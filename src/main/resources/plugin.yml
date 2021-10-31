@@ -1,0 +1,10 @@
+name: MMO-RPG
+version: '${project.version}'
+main: at.feddis08.mmorpg.MMORPG
+api-version: 1.17
+load: STARTUP
+authors: [ Feddis08 ]
+commands:
+  Test:
+  gm:
+  startUp:
