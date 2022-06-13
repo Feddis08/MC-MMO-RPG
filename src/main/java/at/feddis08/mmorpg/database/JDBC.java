@@ -7,11 +7,14 @@ public class JDBC {
     public static void connectToDb(String ip, String port, String db, String user, String pw){
         try{
             MMORPG.consoleLog("Try to connect with DataBase!");
-            //get connection
             myConn = DriverManager.getConnection("jdbc:mysql://" + ip+  ":" + port + "/" + db, user, pw);
             MMORPG.consoleLog("Connection succeed!");
+            MMORPG.consoleLog("Checking all Tables ...");
+            createDataTable();
             createPlayerTable();
-
+            createRanksTable();
+            createWorldsTable();
+            createPlayers_in_worldsTable();
         }catch (Exception e){
             MMORPG.consoleLog("Connection to DataBase failed!");
             e.printStackTrace();
@@ -20,16 +23,70 @@ public class JDBC {
     public static void createPlayerTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "players"
                 + "  (realm           INTEGER ,"
-                + "   rank_level          INTEGER,"
-                + "   level           INTEGER,"
-                + "   player_uuid      VARCHAR(40),"
+                + "   stage           INTEGER,"
+                + "   current_world_id VARCHAR(200),"
+                + "   gamemode           INTEGER,"
+                + "   id                VARCHAR(40),"
+                + "   online           INTEGER,"
                 + "   player_name     VARCHAR(20),"
                 + "   display_name     VARCHAR(20),"
-                + "   player_position VARCHAR(20),"
-                + "   didStartup INTEGER )";
+                + "   didStartup VARCHAR(5))";
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
-        MMORPG.consoleLog("MYSQL table created!");
+        MMORPG.consoleLog("MYSQL player tabel created!");
+    }
+    public static void createRanksTable() throws SQLException {
+        String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "ranks"
+                + "  (permissions VARCHAR (80),"
+                + "   name VARCHAR(20),"
+                + "   parent INTEGER,"
+                + "   id INTEGER,"
+                + "   ranks_level INTEGER,"
+                + "   rank_color VARCHAR(20),"
+                + "   prefix_color VARCHAR(20) ,"
+                + "   prefix VARCHAR (10))";
+
+        Statement stmt = myConn.createStatement();
+        stmt.execute(sqlCreate);
+        MMORPG.consoleLog("MYSQL ranks tabel created!");
+    }
+    public static void createDataTable() throws SQLException {
+        String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "data"
+                + "  (reloads INTEGER,"
+                + "   ranks INTEGER,"
+                + "   enabled INTEGER,"
+                + "   name VARCHAR(20),"
+                + "   registerdPlayers INTEGER,"
+                + "   owner_name VARCHAR(20),"
+                + "   onlinePlayers INTEGER )";
+
+        Statement stmt = myConn.createStatement();
+        stmt.execute(sqlCreate);
+        MMORPG.consoleLog("MYSQL data tabel created!");
+    }
+    public static void createWorldsTable() throws SQLException {
+        String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "worlds"
+                + "  (name VARCHAR(200),"
+                + "   id VARCHAR(40),"
+                + "   players_on INTEGER,"
+                + "   type VARCHAR(20),"
+                + "   loaded VARCHAR(5) )";
+
+        Statement stmt = myConn.createStatement();
+        stmt.execute(sqlCreate);
+        MMORPG.consoleLog("MYSQL worlds tabel created!");
+    }
+    public static void createPlayers_in_worldsTable() throws SQLException {
+        String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "players_in_worlds"
+                + "   (id VARCHAR(40),"
+                + "   world_id VARCHAR(40),"
+                + "   x INTEGER,"
+                + "   y INTEGER,"
+                + "   z INTEGER )";
+
+        Statement stmt = myConn.createStatement();
+        stmt.execute(sqlCreate);
+        MMORPG.consoleLog("MYSQL players_in_worlds table created!");
     }
 }

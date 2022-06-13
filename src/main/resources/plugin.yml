@@ -1,10 +1,14 @@
 name: MMO-RPG
 version: '${project.version}'
 main: at.feddis08.mmorpg.MMORPG
-api-version: 1.17
+api-version: 1.18
 load: STARTUP
 authors: [ Feddis08 ]
 commands:
   Test:
   gm:
   startUp:
+  reset:
+  install:
+  tpworld:
+  loadWorld:

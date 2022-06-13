@@ -1,8 +1,4 @@
-package at.feddis08.mmorpg.database;
-
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
+package at.feddis08.mmorpg.database.objects;
 
 public class DataObject {
     public String _id = "0";

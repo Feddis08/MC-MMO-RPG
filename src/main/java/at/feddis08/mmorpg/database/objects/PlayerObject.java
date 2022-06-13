@@ -1,12 +1,10 @@
-package at.feddis08.mmorpg.database;
+package at.feddis08.mmorpg.database.objects;
 
 public class PlayerObject {
     public String id = "";
     public Integer stage = 0;
     public Integer realm = 0;
-    public Integer x = 0;
-    public Integer y = 0;
-    public Integer z = 0;
+    public String current_world_id = "";
     public Integer gamemode = 0;
     public String player_rank = "";
     public String display_name = "";

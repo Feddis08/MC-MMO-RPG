@@ -1,34 +1,45 @@
 package at.feddis08.mmorpg.listeners;
 
 import at.feddis08.mmorpg.MMORPG;
-import at.feddis08.mmorpg.database.AddPlayer;
-import at.feddis08.mmorpg.database.DataObject;
-import at.feddis08.mmorpg.database.Functions;
+import at.feddis08.mmorpg.database.*;
+import at.feddis08.mmorpg.database.objects.PlayerInWorlds;
+import at.feddis08.mmorpg.database.objects.PlayerObject;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.sql.SQLException;
-import java.util.Dictionary;
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class connectionEvents {
     public static void onJoin(PlayerJoinEvent event) throws SQLException {
         Player player = event.getPlayer();
+        PlayerObject dbPlayer = null;
         event.setJoinMessage(ChatColor.AQUA + "User joined the Realm: " + ChatColor.GREEN + player.getName());
         player.sendMessage("Hi, and welcome to our MMO-RPG minecraft-server: " + player.getName());
-        DataObject dbPlayer = Functions.searchWithPlayerName(player.getName());
-        if (dbPlayer.didStartup == null || dbPlayer.didStartup == 0) {
+        dbPlayer = Functions.getPlayer("id", player.getUniqueId().toString());
+        if (Objects.equals(dbPlayer.id, "")) {
             AddPlayer.addPlayer(event);
+            player.kickPlayer("Please rejoin!");
+        }else{
+            Functions.update("players", "online", "1", dbPlayer.id, "id");
+        }
+        if(Objects.equals(dbPlayer.didStartup, "false")){
             player.sendMessage("Hi, if you are new here, you have to run" + ChatColor.GOLD + " /startup " + ChatColor.GRAY + "in the chat!");
             MMORPG.consoleLog("New player: " + player.getName() + " logged in!");
-        }else {
-            player.sendMessage("Hi, " + dbPlayer.player_name + " your current level is: " + dbPlayer.level);
+        }else if(Objects.equals(dbPlayer.didStartup, "true")){
+            player.sendMessage("Hi, " + dbPlayer.display_name + " your current level is: " + dbPlayer.stage);
         }
     }
     public static void onQuit(PlayerQuitEvent event) throws SQLException {
         Player player = event.getPlayer();
-        Functions.updatePlayerWithName("online", "0", player.getName());
+        PlayerObject dbPlayer = Functions.getPlayer("id", player.getUniqueId().toString());
+        if (Objects.equals(dbPlayer.didStartup, "true")) {
+            Functions.update("players", "online", "0", dbPlayer.id, "id");
+            //ArrayList<PlayerInWorlds> worlds = Functions.getPlayerInWorlds("id", )
+        }
         event.setQuitMessage(ChatColor.AQUA + "User left the Realm: " + ChatColor.GREEN + player.getName());
 
     }

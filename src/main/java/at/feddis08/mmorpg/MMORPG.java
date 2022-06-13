@@ -1,27 +1,49 @@
 package at.feddis08.mmorpg;
 
-import at.feddis08.mmorpg.commands.Gamemode;
-import at.feddis08.mmorpg.commands.StartUp;
-import at.feddis08.mmorpg.commands.TestCommand;
-import at.feddis08.mmorpg.database.JDBC;
-import at.feddis08.mmorpg.listeners.Listener;
-import jdk.incubator.vector.VectorOperators;
-import org.bukkit.Bukkit;
+import at.feddis08.mmorpg.commands.*;
+import at.feddis08.mmorpg.database.*;
+import at.feddis08.mmorpg.database.objects.PlayerInWorlds;
+import at.feddis08.mmorpg.database.objects.WorldObject;
+import at.feddis08.mmorpg.listeners.Listeners;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.function.Function;
 
 public final class MMORPG extends JavaPlugin {
 
     public static String prefix = "MMO-RPG: ";
+    public static boolean enabled = false;
     @Override
     public void onEnable() {
         // Plugin startup logic
         consoleLog("Starting...");
-        JDBC.connectToDb("192.168.1.100", "3306", "MMORPG", "MMORPG", "felix123");
-        getServer().getPluginManager().registerEvents(new Listener(), this);
+        JDBC.connectToDb("10.0.1.46", "3306", "MMORPG", "MMORPG", "felix123");
+
+/*
+        getCommand("install").setExecutor(new install());
+        Collection<? extends Player> players = getServer().getOnlinePlayers();
+        for (Player player : players){
+            consoleLog(player.getUniqueId().toString());
+            PlayerObject dbPlayer = HibernateFunctions.getPlayerByUUID(player.getUniqueId().toString());
+            if (!(dbPlayer.player_rank == "owner") || (!(player.isOp()))){
+                player.kickPlayer("The MMORPG-Server restarts. Please reconnect!");
+            }else{
+                player.sendMessage("The MMO-RPG restarts");
+            }
+        }
+ */
+
+        getServer().getPluginManager().registerEvents(new Listeners(), this);
         getCommand("Test").setExecutor(new TestCommand());
+        getCommand("tpworld").setExecutor(new TpWorld());
+        getCommand("loadWorld").setExecutor(new LoadWorld());
         getCommand("gm").setExecutor(new Gamemode());
         getCommand("startUp").setExecutor(new StartUp());
+        getCommand("reset").setExecutor(new reset());
     }
     @Override
     public void onDisable() {

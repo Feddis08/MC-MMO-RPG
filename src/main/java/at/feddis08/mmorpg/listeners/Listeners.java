@@ -1,5 +1,7 @@
 package at.feddis08.mmorpg.listeners;
 
+import at.feddis08.mmorpg.MMORPG;
+import at.feddis08.mmorpg.commands.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -29,7 +31,5 @@ public class Listeners implements org.bukkit.event.Listener {
         onBlockEvents.onBlockBreak(event);
     }
     @EventHandler
-    public static void onChat(AsyncPlayerChatEvent event){
-        onChat.onChat(event);
-    }
+    public static void onChat(AsyncPlayerChatEvent event) throws SQLException {onChat.onChat(event);}
 }
