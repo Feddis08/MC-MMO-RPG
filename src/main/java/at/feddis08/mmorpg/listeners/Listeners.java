@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.sql.SQLException;
 
-public class Listener implements org.bukkit.event.Listener {
+public class Listeners implements org.bukkit.event.Listener {
     @EventHandler
     public static void onPlayerJoin(PlayerJoinEvent event) throws SQLException {
         connectionEvents.onJoin(event);
