@@ -12,3 +12,4 @@ commands:
   install:
   tpworld:
   loadWorld:
+  rank:

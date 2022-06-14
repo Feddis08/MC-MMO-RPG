@@ -27,6 +27,7 @@ public class JDBC {
                 + "   current_world_id VARCHAR(200),"
                 + "   gamemode           INTEGER,"
                 + "   id                VARCHAR(40),"
+                + "   player_rank                VARCHAR(20),"
                 + "   online           INTEGER,"
                 + "   player_name     VARCHAR(20),"
                 + "   display_name     VARCHAR(20),"
@@ -38,11 +39,11 @@ public class JDBC {
     }
     public static void createRanksTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "ranks"
-                + "  (permissions VARCHAR (80),"
+                + "  (permission_string VARCHAR (256),"
                 + "   name VARCHAR(20),"
-                + "   parent INTEGER,"
-                + "   id INTEGER,"
-                + "   ranks_level INTEGER,"
+                + "   parent VARCHAR(40),"
+                + "   id VARCHAR(40),"
+                + "   rank_level INTEGER,"
                 + "   rank_color VARCHAR(20),"
                 + "   prefix_color VARCHAR(20) ,"
                 + "   prefix VARCHAR (10))";

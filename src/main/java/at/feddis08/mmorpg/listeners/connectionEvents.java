@@ -17,10 +17,10 @@ public class connectionEvents {
     public static void onJoin(PlayerJoinEvent event) throws SQLException {
         Player player = event.getPlayer();
         PlayerObject dbPlayer = null;
+        dbPlayer = Functions.getPlayer("id", player.getUniqueId().toString());
         event.setJoinMessage(ChatColor.AQUA + "User joined the Realm: " + ChatColor.GREEN + player.getName());
         player.sendMessage("Hi, and welcome to our MMO-RPG minecraft-server: " + player.getName());
-        dbPlayer = Functions.getPlayer("id", player.getUniqueId().toString());
-        if (Objects.equals(dbPlayer.id, "")) {
+        if (Objects.equals(dbPlayer.id, null)) {
             AddPlayer.addPlayer(event);
             player.kickPlayer("Please rejoin!");
         }else{

@@ -39,6 +39,7 @@ public final class MMORPG extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new Listeners(), this);
         getCommand("Test").setExecutor(new TestCommand());
+        getCommand("rank").setExecutor(new Rank());
         getCommand("tpworld").setExecutor(new TpWorld());
         getCommand("loadWorld").setExecutor(new LoadWorld());
         getCommand("gm").setExecutor(new Gamemode());

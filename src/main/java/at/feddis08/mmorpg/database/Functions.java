@@ -20,6 +20,8 @@ public class Functions {
                 + "', '"
                 + playerObj.id
                 + "', '"
+                + playerObj.player_rank
+                + "', '"
                 + playerObj.player_name
                 + "', '"
                 + playerObj.display_name
@@ -27,7 +29,7 @@ public class Functions {
                 + playerObj.didStartup
                 + "'";
         String sql = "insert into players "
-                + "(realm, stage, current_world_id, gamemode, id, player_name, display_name, didStartup)"
+                + "(realm, stage, current_world_id, gamemode, id, player_rank, player_name, display_name, didStartup)"
                 + "values (" + sqlString + ")";
         stmt.executeUpdate(sql);
         MMORPG.consoleLog("Player created: " + playerObj.player_name + "!");
@@ -43,12 +45,16 @@ public class Functions {
                 + "', '"
                 + dataObj.id
                 + "', '"
+                + dataObj.parent
+                + "', '"
+                + dataObj.permission_string
+                + "', '"
                 + dataObj.prefix
                 + "', '"
                 + dataObj.prefix_color
                 + "'";
         String sql = "insert into ranks "
-                + "(name, rank_level, rank_color, id, prefix, prefix_color)"
+                + "(name, rank_level, rank_color, id, parent, permission_string, prefix, prefix_color)"
                 + "values (" + sqlString + ")";
         stmt.executeUpdate(sql);
         MMORPG.consoleLog("Rank created: " + dataObj.name + "!");
@@ -120,6 +126,7 @@ public class Functions {
         while (myRs.next()) {
             dataObj.stage = myRs.getInt("stage");
             dataObj.id = myRs.getString("id");
+            dataObj.player_rank = myRs.getString("player_rank");
             dataObj.display_name = myRs.getString("display_name");
             dataObj.player_name = myRs.getString("player_name");
             dataObj.current_world_id = myRs.getString("current_world_id");
@@ -140,9 +147,9 @@ public class Functions {
                 dataObj.prefix = myRs.getString("prefix");
                 dataObj.prefix_color = myRs.getString("prefix_color");
                 dataObj.rank_color = myRs.getString("rank_color");
-                dataObj.id = myRs.getInt("id");
+                dataObj.id = myRs.getString("id");
                 dataObj.rank_level = myRs.getInt("rank_level");
-                dataObj.permissions = myRs.getString("permissions");
+                dataObj.permission_string = myRs.getString("permission_string");
         }
         MMORPG.consoleLog("Database read in ranks for " + dataObj.name + " !");
         return dataObj;
