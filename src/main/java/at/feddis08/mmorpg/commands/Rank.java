@@ -59,6 +59,40 @@ public class Rank implements CommandExecutor {
                             e.printStackTrace();
                         }
                     }
+                    if(Objects.equals(args[1], "set_prefix_color")) {
+                        RankObject dbRank = null;
+                        boolean result = true;
+                        try {
+                            dbRank = Functions.getRank("name", args[0]);
+                            if (Objects.equals(dbRank.name, null)) {
+                                sender.sendMessage(ChatColor.RED + "The rank is not in the system! " + ChatColor.DARK_RED + args[0]);
+                                result = false;
+                            }
+                            if(result){
+                                Functions.update("ranks", "prefix_color", args[2], args[0], "name");
+                                sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank_prefix_color of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if(Objects.equals(args[1], "set_rank_color")) {
+                        RankObject dbRank = null;
+                        boolean result = true;
+                        try {
+                            dbRank = Functions.getRank("name", args[0]);
+                            if (Objects.equals(dbRank.name, null)) {
+                                sender.sendMessage(ChatColor.RED + "The rank is not in the system! " + ChatColor.DARK_RED + args[0]);
+                                result = false;
+                            }
+                            if(result){
+                                Functions.update("ranks", "rank_color", args[2], args[0], "name");
+                                sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank_color of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     if(Objects.equals(args[1], "set_player_rank_from")) {
                         RankObject dbRank = null;
                         PlayerObject dbPlayer2 = null;

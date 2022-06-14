@@ -7,6 +7,7 @@ import at.feddis08.mmorpg.database.objects.RankObject;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.checkerframework.checker.units.qual.C;
 
 import java.sql.SQLException;
 import java.time.Instant;
@@ -24,13 +25,44 @@ public class onChat {
             player.kickPlayer("please rejoin");
         }
         if (Objects.equals(dbPlayer.didStartup, "true")){
-            MMORPG.consoleLog("daw " + ChatColor.GRAY.toString() + " " + ChatColor.GRAY.getChar());
             RankObject dbRank = Functions.getRank("name", dbPlayer.player_rank);
-                event.setFormat(ChatColor.GRAY + "[" + ChatColor.GREEN + dbRank.prefix + ChatColor.GRAY + "][" + ChatColor.GREEN + dbPlayer.display_name + ChatColor.GRAY + "]" + ChatColor.BLUE + ": "
+            ChatColor color_prefix = getChatColor(dbRank.prefix_color);
+            ChatColor color_rank = getChatColor(dbRank.rank_color);
+                    event.setFormat(ChatColor.GRAY + "[" + color_prefix + dbRank.prefix + ChatColor.GRAY + "][" + color_rank + dbPlayer.display_name + ChatColor.GRAY + "]" + ChatColor.BLUE + ": "
                         + ChatColor.YELLOW + chatMessage + ChatColor.GRAY + " [" + Instant.now().toString() + "]");
         }else{
             event.setCancelled(true);
             player.sendMessage(ChatColor.RED + "Please do the startup. " + ChatColor.GOLD + "/startup");
         }
+        }
+        public static ChatColor getChatColor(String color){
+            if (Objects.equals(color, "dark_purple")){
+                return ChatColor.DARK_PURPLE;
+            }
+            if (Objects.equals(color, "green")){
+                return ChatColor.GREEN;
+            }
+            if (Objects.equals(color, "gray")){
+                return ChatColor.GRAY;
+            }
+            if (Objects.equals(color, "gold")){
+                return ChatColor.GOLD;
+            }
+            if (Objects.equals(color, "aqua")){
+                return ChatColor.AQUA;
+            }
+            if (Objects.equals(color, "blue")){
+                return ChatColor.BLUE;
+            }
+            if (Objects.equals(color, "black")){
+                return ChatColor.BLACK;
+            }
+            if (Objects.equals(color, "red")){
+                return ChatColor.RED;
+            }
+            if (Objects.equals(color, "magic")){
+                return ChatColor.MAGIC;
+            }
+            return ChatColor.GRAY;
         }
 }
