@@ -47,7 +47,6 @@ public class Functions {
                 + "', '"
                 + dataObj.parent
                 + "', '"
-                + "', '"
                 + dataObj.prefix
                 + "', '"
                 + dataObj.prefix_color

@@ -29,100 +29,44 @@ public class Rank implements CommandExecutor {
                 }else{
                     boolean validCommand = false;
                     if (args[1].equalsIgnoreCase("create_rank")){
-                        RankObject dbRank = null;
-                        try {
-                            dbRank = Functions.getRank("name", args[0]);
-                            if(Objects.equals(dbRank.name, null)){
-                                dbRank.id = args[0];
-                                dbRank.name = args[0];
-                                Functions.createRank(dbRank);
-                                sender.sendMessage(ChatColor.DARK_GREEN + "Created new rank: " + ChatColor.GREEN + args[0]);
-                                validCommand = true;
-                            }else{
-                                sender.sendMessage(ChatColor.RED + "The rank is already in the system! " + ChatColor.DARK_RED + dbRank.name);
-                            }
-                        } catch (SQLException e) {
-                            e.printStackTrace();
+                        if(create_rank(args[0])){
+                            sender.sendMessage(ChatColor.DARK_GREEN + "Created new rank: " + ChatColor.GREEN + args[0]);
+                            validCommand = true;
+                        }else{
+                            validCommand = false;
                         }
                     }
                     if(Objects.equals(args[1], "set_prefix")) {
-                        RankObject dbRank = null;
-                        boolean result = true;
-                        try {
-                            dbRank = Functions.getRank("name", args[0]);
-                            if (Objects.equals(dbRank.name, null)) {
-                                sender.sendMessage(ChatColor.RED + "The rank is not in the system! " + ChatColor.DARK_RED + args[0]);
-                                result = false;
-                            }
-                            if(result){
-                                Functions.update("ranks", "prefix", args[2], args[0], "name");
-                                sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank_prefix of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
-                                validCommand = true;
-                            }
-                        } catch (SQLException e) {
-                            e.printStackTrace();
+                        if(set_prefix(args[0], args[2])){
+                            sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank_prefix of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
+                            validCommand = true;
+                        }else {
+                            validCommand = false;
                         }
                     }
                     if(Objects.equals(args[1], "set_prefix_color")) {
-                        RankObject dbRank = null;
-                        boolean result = true;
-                        try {
-                            dbRank = Functions.getRank("name", args[0]);
-                            if (Objects.equals(dbRank.name, null)) {
-                                sender.sendMessage(ChatColor.RED + "The rank is not in the system! " + ChatColor.DARK_RED + args[0]);
-                                result = false;
-                            }
-                            if(result){
-                                Functions.update("ranks", "prefix_color", args[2], args[0], "name");
-                                sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank_prefix_color of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
-                                validCommand = true;
-                            }
-                        } catch (SQLException e) {
-                            e.printStackTrace();
+                        if(set_prefix_color(args[0], args[2])){
+                            sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank_prefix_color of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
+                            validCommand = true;
+                        }else{
+                            validCommand = false;
                         }
                     }
                     if(Objects.equals(args[1], "add_rule")) {
-                        RankObject dbRank = null;
-                        Rank_permissionObject dbRank_permissions = null;
-                        boolean result = true;
-                        try {
-                            dbRank = Functions.getRank("name", args[0]);
-                            dbRank_permissions = Functions.getRanksPermissionsWhereAnd("permission", args[2], "id", dbRank.id);
-                            if (Objects.equals(dbRank.name, null)) {
-                                sender.sendMessage(ChatColor.RED + "The rank is not in the system! " + ChatColor.DARK_RED + args[0]);
-                                result = false;
-                            }
-                            if (Objects.equals(dbRank_permissions.permission, args[2])){
-                                sender.sendMessage(ChatColor.RED + "The permission is already in the system! " + ChatColor.DARK_RED + dbRank_permissions.permission);
-                                result = false;
-                            }
-                            if(result){
-                                dbRank_permissions.id = args[0];
-                                dbRank_permissions.permission = args[2];
-                                Functions.createRank_permision(dbRank_permissions);
-                                sender.sendMessage(ChatColor.DARK_GREEN + "Add the rank_permission of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
-                                validCommand = true;
-                            }
-                        } catch (SQLException e) {
-                            e.printStackTrace();
+                        if(add_rule(args[0], args[2])){
+                            sender.sendMessage(ChatColor.DARK_GREEN + "Add the rank_permission of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
+                            validCommand = true;
+                        }else{
+
+                            validCommand = false;
                         }
                     }
                     if(Objects.equals(args[1], "set_rank_color")) {
-                        RankObject dbRank = null;
-                        boolean result = true;
-                        try {
-                            dbRank = Functions.getRank("name", args[0]);
-                            if (Objects.equals(dbRank.name, null)) {
-                                sender.sendMessage(ChatColor.RED + "The rank is not in the system! " + ChatColor.DARK_RED + args[0]);
-                                result = false;
-                            }
-                            if(result){
-                                Functions.update("ranks", "rank_color", args[2], args[0], "name");
-                                sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank_color of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
-                                validCommand = true;
-                            }
-                        } catch (SQLException e) {
-                            e.printStackTrace();
+                        if(set_rank_color(args[0], args[2])){
+                            sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank_color of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
+                            validCommand = true;
+                        }else{
+                            validCommand = false;
                         }
                     }
                     if(Objects.equals(args[1], "set_player_rank_from")) {
@@ -152,7 +96,96 @@ public class Rank implements CommandExecutor {
         }
         return false;
     }
-    public  static boolean set_player_rank_from(String id, String player_id) {
+    public static boolean create_rank(String rank_name){
+        RankObject dbRank = null;
+        Boolean result = false;
+        try {
+            dbRank = Functions.getRank("name", rank_name);
+            if(Objects.equals(dbRank.name, null)){
+                dbRank.id = rank_name;
+                dbRank.name = rank_name;
+                Functions.createRank(dbRank);
+                result = true;
+            }else{
+                result = false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public static boolean set_prefix(String rank_name, String prefix){
+        RankObject dbRank = null;
+        boolean result = true;
+        try {
+            dbRank = Functions.getRank("name", rank_name);
+            if (Objects.equals(dbRank.name, null)) {
+                result = false;
+            }
+            if(result){
+                Functions.update("ranks", "prefix", prefix, rank_name, "name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public static boolean set_prefix_color(String rank_name, String prefix_color){
+        RankObject dbRank = null;
+        boolean result = true;
+        try {
+            dbRank = Functions.getRank("name", rank_name);
+            if (Objects.equals(dbRank.name, null)) {
+                result = false;
+            }
+            if(result){
+                Functions.update("ranks", "prefix_color", prefix_color, rank_name, "name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public static boolean add_rule(String rank_name, String permission){
+        RankObject dbRank = null;
+        Rank_permissionObject dbRank_permissions = null;
+        boolean result = true;
+        try {
+            dbRank = Functions.getRank("name", rank_name);
+            dbRank_permissions = Functions.getRanksPermissionsWhereAnd("permission", permission, "id", dbRank.id);
+            if (Objects.equals(dbRank.name, null)) {
+                result = false;
+            }
+            if (Objects.equals(dbRank_permissions.permission, permission)){
+                result = false;
+            }
+            if(result){
+                dbRank_permissions.id = rank_name;
+                dbRank_permissions.permission = permission;
+                Functions.createRank_permision(dbRank_permissions);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public static boolean set_rank_color(String rank_name, String rank_color){
+        RankObject dbRank = null;
+        boolean result = true;
+        try {
+            dbRank = Functions.getRank("name", rank_name);
+            if (Objects.equals(dbRank.name, null)) {
+                result = false;
+            }
+            if(result){
+                Functions.update("ranks", "rank_color", rank_color, rank_name, "name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public static boolean set_player_rank_from(String id, String player_id) {
         RankObject dbRank = null;
         PlayerObject dbPlayer2 = null;
         boolean result = true;
@@ -161,14 +194,11 @@ public class Rank implements CommandExecutor {
             dbPlayer2 = Functions.getPlayer("display_name", player_id);
             if (!(Objects.equals(dbPlayer2.didStartup, "true"))) {
                result = false;
-                MMORPG.consoleLog("1");
             }
             if (Objects.equals(dbRank.name, null)) {
                 result = false;
-                MMORPG.consoleLog("2");
             } else {
                 if (Objects.equals(dbPlayer2.id, null)) {
-                    MMORPG.consoleLog("3");
                     result = false;
                 }
             }
