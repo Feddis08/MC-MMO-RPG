@@ -185,6 +185,7 @@ public class Functions {
                 dataObj.prefix_color = myRs.getString("prefix_color");
                 dataObj.rank_color = myRs.getString("rank_color");
                 dataObj.id = myRs.getString("id");
+                dataObj.parent = myRs.getString("parent");
                 dataObj.rank_level = myRs.getInt("rank_level");
         }
         MMORPG.consoleLog("Database read in ranks for " + dataObj.name + " !");

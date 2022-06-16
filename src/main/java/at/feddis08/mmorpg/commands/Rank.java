@@ -25,7 +25,7 @@ public class Rank implements CommandExecutor {
             }
             if (Objects.equals(dbPlayer.didStartup, "true")) {
                 try {
-                    if (Rank.has_permission_from_rank_name(Rank.get_rank_from_player(dbPlayer.id).name, "doRank") ||Rank.has_permission_from_rank_name(Rank.get_rank_from_player(dbPlayer.id).name, "*")) {
+                    if (Rank.isPlayer_allowedTo(dbPlayer.id, "doRank") || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
                         if (args.length == 0) {
                             sender.sendMessage(ChatColor.RED + "Wrong syntax! /rank {{rank_name}} {{create_rank|delete_rank|set_rank_color|set_rank_level|set_prefix|set_prefix_color|add_rule|remove_rule|set_player_rank_from}} {{args}}");
                         } else {
@@ -83,6 +83,14 @@ public class Rank implements CommandExecutor {
                                     e.printStackTrace();
                                 }
                             }
+                            if (Objects.equals(args[1], "set_parent")) {
+                                if (set_parent(args[0], args[2])) {
+                                    sender.sendMessage(ChatColor.DARK_GREEN + "Set the parent_rank from " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + args[2]);
+                                    validCommand = true;
+                                } else {
+                                    validCommand = false;
+                                }
+                            }
                             if (Objects.equals(args[1], "remove_rule")) {
                                 if (remove_rule(args[2], args[0])) {
                                     sender.sendMessage(ChatColor.DARK_GREEN + "Removed the rank_permission from " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + args[2]);
@@ -96,7 +104,7 @@ public class Rank implements CommandExecutor {
                             }
                         }
                     }else{
-                        sender.sendMessage(ChatColor.RED + "You need the permission: 'doChat'!");
+                        sender.sendMessage(ChatColor.RED + "You need the permission: 'doRank'!");
                     }
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
@@ -113,9 +121,23 @@ public class Rank implements CommandExecutor {
         RankObject dbRank = Functions.getRank("id", dbPlayer.player_rank);
         return dbRank;
     }
-    public static boolean has_permission_from_rank_name(String rank_name, String permission) throws SQLException {
+    public static boolean has_permission_from_rank(String rank_name, String permission) throws SQLException {
         Rank_permissionObject dbRank_permission = Functions.getRanksPermissionsWhereAnd("id", rank_name, "permission", permission);
         if (Objects.equals(dbRank_permission.permission, permission)){return true;}else{return false;}
+    }
+    public static boolean isPlayer_allowedTo(String player_id, String permission) throws SQLException {
+        RankObject dbRank = Rank.get_rank_from_player(player_id);
+        boolean result = false;
+        if (has_permission_from_rank(dbRank.name, permission)){
+            result = true;
+        }else{
+            if(has_permission_from_rank(dbRank.parent, permission)){
+                result = true;
+            }else{
+                result = false;
+            }
+        }
+        return result;
     }
     public static boolean create_rank(String rank_name){
         RankObject dbRank = null;
@@ -145,6 +167,22 @@ public class Rank implements CommandExecutor {
             }
             if(result){
                 Functions.update("ranks", "prefix", prefix, rank_name, "name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public static boolean set_parent(String rank_name, String parent_name){
+        RankObject dbRank = null;
+        boolean result = true;
+        try {
+            dbRank = Functions.getRank("name", rank_name);
+            if (Objects.equals(dbRank.name, null)) {
+                result = false;
+            }
+            if(result){
+                Functions.update("ranks", "parent", parent_name, rank_name, "name");
             }
         } catch (SQLException e) {
             e.printStackTrace();

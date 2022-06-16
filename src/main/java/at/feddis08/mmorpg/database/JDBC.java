@@ -30,7 +30,7 @@ public class JDBC {
                 + "   gamemode           INTEGER,"
                 + "   id                VARCHAR(40),"
                 + "   player_rank                VARCHAR(20),"
-                + "   online           INTEGER,"
+                + "   online           VARCHAR(5),"
                 + "   player_name     VARCHAR(20),"
                 + "   display_name     VARCHAR(20),"
                 + "   didStartup VARCHAR(5))";

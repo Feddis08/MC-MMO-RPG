@@ -31,7 +31,7 @@ public class Mail implements CommandExecutor {
             }
             if (Objects.equals(dbPlayer.didStartup, "true")) {
                 try {
-                    if (Rank.has_permission_from_rank_name(Rank.get_rank_from_player(dbPlayer.id).name, "doMail") || Rank.has_permission_from_rank_name(Rank.get_rank_from_player(dbPlayer.id).name, "*")) {
+                    if (Rank.isPlayer_allowedTo(dbPlayer.id, "doMail") || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
                         Boolean validCommand = false;
                         if (args.length == 4) {
                             if (args[0].equalsIgnoreCase("send")) {

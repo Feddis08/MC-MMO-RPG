@@ -25,7 +25,7 @@ public class Gamemode implements CommandExecutor {
             }
             if (Objects.equals(dbPlayer.didStartup, "true")) {
                 try {
-                    if (Rank.has_permission_from_rank_name(Rank.get_rank_from_player(dbPlayer.id).name, "doGamemode") || Rank.has_permission_from_rank_name(Rank.get_rank_from_player(dbPlayer.id).name, "*")) {
+                    if (Rank.isPlayer_allowedTo(dbPlayer.id, "doGamemode") || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
 
                         if (!(sender instanceof Player)) {
                             sender.sendMessage("You need to be a Player to run this command!");

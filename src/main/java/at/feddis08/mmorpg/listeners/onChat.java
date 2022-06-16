@@ -1,6 +1,7 @@
 package at.feddis08.mmorpg.listeners;
 
 import at.feddis08.mmorpg.MMORPG;
+import at.feddis08.mmorpg.commands.Rank;
 import at.feddis08.mmorpg.database.Functions;
 import at.feddis08.mmorpg.database.objects.PlayerObject;
 import at.feddis08.mmorpg.database.objects.RankObject;
@@ -25,11 +26,17 @@ public class onChat {
             player.kickPlayer("please rejoin");
         }
         if (Objects.equals(dbPlayer.didStartup, "true")){
+            if (Rank.isPlayer_allowedTo(dbPlayer.id, "doChat") || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
+
             RankObject dbRank = Functions.getRank("name", dbPlayer.player_rank);
             ChatColor color_prefix = getChatColor(dbRank.prefix_color);
             ChatColor color_rank = getChatColor(dbRank.rank_color);
                     event.setFormat(ChatColor.GRAY + "[" + color_prefix + dbRank.prefix + ChatColor.GRAY + "][" + color_rank + dbPlayer.display_name + ChatColor.GRAY + "]" + ChatColor.BLUE + ": "
                         + ChatColor.YELLOW + chatMessage + ChatColor.GRAY + " [" + Instant.now().toString() + "]");
+            }else{
+                player.sendMessage(ChatColor.RED + "You need the permission: 'doMail'!");
+                event.setCancelled(true);
+            }
         }else{
             event.setCancelled(true);
             player.sendMessage(ChatColor.RED + "Please do the startup. " + ChatColor.GOLD + "/startup");

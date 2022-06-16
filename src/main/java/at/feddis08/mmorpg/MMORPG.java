@@ -33,7 +33,8 @@ public final class MMORPG extends JavaPlugin {
         if (Objects.equals(dbRank.name, "default")) {
         } else {
             Rank.create_rank("default");
-            Rank.add_rule("default", "do_chat");
+            Rank.add_rule("default", "doChat");
+            Rank.add_rule("default", "doMail");
         }
         try {
             RankObject dbRank2 = Functions.getRank("id", "operator");
