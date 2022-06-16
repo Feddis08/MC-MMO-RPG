@@ -3,6 +3,7 @@ package at.feddis08.mmorpg;
 import at.feddis08.mmorpg.commands.*;
 import at.feddis08.mmorpg.database.*;
 import at.feddis08.mmorpg.database.objects.PlayerInWorlds;
+import at.feddis08.mmorpg.database.objects.RankObject;
 import at.feddis08.mmorpg.database.objects.WorldObject;
 import at.feddis08.mmorpg.listeners.Listeners;
 import org.bukkit.*;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Function;
 
 public final class MMORPG extends JavaPlugin {
@@ -22,7 +24,27 @@ public final class MMORPG extends JavaPlugin {
         // Plugin startup logic
         consoleLog("Starting...");
         JDBC.connectToDb("10.0.1.46", "3306", "MMORPG", "MMORPG", "felix123");
-
+        RankObject dbRank = null;
+        try {
+            dbRank = Functions.getRank("id", "default");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (Objects.equals(dbRank.name, "default")) {
+        } else {
+            Rank.create_rank("default");
+            Rank.add_rule("default", "do_chat");
+        }
+        try {
+            RankObject dbRank2 = Functions.getRank("id", "operator");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (Objects.equals(dbRank.name, "operator")) {
+        } else {
+            Rank.create_rank("operator");
+            Rank.add_rule("operator", "*");
+        }
 /*
         getCommand("install").setExecutor(new install());
         Collection<? extends Player> players = getServer().getOnlinePlayers();
@@ -46,7 +68,7 @@ public final class MMORPG extends JavaPlugin {
         getCommand("startUp").setExecutor(new StartUp());
         getCommand("reset").setExecutor(new reset());
     }
-    @Override
+        @Override
     public void onDisable() {
         // Plugin shutdown logic
         consoleLog("Stopping...");

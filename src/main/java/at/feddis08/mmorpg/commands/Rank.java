@@ -23,71 +23,83 @@ public class Rank implements CommandExecutor {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            if (Objects.equals(dbPlayer.didStartup, "true")){
-                if (args.length == 0){
-                    sender.sendMessage(ChatColor.RED + "Wrong syntax! /rank {{rank_name}} {{create_rank|delete_rank|set_rank_color|set_rank_level|set_prefix|set_prefix_color|add_rule|remove_rule|set_player_rank_from}} {{args}}");
-                }else{
-                    boolean validCommand = false;
-                    if (args[1].equalsIgnoreCase("create_rank")){
-                        if(create_rank(args[0])){
-                            sender.sendMessage(ChatColor.DARK_GREEN + "Created new rank: " + ChatColor.GREEN + args[0]);
-                            validCommand = true;
-                        }else{
-                            validCommand = false;
-                        }
-                    }
-                    if(Objects.equals(args[1], "set_prefix")) {
-                        if(set_prefix(args[0], args[2])){
-                            sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank_prefix of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
-                            validCommand = true;
-                        }else {
-                            validCommand = false;
-                        }
-                    }
-                    if(Objects.equals(args[1], "set_prefix_color")) {
-                        if(set_prefix_color(args[0], args[2])){
-                            sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank_prefix_color of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
-                            validCommand = true;
-                        }else{
-                            validCommand = false;
-                        }
-                    }
-                    if(Objects.equals(args[1], "add_rule")) {
-                        if(add_rule(args[0], args[2])){
-                            sender.sendMessage(ChatColor.DARK_GREEN + "Add the rank_permission of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
-                            validCommand = true;
-                        }else{
+            if (Objects.equals(dbPlayer.didStartup, "true")) {
+                try {
+                    if (Rank.has_permission_from_rank_name(Rank.get_rank_from_player(dbPlayer.id).name, "doRank") ||Rank.has_permission_from_rank_name(Rank.get_rank_from_player(dbPlayer.id).name, "*")) {
+                        if (args.length == 0) {
+                            sender.sendMessage(ChatColor.RED + "Wrong syntax! /rank {{rank_name}} {{create_rank|delete_rank|set_rank_color|set_rank_level|set_prefix|set_prefix_color|add_rule|remove_rule|set_player_rank_from}} {{args}}");
+                        } else {
+                            boolean validCommand = false;
+                            if (args[1].equalsIgnoreCase("create_rank")) {
+                                if (create_rank(args[0])) {
+                                    sender.sendMessage(ChatColor.DARK_GREEN + "Created new rank: " + ChatColor.GREEN + args[0]);
+                                    validCommand = true;
+                                } else {
+                                    validCommand = false;
+                                }
+                            }
+                            if (Objects.equals(args[1], "set_prefix")) {
+                                if (set_prefix(args[0], args[2])) {
+                                    sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank_prefix of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
+                                    validCommand = true;
+                                } else {
+                                    validCommand = false;
+                                }
+                            }
+                            if (Objects.equals(args[1], "set_prefix_color")) {
+                                if (set_prefix_color(args[0], args[2])) {
+                                    sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank_prefix_color of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
+                                    validCommand = true;
+                                } else {
+                                    validCommand = false;
+                                }
+                            }
+                            if (Objects.equals(args[1], "add_rule")) {
+                                if (add_rule(args[0], args[2])) {
+                                    sender.sendMessage(ChatColor.DARK_GREEN + "Add the rank_permission of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
+                                    validCommand = true;
+                                } else {
 
-                            validCommand = false;
+                                    validCommand = false;
+                                }
+                            }
+                            if (Objects.equals(args[1], "set_rank_color")) {
+                                if (set_rank_color(args[0], args[2])) {
+                                    sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank_color of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
+                                    validCommand = true;
+                                } else {
+                                    validCommand = false;
+                                }
+                            }
+                            if (Objects.equals(args[1], "set_player_rank_from")) {
+                                try {
+                                    if (set_player_rank_from(args[0], Functions.getPlayer("display_name", args[2]).id)) {
+                                        sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank of " + ChatColor.GREEN + args[2] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[0]);
+                                        validCommand = true;
+                                    } else {
+                                        validCommand = false;
+                                    }
+                                } catch (SQLException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            if (Objects.equals(args[1], "remove_rule")) {
+                                if (remove_rule(args[2], args[0])) {
+                                    sender.sendMessage(ChatColor.DARK_GREEN + "Removed the rank_permission from " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + args[2]);
+                                    validCommand = true;
+                                } else {
+                                    validCommand = false;
+                                }
+                            }
+                            if (!(validCommand)) {
+                                sender.sendMessage(ChatColor.RED + "Wrong command!");
+                            }
                         }
+                    }else{
+                        sender.sendMessage(ChatColor.RED + "You need the permission: 'doChat'!");
                     }
-                    if(Objects.equals(args[1], "set_rank_color")) {
-                        if(set_rank_color(args[0], args[2])){
-                            sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank_color of " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[2]);
-                            validCommand = true;
-                        }else{
-                            validCommand = false;
-                        }
-                    }
-                    if(Objects.equals(args[1], "set_player_rank_from")) {
-                        if (set_player_rank_from(args[0], args[2])) {
-                            sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank of " + ChatColor.GREEN + args[2] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[0]);
-                            validCommand = true;
-                        }else{
-                            validCommand = false;
-                        }
-                    }
-                    if(Objects.equals(args[1], "remove_rule")) {
-                        if (remove_rule(args[2], args[0])) {
-                            sender.sendMessage(ChatColor.DARK_GREEN + "Removed the rank_permission from " + ChatColor.GREEN + args[0] + ChatColor.DARK_GREEN + " by " + ChatColor.GREEN + args[2]);
-                            validCommand = true;
-                        }else {
-                            validCommand = false;
-                        }
-                    }
-                    if(!(validCommand)){
-                        sender.sendMessage(ChatColor.RED + "Wrong command!");
-                    }
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
                 }
             }else{
                 sender.sendMessage(ChatColor.RED + "Please do the startup! " + ChatColor.GOLD + "/startup");
@@ -95,6 +107,15 @@ public class Rank implements CommandExecutor {
             }
         }
         return false;
+    }
+    public static RankObject get_rank_from_player(String player_id) throws SQLException {
+        PlayerObject dbPlayer = Functions.getPlayer("id", player_id);
+        RankObject dbRank = Functions.getRank("id", dbPlayer.player_rank);
+        return dbRank;
+    }
+    public static boolean has_permission_from_rank_name(String rank_name, String permission) throws SQLException {
+        Rank_permissionObject dbRank_permission = Functions.getRanksPermissionsWhereAnd("id", rank_name, "permission", permission);
+        if (Objects.equals(dbRank_permission.permission, permission)){return true;}else{return false;}
     }
     public static boolean create_rank(String rank_name){
         RankObject dbRank = null;
@@ -185,16 +206,13 @@ public class Rank implements CommandExecutor {
         }
         return result;
     }
-    public static boolean set_player_rank_from(String id, String player_id) {
+    public static boolean set_player_rank_from(String rank_name, String player_id) {
         RankObject dbRank = null;
         PlayerObject dbPlayer2 = null;
         boolean result = true;
         try {
-            dbRank = Functions.getRank("name", id);
-            dbPlayer2 = Functions.getPlayer("display_name", player_id);
-            if (!(Objects.equals(dbPlayer2.didStartup, "true"))) {
-               result = false;
-            }
+            dbRank = Functions.getRank("name", rank_name);
+            dbPlayer2 = Functions.getPlayer("id", player_id);
             if (Objects.equals(dbRank.name, null)) {
                 result = false;
             } else {
@@ -203,7 +221,7 @@ public class Rank implements CommandExecutor {
                 }
             }
             if(result){
-                Functions.update("players", "player_rank", id, dbPlayer2.id, "id");
+                Functions.update("players", "player_rank", rank_name, dbPlayer2.id, "id");
             }
         }catch(SQLException e){
             e.printStackTrace();

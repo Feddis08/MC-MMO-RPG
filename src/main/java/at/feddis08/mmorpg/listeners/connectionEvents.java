@@ -1,6 +1,7 @@
 package at.feddis08.mmorpg.listeners;
 
 import at.feddis08.mmorpg.MMORPG;
+import at.feddis08.mmorpg.commands.Rank;
 import at.feddis08.mmorpg.database.*;
 import at.feddis08.mmorpg.database.objects.PlayerInWorlds;
 import at.feddis08.mmorpg.database.objects.PlayerObject;
@@ -18,10 +19,15 @@ public class connectionEvents {
         Player player = event.getPlayer();
         PlayerObject dbPlayer = null;
         dbPlayer = Functions.getPlayer("id", player.getUniqueId().toString());
-        event.setJoinMessage(ChatColor.AQUA + "User joined the Realm: " + ChatColor.GREEN + player.getName());
+        //event.setJoinMessage(ChatColor.AQUA + "User joined the Realm: " + ChatColor.GREEN + player.getName());
         player.sendMessage("Hi, and welcome to our MMO-RPG minecraft-server: " + player.getName());
         if (Objects.equals(dbPlayer.id, null)) {
             AddPlayer.addPlayer(event);
+            if (player.isOp()){
+                Rank.set_player_rank_from("operator", player.getUniqueId().toString());
+            }else{
+                Rank.set_player_rank_from("default", player.getUniqueId().toString());
+            }
             player.kickPlayer("Please rejoin!");
         }else{
             Functions.update("players", "online", "1", dbPlayer.id, "id");
