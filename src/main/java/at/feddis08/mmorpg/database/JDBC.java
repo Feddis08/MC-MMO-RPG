@@ -16,6 +16,7 @@ public class JDBC {
             createWorldsTable();
             createPlayers_in_worldsTable();
             createRanks_permissionsTable();
+            createMailsTable();
         }catch (Exception e){
             MMORPG.consoleLog("Connection to DataBase failed!");
             e.printStackTrace();
@@ -51,6 +52,20 @@ public class JDBC {
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
         MMORPG.consoleLog("MYSQL ranks tabel created!");
+    }
+    public static void createMailsTable() throws SQLException {
+        String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "mails"
+                + "   (sender_id VARCHAR(40),"
+                + "  receiver_id VARCHAR(40),"
+                + "  date VARCHAR(40),"
+                + "  opened VARCHAR(5),"
+                + "  title VARCHAR(256),"
+                + "  id INTEGER,"
+                + "  message VARCHAR(256))";
+
+        Statement stmt = myConn.createStatement();
+        stmt.execute(sqlCreate);
+        MMORPG.consoleLog("MYSQL mails tabel created!");
     }
     public static void createRanks_permissionsTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "ranks_permissions"

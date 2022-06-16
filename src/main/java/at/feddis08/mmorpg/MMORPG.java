@@ -67,6 +67,7 @@ public final class MMORPG extends JavaPlugin {
         getCommand("gm").setExecutor(new Gamemode());
         getCommand("startUp").setExecutor(new StartUp());
         getCommand("reset").setExecutor(new reset());
+        getCommand("mail").setExecutor(new Mail());
     }
         @Override
     public void onDisable() {

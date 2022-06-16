@@ -41,7 +41,6 @@ public class LoadWorld implements CommandExecutor {
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
-                    MMORPG.consoleLog("ddd " + dbWorld.id);
                     if (dbWorld.id == null ){
                         dbWorld = new WorldObject();
                         dbWorld.loaded = "true";

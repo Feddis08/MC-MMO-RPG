@@ -26,10 +26,12 @@ public class Functions {
                 + "', '"
                 + playerObj.display_name
                 + "', '"
+                + playerObj.online
+                + "', '"
                 + playerObj.didStartup
                 + "'";
         String sql = "insert into players "
-                + "(realm, stage, current_world_id, gamemode, id, player_rank, player_name, display_name, didStartup)"
+                + "(realm, stage, current_world_id, gamemode, id, player_rank, player_name, display_name, online, didStartup)"
                 + "values (" + sqlString + ")";
         stmt.executeUpdate(sql);
         MMORPG.consoleLog("Player created: " + playerObj.player_name + "!");
@@ -129,6 +131,29 @@ public class Functions {
         stmt.executeUpdate(sql);
         MMORPG.consoleLog("DataTabel created: " + dataObj.permission + "!");
     }
+    public static void createMail(MailObject dataObj) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sqlString = "'"
+                + dataObj.sender_id
+                + "', '"
+                + dataObj.message
+                + "', '"
+                + dataObj.receiver_id
+                + "', '"
+                + dataObj.date
+                + "', '"
+                + dataObj.title
+                + "', '"
+                + dataObj.id
+                + "', '"
+                + dataObj.opened
+                + "'";
+        String sql = "insert into mails "
+                + "(sender_id, message, receiver_id, date, title, id, opened)"
+                + "values (" + sqlString + ")";
+        stmt.executeUpdate(sql);
+        MMORPG.consoleLog("DataTabel created: " + dataObj.sender_id + "!");
+    }
     public static PlayerObject getPlayer(String column, String value) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sql = "select * from players where " + column + " = " + "'" + value + "'";
@@ -137,6 +162,7 @@ public class Functions {
         while (myRs.next()) {
             dataObj.stage = myRs.getInt("stage");
             dataObj.id = myRs.getString("id");
+            dataObj.online = myRs.getString("online");
             dataObj.player_rank = myRs.getString("player_rank");
             dataObj.display_name = myRs.getString("display_name");
             dataObj.player_name = myRs.getString("player_name");
@@ -214,6 +240,44 @@ public class Functions {
             MMORPG.consoleLog("Database read in worlds for " + dataObj.world_id + " !");
         }
         return dataObjList;
+    }
+    public static ArrayList<MailObject> getMails(String column, String value, String column2, String value2) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from mails where " + column + " = " + "'" + value + "' and " + column2 + "='" + value2 + "'";
+        ResultSet myRs = stmt.executeQuery(sql);
+
+        ArrayList<MailObject> dataObjList = new ArrayList<>();
+        while (myRs.next()) {
+            MailObject dataObj = new MailObject();
+            dataObj.sender_id = myRs.getString("sender_id");
+            dataObj.date = myRs.getString("date");
+            dataObj.receiver_id = myRs.getString("receiver_id");
+            dataObj.message = myRs.getString("message");
+            dataObj.opened = myRs.getString("opened");
+            dataObj.title = myRs.getString("title");
+            dataObj.id = myRs.getInt("id");
+            dataObjList.add(dataObj);
+            MMORPG.consoleLog("Database read in worlds for " + dataObj.message + " !");
+        }
+        return dataObjList;
+    }
+    public static MailObject getMail(String column, String value, String column2, String value2) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from mails where " + column + " = " + "'" + value + "' and " + column2 + "='" + value2 + "'";
+        ResultSet myRs = stmt.executeQuery(sql);
+
+        MailObject dataObj = new MailObject();
+        while (myRs.next()) {
+            dataObj.sender_id = myRs.getString("sender_id");
+            dataObj.date = myRs.getString("date");
+            dataObj.title = myRs.getString("title");
+            dataObj.id = myRs.getInt("id");
+            dataObj.receiver_id = myRs.getString("receiver_id");
+            dataObj.message = myRs.getString("message");
+            dataObj.opened = myRs.getString("opened");
+            MMORPG.consoleLog("Database read in worlds for " + dataObj.message + " !");
+        }
+        return dataObj;
     }
     public static ArrayList<Rank_permissionObject> getRanksPermissions(String column, String value) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();

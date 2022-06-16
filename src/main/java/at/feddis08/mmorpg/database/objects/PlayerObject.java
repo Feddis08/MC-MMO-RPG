@@ -1,5 +1,7 @@
 package at.feddis08.mmorpg.database.objects;
 
+import java.util.SplittableRandom;
+
 public class PlayerObject {
     public String id = null;
     public Integer stage = 0;
@@ -10,4 +12,5 @@ public class PlayerObject {
     public String display_name = "";
     public String player_name = "";
     public String didStartup = "false";
+    public String online = "";
 }
