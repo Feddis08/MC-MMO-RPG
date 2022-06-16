@@ -47,14 +47,13 @@ public class Functions {
                 + "', '"
                 + dataObj.parent
                 + "', '"
-                + dataObj.permission_string
                 + "', '"
                 + dataObj.prefix
                 + "', '"
                 + dataObj.prefix_color
                 + "'";
         String sql = "insert into ranks "
-                + "(name, rank_level, rank_color, id, parent, permission_string, prefix, prefix_color)"
+                + "(name, rank_level, rank_color, id, parent, prefix, prefix_color)"
                 + "values (" + sqlString + ")";
         stmt.executeUpdate(sql);
         MMORPG.consoleLog("Rank created: " + dataObj.name + "!");
@@ -118,6 +117,19 @@ public class Functions {
         stmt.executeUpdate(sql);
         MMORPG.consoleLog("DataTabel created: " + dataObj.world_id + "!");
     }
+    public static void createRank_permision(Rank_permissionObject dataObj) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sqlString = "'"
+                + dataObj.permission
+                + "', '"
+                + dataObj.id
+                + "'";
+        String sql = "insert into ranks_permissions "
+                + "(permission, id)"
+                + "values (" + sqlString + ")";
+        stmt.executeUpdate(sql);
+        MMORPG.consoleLog("DataTabel created: " + dataObj.permission + "!");
+    }
     public static PlayerObject getPlayer(String column, String value) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sql = "select * from players where " + column + " = " + "'" + value + "'";
@@ -149,7 +161,6 @@ public class Functions {
                 dataObj.rank_color = myRs.getString("rank_color");
                 dataObj.id = myRs.getString("id");
                 dataObj.rank_level = myRs.getInt("rank_level");
-                dataObj.permission_string = myRs.getString("permission_string");
         }
         MMORPG.consoleLog("Database read in ranks for " + dataObj.name + " !");
         return dataObj;
@@ -205,6 +216,34 @@ public class Functions {
         }
         return dataObjList;
     }
+    public static ArrayList<Rank_permissionObject> getRanksPermissions(String column, String value) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from ranks_permission where " + column + " = " + "'" + value + "'";
+        ResultSet myRs = stmt.executeQuery(sql);
+
+        ArrayList<Rank_permissionObject> dataObjList = new ArrayList<>();
+        while (myRs.next()) {
+            Rank_permissionObject dataObj = new Rank_permissionObject();
+            dataObj.permission = myRs.getString("permission");
+            dataObj.id = myRs.getString("id");
+            dataObjList.add(dataObj);
+            MMORPG.consoleLog("Database read in worlds for " + dataObj.permission + " !");
+        }
+        return dataObjList;
+    }
+    public static Rank_permissionObject getRanksPermissionsWhereAnd(String column, String value, String column2, String value2) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from ranks_permissions where " + column + "=" + "'" + value + "' and " + column2 + "='" + value2 + "';";
+        MMORPG.consoleLog(sql);
+        ResultSet myRs = stmt.executeQuery(sql);
+        Rank_permissionObject dataObj = new Rank_permissionObject();
+        while (myRs.next()) {
+            dataObj.permission = myRs.getString("permission");
+            dataObj.id = myRs.getString("id");
+            MMORPG.consoleLog("Database read in worlds for " + dataObj.permission + " !");
+        }
+        return dataObj;
+    }
     public static void update(String tabel, String column, String newValue, String identityValue, String identityColumn) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sql = "update " + tabel + " set "
@@ -252,6 +291,13 @@ public class Functions {
         String sql = "delete from " + tabel + " where " + column + "='" + value + "'";
         Integer rowsAffected = stmt.executeUpdate(sql);
         MMORPG.consoleLog("Deleted " + rowsAffected + " rows for " + value + "!");
+
+    }
+    public static void deleteWhereAnd(String tabel, String column, String value, String column2, String value2) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "delete from " + tabel + " where " + column + "='" + value + "' and " + column2 + "='" + value2 + "'";
+        Integer rowsAffected = stmt.executeUpdate(sql);
+        MMORPG.consoleLog("Deleted " + rowsAffected + " rows: " + sql + "!");
 
     }
     public static void resetDB() throws SQLException {
