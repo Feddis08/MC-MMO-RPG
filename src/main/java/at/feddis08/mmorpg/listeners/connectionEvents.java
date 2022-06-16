@@ -37,6 +37,7 @@ public class connectionEvents {
             MMORPG.consoleLog("New player: " + player.getName() + " logged in!");
         }else if(Objects.equals(dbPlayer.didStartup, "true")){
             player.sendMessage("Hi, " + dbPlayer.display_name + " your current level is: " + dbPlayer.stage);
+            dbPlayer.init(player);
         }
     }
     public static void onQuit(PlayerQuitEvent event) throws SQLException {

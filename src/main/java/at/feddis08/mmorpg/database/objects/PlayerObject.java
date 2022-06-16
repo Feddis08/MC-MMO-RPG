@@ -1,5 +1,10 @@
 package at.feddis08.mmorpg.database.objects;
 
+import at.feddis08.mmorpg.database.Functions;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
+import java.sql.SQLException;
 import java.util.SplittableRandom;
 
 public class PlayerObject {
@@ -13,4 +18,16 @@ public class PlayerObject {
     public String player_name = "";
     public String didStartup = "false";
     public String online = "";
+    public Player player;
+
+    public void init(Player player) throws SQLException {
+        this.player = player;
+        checkMails();
+    }
+    public void checkMails() throws SQLException {
+        Integer mailsize =  Functions.getMails("receiver_id", id, "opened", "false").size();
+        if (mailsize > 0){
+            player.sendMessage(ChatColor.GOLD + "You have " + ChatColor.DARK_PURPLE + mailsize + ChatColor.GOLD + " unread mails!");
+        }
+    }
 }
