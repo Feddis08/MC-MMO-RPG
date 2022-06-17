@@ -28,7 +28,7 @@ public class Listeners implements org.bukkit.event.Listener {
         onDeath.onDeath(event);
     }
     @EventHandler
-    public static void onBlockBreak(BlockBreakEvent event){
+    public static void onBlockBreak(BlockBreakEvent event) throws SQLException {
         onBlockEvents.onBlockBreak(event);
     }
     @EventHandler

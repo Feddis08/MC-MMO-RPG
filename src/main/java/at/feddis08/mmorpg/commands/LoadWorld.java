@@ -68,7 +68,7 @@ public class LoadWorld implements CommandExecutor {
                             sender.sendMessage("Wrong usage: /loadWorld worldName");
                         }
                     } else {
-                        sender.sendMessage(ChatColor.RED + "You need the permission: 'doTpWorld'!");
+                        sender.sendMessage(ChatColor.RED + "You need the permission: 'doLoadWorld'!");
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();

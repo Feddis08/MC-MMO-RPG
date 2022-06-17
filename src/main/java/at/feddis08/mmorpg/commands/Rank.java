@@ -71,7 +71,7 @@ public class Rank implements CommandExecutor {
                                     validCommand = false;
                                 }
                             }
-                            if (Objects.equals(args[1], "set_player_rank_from")) {
+                            if (Objects.equals(args[1], "set_player_rank")) {
                                 try {
                                     if (set_player_rank_from(args[0], Functions.getPlayer("display_name", args[2]).id)) {
                                         sender.sendMessage(ChatColor.DARK_GREEN + "Set the rank of " + ChatColor.GREEN + args[2] + ChatColor.DARK_GREEN + " to " + ChatColor.GREEN + args[0]);

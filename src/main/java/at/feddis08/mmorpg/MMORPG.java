@@ -33,6 +33,7 @@ public final class MMORPG extends JavaPlugin {
         if (Objects.equals(dbRank.name, "default")) {
         } else {
             Rank.create_rank("default");
+            Rank.set_prefix("default", "Player");
             Rank.add_rule("default", "doChat");
             Rank.add_rule("default", "doMail");
         }
@@ -45,6 +46,7 @@ public final class MMORPG extends JavaPlugin {
         } else {
             Rank.create_rank("operator");
             Rank.add_rule("operator", "*");
+            Rank.set_prefix("operator", "Operator");
         }
 /*
         getCommand("install").setExecutor(new install());

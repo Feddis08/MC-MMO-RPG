@@ -34,7 +34,7 @@ public class onChat {
                     event.setFormat(ChatColor.GRAY + "[" + color_prefix + dbRank.prefix + ChatColor.GRAY + "][" + color_rank + dbPlayer.display_name + ChatColor.GRAY + "]" + ChatColor.BLUE + ": "
                         + ChatColor.YELLOW + chatMessage + ChatColor.GRAY + " [" + Instant.now().toString() + "]");
             }else{
-                player.sendMessage(ChatColor.RED + "You need the permission: 'doMail'!");
+                player.sendMessage(ChatColor.RED + "You need the permission: 'doChat'!");
                 event.setCancelled(true);
             }
         }else{

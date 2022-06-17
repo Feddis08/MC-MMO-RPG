@@ -86,7 +86,7 @@ public class Mail implements CommandExecutor {
                             validCommand = true;
                         }
                         if (args.length == 2) {
-                            if (args[0].equalsIgnoreCase("showMailsFrom")) {
+                            if (args[0].equalsIgnoreCase("sort_mails")) {
                                 ArrayList<MailObject> mails = Functions.getMails("receiver_id", dbPlayer.id, "sender_id", Functions.getPlayer("display_name", args[1]).id);
                                 Integer i = 0;
                                 sender.sendMessage(ChatColor.BLUE + "All your mails you got from " + args[1] + "! The format:");
@@ -118,7 +118,7 @@ public class Mail implements CommandExecutor {
                             }
                         }
                         if (args.length == 1) {
-                            if (args[0].equalsIgnoreCase("showAllMails")) {
+                            if (args[0].equalsIgnoreCase("showMails")) {
                                 ArrayList<MailObject> mails = Functions.getMails("receiver_id", dbPlayer.id, "receiver_id", dbPlayer.id);
                                 Integer i = 0;
                                 sender.sendMessage(ChatColor.BLUE + "All your mails you got! The format:");
