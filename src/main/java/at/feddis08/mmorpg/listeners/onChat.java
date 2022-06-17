@@ -1,6 +1,7 @@
 package at.feddis08.mmorpg.listeners;
 
 import at.feddis08.mmorpg.MMORPG;
+import at.feddis08.mmorpg.Methods;
 import at.feddis08.mmorpg.commands.Rank;
 import at.feddis08.mmorpg.database.Functions;
 import at.feddis08.mmorpg.database.objects.PlayerObject;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.checkerframework.checker.units.qual.C;
 
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.util.Date;
@@ -32,7 +34,7 @@ public class onChat {
             ChatColor color_prefix = getChatColor(dbRank.prefix_color);
             ChatColor color_rank = getChatColor(dbRank.rank_color);
                     event.setFormat(ChatColor.GRAY + "[" + color_prefix + dbRank.prefix + ChatColor.GRAY + "][" + color_rank + dbPlayer.display_name + ChatColor.GRAY + "]" + ChatColor.BLUE + ": "
-                        + ChatColor.YELLOW + chatMessage + ChatColor.GRAY + " [" + Instant.now().toString() + "]");
+                        + ChatColor.YELLOW + chatMessage + ChatColor.GRAY + " [" + Methods.getTime() + "]");
             }else{
                 player.sendMessage(ChatColor.RED + "You need the permission: 'doChat'!");
                 event.setCancelled(true);
