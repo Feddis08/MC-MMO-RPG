@@ -64,7 +64,7 @@ public class Mail implements CommandExecutor {
                             if (args[0].equalsIgnoreCase("open")) {
                                 MailObject mail = Functions.getMail("id", args[1], "receiver_id", dbPlayer.id);
                                 sender.sendMessage(ChatColor.BLUE + "The mail with the id" + args[1] + "! The format:");
-                                sender.sendMessage(ChatColor.AQUA + "From | Date UTC | Seen/Opened | Title | Id");
+                                sender.sendMessage(ChatColor.AQUA + "From | Date | Seen/Opened | Title | Id");
                                 PlayerObject dbSender = Functions.getPlayer("id", mail.sender_id);
                                 RankObject dbRank = Functions.getRank("name", dbSender.player_rank);
                                 ChatColor color_prefix = getChatColor(dbRank.prefix_color);
@@ -90,7 +90,7 @@ public class Mail implements CommandExecutor {
                                 ArrayList<MailObject> mails = Functions.getMails("receiver_id", dbPlayer.id, "sender_id", Functions.getPlayer("display_name", args[1]).id);
                                 Integer i = 0;
                                 sender.sendMessage(ChatColor.BLUE + "All your mails you got from " + args[1] + "! The format:");
-                                sender.sendMessage(ChatColor.AQUA + "From | Date UTC | Seen/Opened | Title | Id");
+                                sender.sendMessage(ChatColor.AQUA + "From | Date | Seen/Opened | Title | Id");
                                 while (!(i >= mails.size())) {
                                     PlayerObject dbSender = Functions.getPlayer("id", mails.get(i).sender_id);
                                     RankObject dbRank = Functions.getRank("name", dbSender.player_rank);
@@ -121,7 +121,7 @@ public class Mail implements CommandExecutor {
                                 ArrayList<MailObject> mails = Functions.getMails("receiver_id", dbPlayer.id, "receiver_id", dbPlayer.id);
                                 Integer i = 0;
                                 sender.sendMessage(ChatColor.BLUE + "All your mails you got! The format:");
-                                sender.sendMessage(ChatColor.AQUA + "From | Date UTC | Seen/Opened | Title | Id");
+                                sender.sendMessage(ChatColor.AQUA + "From | Date | Seen/Opened | Title | Id");
                                 MMORPG.consoleLog(String.valueOf(mails.size()));
                                 while (!(i >= mails.size())) {
                                     PlayerObject dbSender = Functions.getPlayer("id", mails.get(i).sender_id);
