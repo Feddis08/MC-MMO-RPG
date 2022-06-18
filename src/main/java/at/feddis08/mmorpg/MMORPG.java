@@ -6,6 +6,7 @@ import at.feddis08.mmorpg.database.objects.PlayerInWorlds;
 import at.feddis08.mmorpg.database.objects.RankObject;
 import at.feddis08.mmorpg.database.objects.WorldObject;
 import at.feddis08.mmorpg.listeners.Listeners;
+import at.feddis08.mmorpg.scoreboads.BlocksInfoScoreboard;
 import at.feddis08.mmorpg.tools.StartLoadWorld;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
