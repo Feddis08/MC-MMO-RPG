@@ -5,10 +5,13 @@ import at.feddis08.mmorpg.commands.Rank;
 import at.feddis08.mmorpg.database.*;
 import at.feddis08.mmorpg.database.objects.PlayerInWorlds;
 import at.feddis08.mmorpg.database.objects.PlayerObject;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ import java.util.Objects;
 public class connectionEvents {
     public static void onJoin(PlayerJoinEvent event) throws SQLException {
         Player player = event.getPlayer();
+        player.setDisplayName("test");
         PlayerObject dbPlayer = null;
         dbPlayer = Functions.getPlayer("id", player.getUniqueId().toString());
         //event.setJoinMessage(ChatColor.AQUA + "User joined the Realm: " + ChatColor.GREEN + player.getName());
@@ -36,8 +40,14 @@ public class connectionEvents {
             player.sendMessage("Hi, if you are new here, you have to run" + ChatColor.GOLD + " /startup " + ChatColor.GRAY + "in the chat!");
             MMORPG.consoleLog("New player: " + player.getName() + " logged in!");
         }else if(Objects.equals(dbPlayer.didStartup, "true")){
-            player.sendMessage("Hi, " + dbPlayer.display_name + " your current level is: " + dbPlayer.stage);
+
+
             dbPlayer.init(player);
+            player.sendMessage("Hi, " + dbPlayer.display_name + " your current level is: " + dbPlayer.stage);
+            MMORPG.consoleLog(String.valueOf(player.getPing()));
+            Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
+            Team team = board.registerNewTeam(player.getName());
+            team.setPrefix("daw" + ChatColor.GREEN);
         }
     }
     public static void onQuit(PlayerQuitEvent event) throws SQLException {

@@ -131,6 +131,23 @@ public class Functions {
         stmt.executeUpdate(sql);
         MMORPG.consoleLog("DataTabel created: " + dataObj.permission + "!");
     }
+    public static void createBlock_break_count(Block_break_countObject dataObj) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sqlString = "'"
+                + dataObj.block_name
+                + "', '"
+                + dataObj.player_id
+                + "', '"
+                + dataObj.level
+                + "', '"
+                + dataObj.count
+                + "'";
+        String sql = "insert into block_break_counter "
+                + "(block_name, player_id, level, count)"
+                + "values (" + sqlString + ")";
+        stmt.executeUpdate(sql);
+        MMORPG.consoleLog("DataTabel created: " + dataObj.block_name + "!");
+    }
     public static void createMail(MailObject dataObj) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sqlString = "'"
@@ -258,7 +275,7 @@ public class Functions {
             dataObj.title = myRs.getString("title");
             dataObj.id = myRs.getInt("id");
             dataObjList.add(dataObj);
-            MMORPG.consoleLog("Database read in worlds for " + dataObj.message + " !");
+            MMORPG.consoleLog("Database read in mails for " + dataObj.message + " !");
         }
         return dataObjList;
     }
@@ -276,7 +293,7 @@ public class Functions {
             dataObj.receiver_id = myRs.getString("receiver_id");
             dataObj.message = myRs.getString("message");
             dataObj.opened = myRs.getString("opened");
-            MMORPG.consoleLog("Database read in worlds for " + dataObj.message + " !");
+            MMORPG.consoleLog("Database read in mails for " + dataObj.message + " !");
         }
         return dataObj;
     }
@@ -291,7 +308,7 @@ public class Functions {
             dataObj.permission = myRs.getString("permission");
             dataObj.id = myRs.getString("id");
             dataObjList.add(dataObj);
-            MMORPG.consoleLog("Database read in worlds for " + dataObj.permission + " !");
+            MMORPG.consoleLog("Database read in ranks_permissions for " + dataObj.permission + " !");
         }
         return dataObjList;
     }
@@ -304,7 +321,22 @@ public class Functions {
         while (myRs.next()) {
             dataObj.permission = myRs.getString("permission");
             dataObj.id = myRs.getString("id");
-            MMORPG.consoleLog("Database read in worlds for " + dataObj.permission + " !");
+            MMORPG.consoleLog("Database read in ranks_permissions for " + dataObj.permission + " !");
+        }
+        return dataObj;
+    }
+    public static Block_break_countObject getBlock_break_count(String column, String value, String column2, String value2) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from block_break_counter where " + column + "=" + "'" + value + "' and " + column2 + "='" + value2 + "';";
+        MMORPG.consoleLog(sql);
+        ResultSet myRs = stmt.executeQuery(sql);
+        Block_break_countObject dataObj = new Block_break_countObject();
+        while (myRs.next()) {
+            dataObj.block_name = myRs.getString("block_name");
+            dataObj.player_id = myRs.getString("player_id");
+            dataObj.count = myRs.getInt("count");
+            dataObj.level = myRs.getInt("level");
+            MMORPG.consoleLog("Database read in block_break_counter for " + dataObj.block_name + " !");
         }
         return dataObj;
     }

@@ -1,7 +1,6 @@
 package at.feddis08.mmorpg.listeners;
 
-import at.feddis08.mmorpg.MMORPG;
-import at.feddis08.mmorpg.Methods;
+import at.feddis08.mmorpg.tools.Methods;
 import at.feddis08.mmorpg.commands.Rank;
 import at.feddis08.mmorpg.database.Functions;
 import at.feddis08.mmorpg.database.objects.PlayerObject;
@@ -9,12 +8,8 @@ import at.feddis08.mmorpg.database.objects.RankObject;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.checkerframework.checker.units.qual.C;
 
-import java.lang.reflect.Method;
 import java.sql.SQLException;
-import java.time.Instant;
-import java.util.Date;
 import java.util.Objects;
 
 public class onChat {

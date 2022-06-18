@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -35,6 +36,10 @@ public class Listeners implements org.bukkit.event.Listener {
     @EventHandler
     public static void onPlayerInteractEvent(PlayerInteractEvent event){
         onPlayerInteract.playerInteract(event);
+    }
+    @EventHandler
+    public static void onSpawn(EntitySpawnEvent event){
+        onSpawn.onSpawn(event);
     }
     @EventHandler
     public static void onChat(AsyncPlayerChatEvent event) throws SQLException {onChat.onChat(event);}

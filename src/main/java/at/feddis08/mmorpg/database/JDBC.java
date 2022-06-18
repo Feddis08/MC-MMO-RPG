@@ -17,6 +17,7 @@ public class JDBC {
             createPlayers_in_worldsTable();
             createRanks_permissionsTable();
             createMailsTable();
+            createBlock_break_countTable();
         }catch (Exception e){
             MMORPG.consoleLog("Connection to DataBase failed!");
             e.printStackTrace();
@@ -101,6 +102,17 @@ public class JDBC {
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
         MMORPG.consoleLog("MYSQL worlds tabel created!");
+    }
+    public static void createBlock_break_countTable() throws SQLException {
+        String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "block_break_counter"
+                + "  (block_name VARCHAR(40),"
+                + "   player_id VARCHAR(40),"
+                + "   count INTEGER,"
+                + "   level INTEGER)";
+
+        Statement stmt = myConn.createStatement();
+        stmt.execute(sqlCreate);
+        MMORPG.consoleLog("MYSQL block_break_count tabel created!");
     }
     public static void createPlayers_in_worldsTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "players_in_worlds"

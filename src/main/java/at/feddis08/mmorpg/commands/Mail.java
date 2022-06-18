@@ -1,7 +1,7 @@
 package at.feddis08.mmorpg.commands;
 
 import at.feddis08.mmorpg.MMORPG;
-import at.feddis08.mmorpg.Methods;
+import at.feddis08.mmorpg.tools.Methods;
 import at.feddis08.mmorpg.database.Functions;
 import at.feddis08.mmorpg.database.objects.MailObject;
 import at.feddis08.mmorpg.database.objects.PlayerObject;

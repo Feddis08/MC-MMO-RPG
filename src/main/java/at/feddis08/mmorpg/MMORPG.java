@@ -6,6 +6,7 @@ import at.feddis08.mmorpg.database.objects.PlayerInWorlds;
 import at.feddis08.mmorpg.database.objects.RankObject;
 import at.feddis08.mmorpg.database.objects.WorldObject;
 import at.feddis08.mmorpg.listeners.Listeners;
+import at.feddis08.mmorpg.tools.StartLoadWorld;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -36,6 +37,7 @@ public final class MMORPG extends JavaPlugin {
             Rank.set_prefix("default", "Player");
             Rank.add_rule("default", "doChat");
             Rank.add_rule("default", "doMail");
+            Rank.add_rule("default", "doBreakBlockInMain");
         }
         try {
             RankObject dbRank2 = Functions.getRank("id", "operator");
@@ -48,6 +50,8 @@ public final class MMORPG extends JavaPlugin {
             Rank.add_rule("operator", "*");
             Rank.set_prefix("operator", "Operator");
         }
+        StartLoadWorld.loadWorld("main");
+
 /*
         getCommand("install").setExecutor(new install());
         Collection<? extends Player> players = getServer().getOnlinePlayers();
