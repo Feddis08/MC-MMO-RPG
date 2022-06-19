@@ -44,10 +44,6 @@ public class connectionEvents {
 
             dbPlayer.init(player);
             player.sendMessage("Hi, " + dbPlayer.display_name + " your current level is: " + dbPlayer.stage);
-            MMORPG.consoleLog(String.valueOf(player.getPing()));
-            Scoreboard board = Bukkit.getScoreboardManager().getMainScoreboard();
-            Team team = board.registerNewTeam(player.getName());
-            team.setPrefix("daw" + ChatColor.GREEN);
         }
     }
     public static void onQuit(PlayerQuitEvent event) throws SQLException {

@@ -39,6 +39,7 @@ public final class MMORPG extends JavaPlugin {
             Rank.add_rule("default", "doChat");
             Rank.add_rule("default", "doMail");
             Rank.add_rule("default", "doBreakBlockInMain");
+            Rank.add_rule("default", "doSetPlayerInfoScoreboard");
         }
         try {
             RankObject dbRank2 = Functions.getRank("id", "operator");
@@ -76,6 +77,7 @@ public final class MMORPG extends JavaPlugin {
         getCommand("startUp").setExecutor(new StartUp());
         getCommand("reset").setExecutor(new reset());
         getCommand("mail").setExecutor(new Mail());
+        getCommand("setScoreboard").setExecutor(new SetScoreboard());
     }
         @Override
     public void onDisable() {

@@ -14,3 +14,4 @@ commands:
   loadWorld:
   rank:
   mail:
+  setScoreboard:
