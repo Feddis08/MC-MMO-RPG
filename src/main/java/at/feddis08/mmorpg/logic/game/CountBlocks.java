@@ -39,7 +39,7 @@ public class CountBlocks {
     }
 
     public static Integer checkLevelUd(Integer count, Integer level){
-        Integer currentLevel = Integer.parseInt(String.valueOf(Math.round(Math.sqrt(count))));
+        Integer currentLevel = Integer.parseInt(String.valueOf(Math.sqrt(count)).split("\\.")[0]);
         return currentLevel;
     }
     public static boolean checkIfBlockIsInDb(String block_name, String player_id) throws SQLException {
