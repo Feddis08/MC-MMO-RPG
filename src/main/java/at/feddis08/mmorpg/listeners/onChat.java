@@ -29,7 +29,7 @@ public class onChat {
             ChatColor color_prefix = getChatColor(dbRank.prefix_color);
             ChatColor color_rank = getChatColor(dbRank.rank_color);
                     event.setFormat(ChatColor.GRAY + "[" + color_prefix + dbRank.prefix + ChatColor.GRAY + "][" + color_rank + dbPlayer.display_name + ChatColor.GRAY + "]" + ChatColor.BLUE + ": "
-                        + ChatColor.YELLOW + chatMessage + ChatColor.GRAY + " [" + Methods.getTime() + "]");
+                        + ChatColor.YELLOW + chatMessage + ChatColor.GRAY + " [" + Methods.getTime() + "][" + dbPlayer.job + "]");
             }else{
                 player.sendMessage(ChatColor.RED + "You need the permission: 'doChat'!");
                 event.setCancelled(true);

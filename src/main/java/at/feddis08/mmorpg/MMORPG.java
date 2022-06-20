@@ -5,6 +5,7 @@ import at.feddis08.mmorpg.database.*;
 import at.feddis08.mmorpg.database.objects.PlayerInWorlds;
 import at.feddis08.mmorpg.database.objects.RankObject;
 import at.feddis08.mmorpg.database.objects.WorldObject;
+import at.feddis08.mmorpg.inventories.getJobInv;
 import at.feddis08.mmorpg.listeners.Listeners;
 import at.feddis08.mmorpg.scoreboads.BlocksInfoScoreboard;
 import at.feddis08.mmorpg.tools.StartLoadWorld;
@@ -51,7 +52,10 @@ public final class MMORPG extends JavaPlugin {
             Rank.create_rank("operator");
             Rank.add_rule("operator", "*");
             Rank.set_prefix("operator", "Operator");
+            Rank.set_prefix_color("operator", "red");
         }
+
+        getJobInv.createInv();
         StartLoadWorld.loadWorld("main");
 
 /*

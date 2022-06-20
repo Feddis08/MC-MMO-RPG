@@ -28,10 +28,12 @@ public class Functions {
                 + "', '"
                 + playerObj.online
                 + "', '"
+                + playerObj.job
+                + "', '"
                 + playerObj.didStartup
                 + "'";
         String sql = "insert into players "
-                + "(realm, stage, current_world_id, gamemode, id, player_rank, player_name, display_name, online, didStartup)"
+                + "(realm, stage, current_world_id, gamemode, id, player_rank, player_name, display_name, online, job, didStartup)"
                 + "values (" + sqlString + ")";
         stmt.executeUpdate(sql);
         MMORPG.consoleLog("Player created: " + playerObj.player_name + "!");
@@ -179,6 +181,7 @@ public class Functions {
         while (myRs.next()) {
             dataObj.stage = myRs.getInt("stage");
             dataObj.id = myRs.getString("id");
+            dataObj.job = myRs.getString("job");
             dataObj.online = myRs.getString("online");
             dataObj.player_rank = myRs.getString("player_rank");
             dataObj.display_name = myRs.getString("display_name");

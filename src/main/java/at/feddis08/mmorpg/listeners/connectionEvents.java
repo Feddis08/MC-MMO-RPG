@@ -5,6 +5,7 @@ import at.feddis08.mmorpg.commands.Rank;
 import at.feddis08.mmorpg.database.*;
 import at.feddis08.mmorpg.database.objects.PlayerInWorlds;
 import at.feddis08.mmorpg.database.objects.PlayerObject;
+import at.feddis08.mmorpg.inventories.getJobInv;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -40,8 +41,6 @@ public class connectionEvents {
             player.sendMessage("Hi, if you are new here, you have to run" + ChatColor.GOLD + " /startup " + ChatColor.GRAY + "in the chat!");
             MMORPG.consoleLog("New player: " + player.getName() + " logged in!");
         }else if(Objects.equals(dbPlayer.didStartup, "true")){
-
-
             dbPlayer.init(player);
             player.sendMessage("Hi, " + dbPlayer.display_name + " your current level is: " + dbPlayer.stage);
         }

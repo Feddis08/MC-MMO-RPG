@@ -30,6 +30,7 @@ public class JDBC {
                 + "   current_world_id VARCHAR(200),"
                 + "   gamemode           INTEGER,"
                 + "   id                VARCHAR(40),"
+                + "   job                VARCHAR(40),"
                 + "   player_rank                VARCHAR(20),"
                 + "   online           VARCHAR(5),"
                 + "   player_name     VARCHAR(20),"

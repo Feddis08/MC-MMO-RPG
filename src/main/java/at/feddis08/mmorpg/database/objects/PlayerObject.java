@@ -18,6 +18,7 @@ public class PlayerObject {
     public String player_name = "";
     public String didStartup = "false";
     public String online = "";
+    public String job = "";
     public Player player;
 
     public void init(Player player) throws SQLException {
