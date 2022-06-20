@@ -9,6 +9,7 @@ import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -46,6 +47,10 @@ public class Listeners implements org.bukkit.event.Listener {
     @EventHandler
     public static void onInventoryClick(InventoryClickEvent event) throws SQLException {
         onInventoryClick.onInventoryClick(event);
+    }
+    @EventHandler
+    public static void onInvOpened(InventoryOpenEvent event){
+        onInvOpened.onInvOpened(event);
     }
     @EventHandler
     public static void onChat(AsyncPlayerChatEvent event) throws SQLException {onChat.onChat(event);}

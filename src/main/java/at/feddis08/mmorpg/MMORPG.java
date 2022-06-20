@@ -5,6 +5,7 @@ import at.feddis08.mmorpg.database.*;
 import at.feddis08.mmorpg.database.objects.PlayerInWorlds;
 import at.feddis08.mmorpg.database.objects.RankObject;
 import at.feddis08.mmorpg.database.objects.WorldObject;
+import at.feddis08.mmorpg.inventories.getBakerInv;
 import at.feddis08.mmorpg.inventories.getJobInv;
 import at.feddis08.mmorpg.listeners.Listeners;
 import at.feddis08.mmorpg.scoreboads.BlocksInfoScoreboard;
@@ -56,6 +57,7 @@ public final class MMORPG extends JavaPlugin {
         }
 
         getJobInv.createInv();
+        getBakerInv.createInv();
         StartLoadWorld.loadWorld("main");
 
 /*
