@@ -44,24 +44,24 @@ public final class MMORPG extends JavaPlugin {
             Rank.add_rule("default", "doBreakBlockInMain");
             Rank.add_rule("default", "doSetPlayerInfoScoreboard");
         }
+        RankObject dbRank2 = null;
         try {
-            RankObject dbRank2 = Functions.getRank("id", "operator");
+            dbRank2 = Functions.getRank("id", "operator");
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        if (Objects.equals(dbRank.name, "operator")) {
+        if (Objects.equals(dbRank2.name, "operator")) {
+            StartLoadWorld.loadWorld("main");
+            try {
+                WorldAutoLoad.checkAutoloadWorlds();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } else {
             Rank.create_rank("operator");
             Rank.add_rule("operator", "*");
             Rank.set_prefix("operator", "Operator");
             Rank.set_prefix_color("operator", "red");
-        }
-
-        StartLoadWorld.loadWorld("main");
-        try {
-            WorldAutoLoad.checkAutoloadWorlds();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
 /*

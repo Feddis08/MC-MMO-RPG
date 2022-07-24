@@ -170,7 +170,7 @@ public class Mail implements CommandExecutor {
         mail.message = mail_message;
         mail.title = mail_message;
         mail.date = Methods.getTime();
-        mail.id = Integer.parseInt(String.valueOf(Math.random()));
+        mail.id = Functions.getAllMails().size();
         Functions.createMail(mail);
     }
     public static MailObject open(String mail_id, String player_id) throws SQLException {

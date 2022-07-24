@@ -284,6 +284,26 @@ public class Functions {
         }
         return dataObjList;
     }
+    public static ArrayList<MailObject> getAllMails() throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from mails";
+        ResultSet myRs = stmt.executeQuery(sql);
+
+        ArrayList<MailObject> dataObjList = new ArrayList<>();
+        while (myRs.next()) {
+            MailObject dataObj = new MailObject();
+            dataObj.sender_id = myRs.getString("sender_id");
+            dataObj.date = myRs.getString("date");
+            dataObj.receiver_id = myRs.getString("receiver_id");
+            dataObj.message = myRs.getString("message");
+            dataObj.opened = myRs.getString("opened");
+            dataObj.title = myRs.getString("title");
+            dataObj.id = myRs.getInt("id");
+            dataObjList.add(dataObj);
+            MMORPG.consoleLog("Database read in mails for " + dataObj.message + " !");
+        }
+        return dataObjList;
+    }
     public static ArrayList<MailObject> getMails(String column, String value, String column2, String value2) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sql = "select * from mails where " + column + " = " + "'" + value + "' and " + column2 + "='" + value2 + "'";
