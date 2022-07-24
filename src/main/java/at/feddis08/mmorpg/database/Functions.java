@@ -89,6 +89,8 @@ public class Functions {
                 + "', '"
                 + dataObj.id
                 + "', '"
+                + dataObj.autoload
+                + "', '"
                 + dataObj.loaded
                 + "', '"
                 + dataObj.type
@@ -96,7 +98,7 @@ public class Functions {
                 + dataObj.players_on
                 + "'";
         String sql = "insert into worlds "
-                + "(name, id, loaded, type, players_on)"
+                + "(name, id, autoload, loaded, type, players_on)"
                 + "values (" + sqlString + ")";
         stmt.executeUpdate(sql);
         MMORPG.consoleLog("DataTabel created: " + dataObj.name + "!");
@@ -238,11 +240,31 @@ public class Functions {
             dataObj.name = myRs.getString("name");
             dataObj.type = myRs.getString("type");
             dataObj.id = myRs.getString("id");
+            dataObj.autoload = myRs.getString("autoload");
             dataObj.loaded = myRs.getString("loaded");
             dataObj.players_on = myRs.getInt("players_on");
         }
         MMORPG.consoleLog("Database read in worlds for " + value + " !");
         return dataObj;
+    }
+    public static ArrayList<WorldObject> getWorlds() throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from worlds";
+        ResultSet myRs = stmt.executeQuery(sql);
+
+        ArrayList<WorldObject> dataObjList = new ArrayList<>();
+        while (myRs.next()) {
+            WorldObject dataObj = new WorldObject();
+            dataObj.name = myRs.getString("name");
+            dataObj.type = myRs.getString("type");
+            dataObj.id = myRs.getString("id");
+            dataObj.autoload = myRs.getString("autoload");
+            dataObj.loaded = myRs.getString("loaded");
+            dataObj.players_on = myRs.getInt("players_on");
+            dataObjList.add(dataObj);
+            MMORPG.consoleLog("Database read in worlds for " + dataObj.name + " !");
+        }
+        return dataObjList;
     }
     public static ArrayList<PlayerInWorlds> getPlayerInWorlds(String column, String value) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();

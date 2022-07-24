@@ -96,6 +96,7 @@ public class JDBC {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "worlds"
                 + "  (name VARCHAR(200),"
                 + "   id VARCHAR(40),"
+                + "   autoload VARCHAR(2)"
                 + "   players_on INTEGER,"
                 + "   type VARCHAR(20),"
                 + "   loaded VARCHAR(5) )";

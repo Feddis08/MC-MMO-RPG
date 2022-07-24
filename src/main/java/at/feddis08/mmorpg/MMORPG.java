@@ -10,6 +10,7 @@ import at.feddis08.mmorpg.inventories.getJobInv;
 import at.feddis08.mmorpg.listeners.Listeners;
 import at.feddis08.mmorpg.scoreboads.BlocksInfoScoreboard;
 import at.feddis08.mmorpg.tools.StartLoadWorld;
+import at.feddis08.mmorpg.tools.WorldAutoLoad;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -56,8 +57,12 @@ public final class MMORPG extends JavaPlugin {
             Rank.set_prefix_color("operator", "red");
         }
 
-        //getJobInv.createInv();
         StartLoadWorld.loadWorld("main");
+        try {
+            WorldAutoLoad.checkAutoloadWorlds();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
 /*
         getCommand("install").setExecutor(new install());

@@ -54,7 +54,7 @@ public class Mail implements CommandExecutor {
                         }
                         if (args.length == 2) {
                             if (args[0].equalsIgnoreCase("open")) {
-                                MailObject mail = Mail.open(args[1], dbPlayer.id)
+                                MailObject mail = Mail.open(args[1], dbPlayer.id);
                                 sender.sendMessage(ChatColor.BLUE + "The mail with the id" + args[1] + "! The format:");
                                 sender.sendMessage(ChatColor.AQUA + "From | Date | Seen/Opened | Title | Id");
                                 PlayerObject dbSender = Functions.getPlayer("id", mail.sender_id);
