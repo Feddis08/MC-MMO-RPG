@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Objects;
 
 import static at.feddis08.mmorpg.listeners.onChat.getChatColor;
@@ -34,17 +35,8 @@ public class Mail implements CommandExecutor {
                         Boolean validCommand = false;
                         if (args.length == 4) {
                             if (args[0].equalsIgnoreCase("send")) {
-                                Calendar calendar = Calendar.getInstance();
+                                Mail.send(args[1], dbPlayer.id, args[2], args[3]);
                                 PlayerObject dbReceiver = Functions.getPlayer("display_name", args[1]);
-                                MailObject mail = new MailObject();
-                                mail.receiver_id = dbReceiver.id;
-                                mail.sender_id = dbPlayer.id;
-                                mail.message = args[3];
-                                mail.title = args[2];
-                                mail.date = Methods.getTime();
-                                mail.id = Functions.getMails("receiver_id", dbPlayer.id, "receiver_id", dbPlayer.id).size() + 1;
-
-                                Functions.createMail(mail);
                                 if (Objects.equals(dbReceiver.online, "1") && Objects.equals(dbReceiver.didStartup, "true")) {
                                     RankObject dbRank = Functions.getRank("name", dbPlayer.player_rank);
                                     ChatColor color_prefix = getChatColor(dbRank.prefix_color);
@@ -54,7 +46,7 @@ public class Mail implements CommandExecutor {
                                             + dbRank.prefix + ChatColor.GRAY
                                             + "][" + color_rank
                                             + dbPlayer.display_name + ChatColor.GRAY
-                                            + "]") + ChatColor.DARK_PURPLE + " (" + mail.title + ")");
+                                            + "]") + ChatColor.DARK_PURPLE + " (" + args[2] + ")");
                                 }
                                 sender.sendMessage(ChatColor.GREEN + "Sent mail");
                                 validCommand = true;
@@ -62,7 +54,7 @@ public class Mail implements CommandExecutor {
                         }
                         if (args.length == 2) {
                             if (args[0].equalsIgnoreCase("open")) {
-                                MailObject mail = Functions.getMail("id", args[1], "receiver_id", dbPlayer.id);
+                                MailObject mail = Mail.open(args[1], dbPlayer.id)
                                 sender.sendMessage(ChatColor.BLUE + "The mail with the id" + args[1] + "! The format:");
                                 sender.sendMessage(ChatColor.AQUA + "From | Date | Seen/Opened | Title | Id");
                                 PlayerObject dbSender = Functions.getPlayer("id", mail.sender_id);
@@ -86,7 +78,7 @@ public class Mail implements CommandExecutor {
                             validCommand = true;
                         }
                         if (args.length == 2) {
-                            if (args[0].equalsIgnoreCase("sort_mails")) {
+                            if (args[0].equalsIgnoreCase("sortMails")) {
                                 ArrayList<MailObject> mails = Functions.getMails("receiver_id", dbPlayer.id, "sender_id", Functions.getPlayer("display_name", args[1]).id);
                                 Integer i = 0;
                                 sender.sendMessage(ChatColor.BLUE + "All your mails you got from " + args[1] + "! The format:");
@@ -117,6 +109,13 @@ public class Mail implements CommandExecutor {
                             }
                         }
                         if (args.length == 1) {
+                            if (args[0].equalsIgnoreCase("help")){
+                                sender.sendMessage("With the mail function you can send a player a mail.");
+                                sender.sendMessage("send: You write and send a mail to a player. /mail send player_name titel message");
+                                sender.sendMessage("open: You can open a mail that a player sent you. /mail open mail_id");
+                                sender.sendMessage("sortMails: You can search for mails that were sent by a player. /mail player_name");
+                                sender.sendMessage("showMails: You can show all your mails you got. /mail showMails");
+                            }
                             if (args[0].equalsIgnoreCase("showMails")) {
                                 ArrayList<MailObject> mails = Functions.getMails("receiver_id", dbPlayer.id, "receiver_id", dbPlayer.id);
                                 Integer i = 0;
@@ -162,5 +161,20 @@ public class Mail implements CommandExecutor {
             }
         }
         return true;
+    }
+    public static void send(String receiver_display_name, String sender_id, String mail_message, String mail_title) throws SQLException {
+        PlayerObject dbReceiver = Functions.getPlayer("display_name", receiver_display_name);
+        MailObject mail = new MailObject();
+        mail.receiver_id = dbReceiver.id;
+        mail.sender_id = sender_id;
+        mail.message = mail_message;
+        mail.title = mail_message;
+        mail.date = Methods.getTime();
+        mail.id = Integer.parseInt(String.valueOf(Math.random()));
+        Functions.createMail(mail);
+    }
+    public static MailObject open(String mail_id, String player_id) throws SQLException {
+        MailObject mail = Functions.getMail("id", mail_id, "receiver_id", player_id);
+        return mail;
     }
 }

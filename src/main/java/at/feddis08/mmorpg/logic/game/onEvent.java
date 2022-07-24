@@ -12,6 +12,7 @@ import java.sql.SQLException;
 
 public class onEvent {
     public static void onInventoryClick (InventoryClickEvent event) throws SQLException {
+        /*
         if (event.getInventory().equals(getJobInv.inv)){
             event.setCancelled(true);
             getJobInv.setPlayerJob((Player) event.getWhoClicked(), event.getSlot());
@@ -32,11 +33,16 @@ public class onEvent {
                 MMORPG.consoleLog("daw");
             }
         }
+
+         */
     }
     public static void onInventoryOpened(InventoryOpenEvent event){
+        /*
         if (getBakerInv.checkInvType(event.getInventory().getType().name())){
             event.setCancelled(true);
             getBakerInv.set_player_inventory((Player)event.getPlayer());
         }
+
+         */
     }
 }

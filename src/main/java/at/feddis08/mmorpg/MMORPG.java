@@ -56,8 +56,7 @@ public final class MMORPG extends JavaPlugin {
             Rank.set_prefix_color("operator", "red");
         }
 
-        getJobInv.createInv();
-        getBakerInv.createInv();
+        //getJobInv.createInv();
         StartLoadWorld.loadWorld("main");
 
 /*
