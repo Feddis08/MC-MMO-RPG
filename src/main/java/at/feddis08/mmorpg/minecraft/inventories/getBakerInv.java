@@ -1,4 +1,4 @@
-package at.feddis08.mmorpg.inventories;
+package at.feddis08.mmorpg.minecraft.inventories;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

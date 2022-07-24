@@ -1,6 +1,5 @@
-package at.feddis08.mmorpg.scoreboads;
+package at.feddis08.mmorpg.minecraft.scoreboads;
 
-import at.feddis08.mmorpg.commands.Rank;
 import at.feddis08.mmorpg.database.Functions;
 import at.feddis08.mmorpg.database.objects.PlayerObject;
 import org.bukkit.Bukkit;

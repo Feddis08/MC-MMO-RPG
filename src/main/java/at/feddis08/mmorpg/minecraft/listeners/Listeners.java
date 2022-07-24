@@ -1,11 +1,7 @@
-package at.feddis08.mmorpg.listeners;
+package at.feddis08.mmorpg.minecraft.listeners;
 
-import at.feddis08.mmorpg.MMORPG;
-import at.feddis08.mmorpg.commands.*;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -14,7 +10,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.inventory.Inventory;
 
 import java.sql.SQLException;
 

@@ -1,7 +1,6 @@
-package at.feddis08.mmorpg.tools;
+package at.feddis08.mmorpg.minecraft.tools;
 
 import at.feddis08.mmorpg.MMORPG;
-import at.feddis08.mmorpg.commands.LoadWorld;
 import at.feddis08.mmorpg.database.Functions;
 import at.feddis08.mmorpg.database.objects.WorldObject;
 import org.bukkit.World;

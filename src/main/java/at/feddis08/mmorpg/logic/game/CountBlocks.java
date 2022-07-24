@@ -1,9 +1,8 @@
 package at.feddis08.mmorpg.logic.game;
 
-import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.database.Functions;
 import at.feddis08.mmorpg.database.objects.Block_break_countObject;
-import at.feddis08.mmorpg.scoreboads.BlocksInfoScoreboard;
+import at.feddis08.mmorpg.minecraft.scoreboads.BlocksInfoScoreboard;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import java.sql.SQLException;

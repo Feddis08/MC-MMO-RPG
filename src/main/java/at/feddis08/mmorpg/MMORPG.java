@@ -2,23 +2,15 @@ package at.feddis08.mmorpg;
 
 import at.feddis08.mmorpg.commands.*;
 import at.feddis08.mmorpg.database.*;
-import at.feddis08.mmorpg.database.objects.PlayerInWorlds;
 import at.feddis08.mmorpg.database.objects.RankObject;
-import at.feddis08.mmorpg.database.objects.WorldObject;
-import at.feddis08.mmorpg.inventories.getBakerInv;
-import at.feddis08.mmorpg.inventories.getJobInv;
-import at.feddis08.mmorpg.listeners.Listeners;
-import at.feddis08.mmorpg.scoreboads.BlocksInfoScoreboard;
-import at.feddis08.mmorpg.tools.StartLoadWorld;
-import at.feddis08.mmorpg.tools.WorldAutoLoad;
+import at.feddis08.mmorpg.discord.DISCORD;
+import at.feddis08.mmorpg.minecraft.listeners.Listeners;
+import at.feddis08.mmorpg.minecraft.tools.StartLoadWorld;
+import at.feddis08.mmorpg.minecraft.tools.WorldAutoLoad;
 import org.bukkit.*;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.sql.SQLException;
-import java.util.Collection;
 import java.util.Objects;
-import java.util.function.Function;
 
 public final class MMORPG extends JavaPlugin {
 
@@ -27,6 +19,7 @@ public final class MMORPG extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        DISCORD.start_bot();
         consoleLog("Starting...");
         JDBC.connectToDb("10.0.1.46", "3306", "MMORPG", "MMORPG", "felix123");
         RankObject dbRank = null;
@@ -96,5 +89,6 @@ public final class MMORPG extends JavaPlugin {
     }
     public static void consoleLog(String log){
         Bukkit.getConsoleSender().sendMessage(prefix + log);
+        at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, log);
     }
 }

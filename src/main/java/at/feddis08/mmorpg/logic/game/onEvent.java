@@ -1,10 +1,5 @@
 package at.feddis08.mmorpg.logic.game;
 
-import at.feddis08.mmorpg.MMORPG;
-import at.feddis08.mmorpg.inventories.getBakerInv;
-import at.feddis08.mmorpg.inventories.getJobInv;
-import org.bukkit.block.Furnace;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 

@@ -1,7 +1,7 @@
 package at.feddis08.mmorpg.commands;
 
 import at.feddis08.mmorpg.MMORPG;
-import at.feddis08.mmorpg.tools.Methods;
+import at.feddis08.mmorpg.minecraft.tools.Methods;
 import at.feddis08.mmorpg.database.Functions;
 import at.feddis08.mmorpg.database.objects.MailObject;
 import at.feddis08.mmorpg.database.objects.PlayerObject;
@@ -13,11 +13,9 @@ import org.bukkit.command.CommandSender;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
 import java.util.Objects;
 
-import static at.feddis08.mmorpg.listeners.onChat.getChatColor;
+import static at.feddis08.mmorpg.minecraft.listeners.onChat.getChatColor;
 
 public class Mail implements CommandExecutor {
     @Override

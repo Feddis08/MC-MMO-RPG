@@ -1,4 +1,4 @@
-package at.feddis08.mmorpg.listeners;
+package at.feddis08.mmorpg.minecraft.listeners;
 
 import at.feddis08.mmorpg.logic.game.onEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;

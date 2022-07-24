@@ -1,19 +1,15 @@
 package at.feddis08.mmorpg.commands;
 
-import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.database.Functions;
 import at.feddis08.mmorpg.database.objects.PlayerObject;
-import at.feddis08.mmorpg.database.objects.WorldObject;
-import at.feddis08.mmorpg.tools.StartLoadWorld;
+import at.feddis08.mmorpg.minecraft.tools.StartLoadWorld;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Objects;
-import java.util.function.Function;
 
 public class LoadWorld implements CommandExecutor {
     @Override

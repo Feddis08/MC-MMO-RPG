@@ -1,6 +1,6 @@
-package at.feddis08.mmorpg.listeners;
+package at.feddis08.mmorpg.minecraft.listeners;
 
-import at.feddis08.mmorpg.tools.Methods;
+import at.feddis08.mmorpg.minecraft.tools.Methods;
 import at.feddis08.mmorpg.commands.Rank;
 import at.feddis08.mmorpg.database.Functions;
 import at.feddis08.mmorpg.database.objects.PlayerObject;

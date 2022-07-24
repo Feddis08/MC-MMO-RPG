@@ -1,4 +1,4 @@
-package at.feddis08.mmorpg.scoreboads;
+package at.feddis08.mmorpg.minecraft.scoreboads;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

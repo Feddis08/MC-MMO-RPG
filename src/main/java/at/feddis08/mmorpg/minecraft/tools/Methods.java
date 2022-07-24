@@ -1,7 +1,4 @@
-package at.feddis08.mmorpg.tools;
-
-import at.feddis08.mmorpg.database.objects.MailObject;
-import at.feddis08.mmorpg.database.objects.PlayerObject;
+package at.feddis08.mmorpg.minecraft.tools;
 
 import java.util.Calendar;
 

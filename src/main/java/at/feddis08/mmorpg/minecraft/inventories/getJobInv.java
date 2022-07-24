@@ -1,12 +1,10 @@
-package at.feddis08.mmorpg.inventories;
+package at.feddis08.mmorpg.minecraft.inventories;
 
 import at.feddis08.mmorpg.database.Functions;
-import at.feddis08.mmorpg.database.objects.PlayerObject;
 import at.feddis08.mmorpg.logic.game.jobs.Baker;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.ItemMeta;
 

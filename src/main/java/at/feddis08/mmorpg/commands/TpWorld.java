@@ -1,6 +1,5 @@
 package at.feddis08.mmorpg.commands;
 
-import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.database.Functions;
 import at.feddis08.mmorpg.database.objects.PlayerInWorlds;
 import at.feddis08.mmorpg.database.objects.PlayerObject;
@@ -13,7 +12,6 @@ import org.bukkit.entity.Player;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.function.Function;
 
 public class TpWorld implements CommandExecutor {
     @Override

@@ -1,6 +1,5 @@
 package at.feddis08.mmorpg.commands;
 
-import at.feddis08.mmorpg.MMORPG;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
