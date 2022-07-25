@@ -7,6 +7,9 @@ public class DISCORD {
 
     public static String text_channel_Allgemein_id = "861647318017507351";
     public static String server_log = "1000897762327547944";
+    public static String read_only_chat = "1001122143112790046";
+    public static String chat = "1001122305814040577";
+
     public static void start_bot(){
     //public static void main(String[] args) {
         api = new DiscordApiBuilder()

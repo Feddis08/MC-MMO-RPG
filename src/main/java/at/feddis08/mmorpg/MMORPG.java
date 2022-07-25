@@ -9,6 +9,8 @@ import at.feddis08.mmorpg.minecraft.tools.StartLoadWorld;
 import at.feddis08.mmorpg.minecraft.tools.WorldAutoLoad;
 import org.bukkit.*;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.net.ServerSocket;
 import java.sql.SQLException;
 import java.util.Objects;
 
@@ -16,9 +18,13 @@ public final class MMORPG extends JavaPlugin {
 
     public static String prefix = "MMO-RPG: ";
     public static boolean enabled = false;
+
+    public static Server Server;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
+        Server = getServer();
         DISCORD.start_bot();
         consoleLog("Starting...");
         JDBC.connectToDb("10.0.1.46", "3306", "MMORPG", "MMORPG", "felix123");
@@ -86,7 +92,13 @@ public final class MMORPG extends JavaPlugin {
     public void onDisable() {
         // Plugin shutdown logic
         consoleLog("Stopping...");
-    }
+            try {
+                JDBC.myConn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        DISCORD.api.disconnect();
+        }
     public static void consoleLog(String log){
         Bukkit.getConsoleSender().sendMessage(prefix + log);
         at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, log);

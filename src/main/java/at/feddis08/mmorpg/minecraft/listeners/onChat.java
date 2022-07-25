@@ -1,5 +1,6 @@
 package at.feddis08.mmorpg.minecraft.listeners;
 
+import at.feddis08.mmorpg.discord.DISCORD;
 import at.feddis08.mmorpg.minecraft.tools.Methods;
 import at.feddis08.mmorpg.commands.Rank;
 import at.feddis08.mmorpg.database.Functions;
@@ -29,7 +30,13 @@ public class onChat {
             ChatColor color_prefix = getChatColor(dbRank.prefix_color);
             ChatColor color_rank = getChatColor(dbRank.rank_color);
                     event.setFormat(ChatColor.GRAY + "[" + color_prefix + dbRank.prefix + ChatColor.GRAY + "][" + color_rank + dbPlayer.display_name + ChatColor.GRAY + "]" + ChatColor.BLUE + ": "
-                        + ChatColor.YELLOW + chatMessage + ChatColor.GRAY + " [" + Methods.getTime() + "][" + dbPlayer.job + "]");
+                        + ChatColor.YELLOW + chatMessage + ChatColor.GRAY + " [" + Methods.getTime() + "]");
+
+                    at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.read_only_chat, "[" +  dbRank.prefix +  "][" + dbPlayer.display_name + "]" + ": "
+                            + chatMessage + " [" + Methods.getTime() + "]");
+                    at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.chat, "[" +  dbRank.prefix +  "][" + dbPlayer.display_name + "]" + ": "
+                            + chatMessage + " [" + Methods.getTime() + "]");
+
             }else{
                 player.sendMessage(ChatColor.RED + "You need the permission: 'doChat'!");
                 event.setCancelled(true);
