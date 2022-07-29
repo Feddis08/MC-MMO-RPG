@@ -12,6 +12,12 @@ public class MessageListeners {
             }
         });
         DISCORD.api.addMessageCreateListener(event -> {
+            if (event.getMessageContent().equalsIgnoreCase("!play")) {
+                event.getChannel().sendMessage("Join channel");
+                dcFunctions.join_voice_channel_and_stream_audio(DISCORD.voice1);
+            }
+        });
+        DISCORD.api.addMessageCreateListener(event -> {
             if (event.getMessageContent().equalsIgnoreCase("!ping")) {
                 event.getChannel().sendMessage("Pong!");
             }
@@ -19,16 +25,6 @@ public class MessageListeners {
         DISCORD.api.addMessageCreateListener(event -> {
             if (event.getMessageContent().equals("Hello")){
                 event.getChannel().sendMessage("World!");
-            }
-        });
-        DISCORD.api.addMessageCreateListener(event -> {
-            if (event.getMessageContent().equals("Felix")){
-                event.getChannel().sendMessage("Riemer");
-            }
-        });
-        DISCORD.api.addMessageCreateListener(event -> {
-            if (event.getMessageContent().equals("Leon")){
-                event.getChannel().sendMessage("Montel");
             }
         });
     }
