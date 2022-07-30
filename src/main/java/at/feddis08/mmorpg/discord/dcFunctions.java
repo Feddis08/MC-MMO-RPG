@@ -18,13 +18,9 @@ public class dcFunctions {
         ServerTextChannel t = DISCORD.api.getServerTextChannelById(channel_id).get();
         t.sendMessage(message);
     }
-    public static void join_voice_channel_and_stream_audio(String channel_id){
+    public static void join_voice_channel_and_stream_audio(long channel_id, String youtube_link){
         ServerVoiceChannel channel = DISCORD.api.getServerVoiceChannelById(channel_id).get();
         channel.connect().thenAccept(audioConnection -> {
-            DISCORD.api.getServerById("861647318017507348").get().unmuteYourself();
-            if (DISCORD.api.getYourself().isMuted(DISCORD.api.getServerById("861647318017507348").get())){
-                MMORPG.consoleLog("dawd");
-            }
             // Create a player manager
             AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
             playerManager.registerSourceManager(new YoutubeAudioSourceManager());
@@ -35,7 +31,7 @@ public class dcFunctions {
             audioConnection.setAudioSource(source);
 
             // You can now use the AudioPlayer like you would normally do with Lavaplayer, e.g.,
-            playerManager.loadItem("https://www.youtube.com/watch?v=mWebB6zby6Y", new AudioLoadResultHandler() {
+            playerManager.loadItem(youtube_link, new AudioLoadResultHandler() {
                 @Override
                 public void trackLoaded(AudioTrack track) {
                     player.playTrack(track);
@@ -51,12 +47,12 @@ public class dcFunctions {
                 @Override
                 public void noMatches() {
                     // Notify the user that we've got nothing
-                    MMORPG.consoleLog("dafwewd");
+                    MMORPG.consoleLog("DISCORD: Youtube link does not match: " + youtube_link);
                 }
 
                 @Override
                 public void loadFailed(FriendlyException throwable) {
-                    MMORPG.consoleLog("dwefsujawd");
+                    MMORPG.consoleLog("DISCORD: something went wrong: " + throwable);
                     // Notify the user that everything exploded
                 }
             });
