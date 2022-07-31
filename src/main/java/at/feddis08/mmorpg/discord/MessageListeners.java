@@ -10,7 +10,9 @@ public class MessageListeners {
     public static void create_message_listener(){
         DISCORD.api.addMessageCreateListener(event -> {
             if (String.valueOf(event.getChannel().getId()).equals(DISCORD.chat)){
-                MMORPG.Server.broadcastMessage(ChatColor.GRAY + "[" + ChatColor.BLUE + "DISCORD" + ChatColor.GRAY + "][" + ChatColor.GREEN + event.getMessage().getAuthor().getName() + ChatColor.GRAY + "]: " + ChatColor.YELLOW + event.getMessage().getContent() + ChatColor.GRAY + " [" + Methods.getTime() + "]");
+                if (!(event.getMessage().getAuthor().getId() == DISCORD.api.getYourself().getId())){
+                    MMORPG.Server.broadcastMessage(ChatColor.GRAY + "[" + ChatColor.BLUE + "DISCORD" + ChatColor.GRAY + "][" + ChatColor.GREEN + event.getMessage().getAuthor().getName() + ChatColor.GRAY + "]: " + ChatColor.YELLOW + event.getMessage().getContent() + ChatColor.GRAY + " [" + Methods.getTime() + "]");
+                }
             }
         });
         DISCORD.api.addMessageCreateListener(event -> {
