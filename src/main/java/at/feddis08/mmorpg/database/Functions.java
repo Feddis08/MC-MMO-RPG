@@ -150,6 +150,29 @@ public class Functions {
         stmt.executeUpdate(sql);
         MMORPG.debugLog("DataTabel created: " + dataObj.block_name + "!");
     }
+    public static void createPlayer_stat(Player_statObject dataObj) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sqlString = "'"
+                + dataObj.player_id
+                + "', '"
+                + dataObj.agil
+                + "'"
+                + dataObj.strength
+                + "'"
+                + dataObj.soul
+                + "'"
+                + dataObj.woodcut_experience
+                + "'"
+                + dataObj.general_experience
+                + "'"
+                + dataObj.endu
+                + "'";
+        String sql = "insert into players_stats "
+                + "(player_id, agil, strength, soul, woodcut_experience, general_experience, endu)"
+                + "values (" + sqlString + ")";
+        stmt.executeUpdate(sql);
+        MMORPG.debugLog("DataTabel created: " + dataObj.player_id + "!");
+    }
     public static void createMail(MailObject dataObj) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sqlString = "'"
@@ -379,6 +402,24 @@ public class Functions {
             dataObj.player_id = myRs.getString("player_id");
             dataObj.count = myRs.getInt("count");
             MMORPG.debugLog("Database read in block_break_counter for " + dataObj.block_name + " !");
+        }
+        return dataObj;
+    }
+    public static Player_statObject getPlayer_stat (String column, String value) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from players_stats where " + column + "=" + "'" + value + "';";
+        MMORPG.debugLog(sql);
+        ResultSet myRs = stmt.executeQuery(sql);
+        Player_statObject dataObj = new Player_statObject();
+        while (myRs.next()) {
+            dataObj.player_id = myRs.getString("player_id");
+            dataObj.agil = myRs.getInt("agil");
+            dataObj.endu = myRs.getInt("endu");
+            dataObj.general_experience = myRs.getInt("general_experience");
+            dataObj.woodcut_experience = myRs.getInt("woodcut_experience");
+            dataObj.soul = myRs.getInt("soul");
+            dataObj.strength = myRs.getInt("strength");
+            MMORPG.debugLog("Database read in player_stats for " + dataObj.player_id + " !");
         }
         return dataObj;
     }

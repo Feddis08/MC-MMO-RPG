@@ -18,7 +18,7 @@ public final class MMORPG extends JavaPlugin {
 
     public static String prefix = "MMO-RPG: ";
     public static boolean debugMode = true;
-    public static Integer current_dev_version = 3;
+    public static Integer current_dev_version = 4;
     public static boolean enable_discord_bot = false;
     public static boolean discord_bot_active = false;
 

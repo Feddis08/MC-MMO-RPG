@@ -9,7 +9,7 @@ public class JDBC {
             MMORPG.debugLog("Try to connect with DataBase!");
             myConn = DriverManager.getConnection("jdbc:mysql://" + ip+  ":" + port + "/" + db, user, pw);
             MMORPG.debugLog("Connection succeed!");
-            MMORPG.debugLog("Checking all Tables ...");
+            MMORPG.debugLog("Checking all Tables and create if needed ...");
             createDataTable();
             createPlayerTable();
             createRanksTable();
@@ -18,6 +18,7 @@ public class JDBC {
             createRanks_permissionsTable();
             createMailsTable();
             createBlock_break_countTable();
+            createPlayers_stats_table();
         }catch (Exception e){
             MMORPG.debugLog("Connection to DataBase failed!");
             e.printStackTrace();
@@ -113,7 +114,22 @@ public class JDBC {
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
-        MMORPG.debugLog("MYSQL block_break_count tabel created!");
+        MMORPG.debugLog("MYSQL block_break_count table created!");
+    }
+    public static void createPlayers_stats_table() throws SQLException {
+        String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "players_stats"
+                + "  (player_id VARCHAR(40),"
+                + "   strength INTEGER,"
+                + "   endu INTEGER,"
+                + "   soul INTEGER,"
+                + "   general_experience INTEGER,"
+                + "   agil INTEGER,"
+                + "   woodcut_experience INTEGER,"
+                + "   level INTEGER)";
+
+        Statement stmt = myConn.createStatement();
+        stmt.execute(sqlCreate);
+        MMORPG.debugLog("MYSQL players_stats table created!");
     }
     public static void createPlayers_in_worldsTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "players_in_worlds"
