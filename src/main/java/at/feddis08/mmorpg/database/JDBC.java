@@ -109,8 +109,7 @@ public class JDBC {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "block_break_counter"
                 + "  (block_name VARCHAR(40),"
                 + "   player_id VARCHAR(40),"
-                + "   count INTEGER,"
-                + "   level INTEGER)";
+                + "   count INTEGER)";
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);

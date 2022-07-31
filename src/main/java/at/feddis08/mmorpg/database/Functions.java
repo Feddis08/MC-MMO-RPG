@@ -142,12 +142,10 @@ public class Functions {
                 + "', '"
                 + dataObj.player_id
                 + "', '"
-                + dataObj.level
-                + "', '"
                 + dataObj.count
                 + "'";
         String sql = "insert into block_break_counter "
-                + "(block_name, player_id, level, count)"
+                + "(block_name, player_id, count)"
                 + "values (" + sqlString + ")";
         stmt.executeUpdate(sql);
         MMORPG.debugLog("DataTabel created: " + dataObj.block_name + "!");
@@ -380,7 +378,6 @@ public class Functions {
             dataObj.block_name = myRs.getString("block_name");
             dataObj.player_id = myRs.getString("player_id");
             dataObj.count = myRs.getInt("count");
-            dataObj.level = myRs.getInt("level");
             MMORPG.debugLog("Database read in block_break_counter for " + dataObj.block_name + " !");
         }
         return dataObj;
