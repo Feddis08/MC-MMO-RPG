@@ -1,5 +1,8 @@
 package at.feddis08.mmorpg.minecraft.listeners;
 
+import at.feddis08.mmorpg.MMORPG;
+import at.feddis08.mmorpg.logic.Clock;
+import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
@@ -31,6 +34,8 @@ public class Listeners implements org.bukkit.event.Listener {
     public static void onBlockBreak(BlockBreakEvent event) throws SQLException {
         onBlockEvents.onBlockBreak(event);
     }
+    @EventHandler
+    public static void onTickEvent(ServerTickStartEvent event){Clock.tick(event);}
     @EventHandler
     public static void onPlayerInteractEvent(PlayerInteractEvent event){
         onPlayerInteract.playerInteract(event);

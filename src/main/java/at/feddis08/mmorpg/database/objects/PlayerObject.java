@@ -1,8 +1,11 @@
 package at.feddis08.mmorpg.database.objects;
 
+import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.database.Functions;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.block.BlockBreakEvent;
 
 import java.sql.SQLException;
 import java.util.SplittableRandom;
@@ -30,5 +33,8 @@ public class PlayerObject {
         if (mailsize > 0){
             player.sendMessage(ChatColor.GOLD + "You have " + ChatColor.DARK_PURPLE + mailsize + ChatColor.GOLD + " unread mails!");
         }
+    }
+    public void destroy_block (BlockBreakEvent event){
+        MMORPG.debugLog("da " + event.getPlayer().getItemInHand().getType().name());
     }
 }

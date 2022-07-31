@@ -17,15 +17,15 @@ public class Gamemode implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (label.equalsIgnoreCase("gm")) {
-            PlayerObject dbPlayer = null;
+            PlayerObject dbPlayerSender = null;
             try {
-                dbPlayer = Functions.getPlayer("id", sender.getServer().getPlayer(sender.getName()).getUniqueId().toString());
+                dbPlayerSender = Functions.getPlayer("id", sender.getServer().getPlayer(sender.getName()).getUniqueId().toString());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            if (Objects.equals(dbPlayer.didStartup, "true")) {
+            if (Objects.equals(dbPlayerSender.didStartup, "true")) {
                 try {
-                    if (Rank.isPlayer_allowedTo(dbPlayer.id, "doGamemode") || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
+                    if (Rank.isPlayer_allowedTo(dbPlayerSender.id, "doGamemode") || Rank.isPlayer_allowedTo(dbPlayerSender.id, "*")) {
 
                         if (!(sender instanceof Player)) {
                             sender.sendMessage("You need to be a Player to run this command!");
@@ -36,10 +36,12 @@ public class Gamemode implements CommandExecutor {
                                 return true;
                             }
                             Player player = null;
+                            PlayerObject dbPlayer = dbPlayerSender;
                             if (args.length == 1) {
                                 player = sender.getServer().getPlayer(sender.getName());
                             } else if (args.length == 2) {
                                 player = sender.getServer().getPlayer(args[1]);
+                                dbPlayer = Functions.getPlayer("display_name", args[1]);
                             }
                             if (args[0].equalsIgnoreCase("1")) {
                                 try {
