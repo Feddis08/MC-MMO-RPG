@@ -50,7 +50,7 @@ public class StartUp implements CommandExecutor {
                         }
                         sender.sendMessage("You are now in the Realm: " + args[1] + " and your name is " + DisplayName
                                     + ". You can change it with: /change player_name");
-                        getJobInv.set_player_inventory(sender.getServer().getPlayer(sender.getName()));
+                        //getJobInv.set_player_inventory(sender.getServer().getPlayer(sender.getName()));
                             return true;
                         }
                     }

@@ -6,10 +6,10 @@ public class JDBC {
     public static Connection myConn = null;
     public static void connectToDb(String ip, String port, String db, String user, String pw){
         try{
-            MMORPG.consoleLog("Try to connect with DataBase!");
+            MMORPG.debugLog("Try to connect with DataBase!");
             myConn = DriverManager.getConnection("jdbc:mysql://" + ip+  ":" + port + "/" + db, user, pw);
-            MMORPG.consoleLog("Connection succeed!");
-            MMORPG.consoleLog("Checking all Tables ...");
+            MMORPG.debugLog("Connection succeed!");
+            MMORPG.debugLog("Checking all Tables ...");
             createDataTable();
             createPlayerTable();
             createRanksTable();
@@ -19,7 +19,7 @@ public class JDBC {
             createMailsTable();
             createBlock_break_countTable();
         }catch (Exception e){
-            MMORPG.consoleLog("Connection to DataBase failed!");
+            MMORPG.debugLog("Connection to DataBase failed!");
             e.printStackTrace();
         }
     }
@@ -39,7 +39,7 @@ public class JDBC {
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
-        MMORPG.consoleLog("MYSQL player tabel created!");
+        MMORPG.debugLog("MYSQL player tabel created!");
     }
     public static void createRanksTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "ranks"
@@ -53,7 +53,7 @@ public class JDBC {
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
-        MMORPG.consoleLog("MYSQL ranks tabel created!");
+        MMORPG.debugLog("MYSQL ranks tabel created!");
     }
     public static void createMailsTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "mails"
@@ -67,7 +67,7 @@ public class JDBC {
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
-        MMORPG.consoleLog("MYSQL mails tabel created!");
+        MMORPG.debugLog("MYSQL mails tabel created!");
     }
     public static void createRanks_permissionsTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "ranks_permissions"
@@ -76,7 +76,7 @@ public class JDBC {
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
-        MMORPG.consoleLog("MYSQL ranks_permissions tabel created!");
+        MMORPG.debugLog("MYSQL ranks_permissions tabel created!");
     }
     public static void createDataTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "data"
@@ -90,7 +90,7 @@ public class JDBC {
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
-        MMORPG.consoleLog("MYSQL data tabel created!");
+        MMORPG.debugLog("MYSQL data tabel created!");
     }
     public static void createWorldsTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "worlds"
@@ -103,7 +103,7 @@ public class JDBC {
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
-        MMORPG.consoleLog("MYSQL worlds tabel created!");
+        MMORPG.debugLog("MYSQL worlds tabel created!");
     }
     public static void createBlock_break_countTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "block_break_counter"
@@ -114,7 +114,7 @@ public class JDBC {
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
-        MMORPG.consoleLog("MYSQL block_break_count tabel created!");
+        MMORPG.debugLog("MYSQL block_break_count tabel created!");
     }
     public static void createPlayers_in_worldsTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "players_in_worlds"
@@ -126,6 +126,6 @@ public class JDBC {
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
-        MMORPG.consoleLog("MYSQL players_in_worlds table created!");
+        MMORPG.debugLog("MYSQL players_in_worlds table created!");
     }
 }

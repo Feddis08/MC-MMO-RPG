@@ -17,7 +17,7 @@ import java.util.Objects;
 public final class MMORPG extends JavaPlugin {
 
     public static String prefix = "MMO-RPG: ";
-    public static boolean enabled = false;
+    public static boolean debugMode = false;
 
     public static Server Server;
 
@@ -27,6 +27,11 @@ public final class MMORPG extends JavaPlugin {
         Server = getServer();
         DISCORD.start_bot();
         consoleLog("Starting...");
+        if (debugMode){
+            consoleLog("DebugMode enabled...");
+        }else{
+            consoleLog("DebugMode disabled...");
+        }
         JDBC.connectToDb("10.0.1.46", "3306", "MMORPG", "MMORPG", "felix123");
         RankObject dbRank = null;
         try {
@@ -63,20 +68,6 @@ public final class MMORPG extends JavaPlugin {
             Rank.set_prefix_color("operator", "red");
         }
 
-/*
-        getCommand("install").setExecutor(new install());
-        Collection<? extends Player> players = getServer().getOnlinePlayers();
-        for (Player player : players){
-            consoleLog(player.getUniqueId().toString());
-            PlayerObject dbPlayer = HibernateFunctions.getPlayerByUUID(player.getUniqueId().toString());
-            if (!(dbPlayer.player_rank == "owner") || (!(player.isOp()))){
-                player.kickPlayer("The MMORPG-Server restarts. Please reconnect!");
-            }else{
-                player.sendMessage("The MMO-RPG restarts");
-            }
-        }
- */
-
         getServer().getPluginManager().registerEvents(new Listeners(), this);
         getCommand("Test").setExecutor(new TestCommand());
         getCommand("rank").setExecutor(new Rank());
@@ -91,16 +82,27 @@ public final class MMORPG extends JavaPlugin {
         @Override
     public void onDisable() {
         // Plugin shutdown logic
-        consoleLog("Stopping...");
-            try {
-                JDBC.myConn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        DISCORD.api.disconnect();
+            shutdown();
         }
+    public static void debugLog(String log){
+        if (debugMode){
+            Bukkit.getConsoleSender().sendMessage(prefix + "Debug: " + log);
+            at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, (prefix + "Debug: " + log));
+        }
+    }
     public static void consoleLog(String log){
-        Bukkit.getConsoleSender().sendMessage(prefix + log);
-        at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, log);
+        Bukkit.getConsoleSender().sendMessage(prefix + "Log: " + log);
+        at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, (prefix + "Log: " + log));
+    }
+    public static void shutdown(){
+        consoleLog("Shutdown...");
+        debugLog("Disconnecting systems...");
+        DISCORD.api.disconnect();
+        try {
+            JDBC.myConn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        debugLog("Disconnected: Discord_bot, Database_connection");
     }
 }
