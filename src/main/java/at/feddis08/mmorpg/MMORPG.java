@@ -17,15 +17,24 @@ import java.util.Objects;
 public final class MMORPG extends JavaPlugin {
 
     public static String prefix = "MMO-RPG: ";
-    public static boolean debugMode = false;
+    public static boolean debugMode = true;
+    public static Integer current_dev_version = 1;
+    public static boolean enable_discord_bot = false;
 
     public static Server Server;
 
     @Override
     public void onEnable() {
         // Plugin startup logic
+        debugLog("Current_dev_version: " + current_dev_version);
+
         Server = getServer();
-        DISCORD.start_bot();
+        if (enable_discord_bot) {
+            debugLog("Discord_bot enabled");
+            //DISCORD.start_bot();
+        }else{
+            debugLog("Discord_bot disabled");
+        }
         consoleLog("Starting...");
         if (debugMode){
             consoleLog("DebugMode enabled...");
@@ -87,22 +96,27 @@ public final class MMORPG extends JavaPlugin {
     public static void debugLog(String log){
         if (debugMode){
             Bukkit.getConsoleSender().sendMessage(prefix + "Debug: " + log);
-            at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, (prefix + "Debug: " + log));
+            if (enable_discord_bot)
+                at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, (prefix + "Debug: " + log));
         }
     }
     public static void consoleLog(String log){
         Bukkit.getConsoleSender().sendMessage(prefix + "Log: " + log);
-        at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, (prefix + "Log: " + log));
+        if (enable_discord_bot)
+            at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, (prefix + "Log: " + log));
     }
     public static void shutdown(){
         consoleLog("Shutdown...");
         debugLog("Disconnecting systems...");
-        DISCORD.api.disconnect();
+        if (enable_discord_bot){
+            DISCORD.api.disconnect();
+            debugLog("Disconnected Discord_bot");
+        }
         try {
             JDBC.myConn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        debugLog("Disconnected: Discord_bot, Database_connection");
+        debugLog("Disconnected Database");
     }
 }
