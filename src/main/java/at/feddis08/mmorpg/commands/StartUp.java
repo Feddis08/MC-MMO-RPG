@@ -2,7 +2,6 @@ package at.feddis08.mmorpg.commands;
 
 import at.feddis08.mmorpg.database.*;
 import at.feddis08.mmorpg.database.objects.PlayerObject;
-import at.feddis08.mmorpg.minecraft.inventories.getJobInv;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -50,7 +49,6 @@ public class StartUp implements CommandExecutor {
                         }
                         sender.sendMessage("You are now in the Realm: " + args[1] + " and your name is " + DisplayName
                                     + ". You can change it with: /change player_name");
-                        //getJobInv.set_player_inventory(sender.getServer().getPlayer(sender.getName()));
                             return true;
                         }
                     }
