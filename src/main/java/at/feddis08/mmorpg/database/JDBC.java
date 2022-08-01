@@ -19,6 +19,7 @@ public class JDBC {
             createMailsTable();
             createBlock_break_countTable();
             createPlayers_stats_table();
+            createInventoryTracksTable();
         }catch (Exception e){
             MMORPG.debugLog("Connection to DataBase failed!");
             e.printStackTrace();
@@ -142,5 +143,17 @@ public class JDBC {
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
         MMORPG.debugLog("MYSQL players_in_worlds table created!");
+    }
+    public static void createInventoryTracksTable() throws SQLException {
+        String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "inventory_tracks"
+                + "   (id INTEGER,"
+                + "   world_id VARCHAR(40),"
+                + "   x INTEGER,"
+                + "   y INTEGER,"
+                + "   z INTEGER )";
+
+        Statement stmt = myConn.createStatement();
+        stmt.execute(sqlCreate);
+        MMORPG.debugLog("MYSQL inventory_tracks table created!");
     }
 }

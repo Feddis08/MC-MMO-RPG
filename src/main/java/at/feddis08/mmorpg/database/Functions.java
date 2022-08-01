@@ -122,6 +122,25 @@ public class Functions {
         stmt.executeUpdate(sql);
         MMORPG.debugLog("DataTabel created: " + dataObj.world_id + "!");
     }
+    public static void createInventoryTrack(InventoryTrackObject dataObj) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sqlString = "'"
+                + dataObj.world_id
+                + "', '"
+                + dataObj.id
+                + "', '"
+                + dataObj.x
+                + "', '"
+                + dataObj.y
+                + "', '"
+                + dataObj.z
+                + "'";
+        String sql = "insert into inventory_tracks "
+                + "(world_id, id, x, y, z)"
+                + "values (" + sqlString + ")";
+        stmt.executeUpdate(sql);
+        MMORPG.debugLog("DataTabel created: " + dataObj.id + "!");
+    }
     public static void createRank_permision(Rank_permissionObject dataObj) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sqlString = "'"
@@ -420,6 +439,22 @@ public class Functions {
             dataObj.soul = myRs.getInt("soul");
             dataObj.strength = myRs.getInt("strength");
             MMORPG.debugLog("Database read in player_stats for " + dataObj.player_id + " !");
+        }
+        return dataObj;
+    }
+    public static InventoryTrackObject getInventoryTrack (String column, String value) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from inventory_tracks where " + column + "=" + "'" + value + "';";
+        MMORPG.debugLog(sql);
+        ResultSet myRs = stmt.executeQuery(sql);
+        InventoryTrackObject dataObj = new InventoryTrackObject();
+        while (myRs.next()) {
+            dataObj.world_id = myRs.getString("player_id");
+            dataObj.id = myRs.getInt("id");
+            dataObj.x = myRs.getInt("x");
+            dataObj.y = myRs.getInt("y");
+            dataObj.z = myRs.getInt("z");
+            MMORPG.debugLog("Database read in player_stats for " + dataObj.id + " !");
         }
         return dataObj;
     }

@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.VillagerAcquireTradeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -25,6 +26,9 @@ public class Listeners implements org.bukkit.event.Listener {
     @EventHandler
     public static void onPlayerDisconnect(PlayerQuitEvent event) throws SQLException {
         connectionEvents.onQuit(event);
+    }
+    @EventHandler
+    public static void test(){
     }
     @EventHandler
     public static void onDeath(PlayerDeathEvent event){
