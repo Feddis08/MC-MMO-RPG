@@ -449,7 +449,7 @@ public class Functions {
         ResultSet myRs = stmt.executeQuery(sql);
         InventoryTrackObject dataObj = new InventoryTrackObject();
         while (myRs.next()) {
-            dataObj.world_id = myRs.getString("player_id");
+            dataObj.world_id = myRs.getString("world_id");
             dataObj.id = myRs.getInt("id");
             dataObj.x = myRs.getInt("x");
             dataObj.y = myRs.getInt("y");

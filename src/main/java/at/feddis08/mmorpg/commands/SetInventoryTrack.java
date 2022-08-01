@@ -1,7 +1,10 @@
 package at.feddis08.mmorpg.commands;
 
+import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.database.Functions;
+import at.feddis08.mmorpg.database.objects.InventoryTrackObject;
 import at.feddis08.mmorpg.database.objects.PlayerObject;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,7 +26,24 @@ public class SetInventoryTrack implements CommandExecutor {
                 try {
                     if (Rank.isPlayer_allowedTo(dbPlayer.id, "doSetInventoryTrack") || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
 
-
+                        InventoryTrackObject inventoryTrackObject = Functions.getInventoryTrack("id", args[0]);
+                        if (Objects.equals(String.valueOf(inventoryTrackObject.id), args[0])){
+                            Functions.update("inventory_tracks", "world_id", args[1], args[0], "id");
+                            Functions.update("inventory_tracks", "x", args[2], args[0], "id");
+                            Functions.update("inventory_tracks", "y", args[3], args[0], "id");
+                            Functions.update("inventory_tracks", "z", args[4], args[0], "id");
+                            MMORPG.consoleLog("Created/Updated a InventoryTrack: " + inventoryTrackObject.id + "; for " + dbPlayer.display_name);
+                            sender.sendMessage(ChatColor.GREEN + "Done!");
+                        }else {
+                            inventoryTrackObject.id = Integer.parseInt(args[0]);
+                            inventoryTrackObject.world_id = args[1];
+                            inventoryTrackObject.x = Integer.parseInt(args[2]);
+                            inventoryTrackObject.y = Integer.parseInt(args[3]);
+                            inventoryTrackObject.z = Integer.parseInt(args[4]);
+                            Functions.createInventoryTrack(inventoryTrackObject);
+                            MMORPG.consoleLog("Created/Updated a InventoryTrack: " + inventoryTrackObject.id + "; for " + dbPlayer.display_name);
+                            sender.sendMessage(ChatColor.GREEN + "Done!");
+                        }
 
                     }
                 } catch (SQLException e) {

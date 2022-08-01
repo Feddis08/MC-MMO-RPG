@@ -18,7 +18,7 @@ public final class MMORPG extends JavaPlugin {
 
     public static String prefix = "MMO-RPG: ";
     public static boolean debugMode = true;
-    public static Integer current_dev_version = 6;
+    public static Integer current_dev_version = 7;
     public static boolean enable_discord_bot = false;
     public static boolean discord_bot_active = false;
 
@@ -89,6 +89,7 @@ public final class MMORPG extends JavaPlugin {
         getCommand("reset").setExecutor(new reset());
         getCommand("mail").setExecutor(new Mail());
         getCommand("setScoreboard").setExecutor(new SetScoreboard());
+        getCommand("setInventoryTrack").setExecutor(new SetInventoryTrack());
     }
         @Override
     public void onDisable() {
