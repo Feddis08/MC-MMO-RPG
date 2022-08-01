@@ -1,7 +1,7 @@
 name: MMO-RPG
 version: '${project.version}'
 main: at.feddis08.mmorpg.MMORPG
-api-version: 1.18
+api-version: 1.19
 load: POSTWORLD
 authors: [ Feddis08 ]
 commands:
