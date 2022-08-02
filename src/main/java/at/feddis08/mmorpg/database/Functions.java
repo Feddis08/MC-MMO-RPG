@@ -122,6 +122,21 @@ public class Functions {
         stmt.executeUpdate(sql);
         MMORPG.debugLog("DataTabel created: " + dataObj.world_id + "!");
     }
+    public static void createPlayers_balance(Player_balanceObject dataObj) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sqlString = "'"
+                + dataObj.player_id
+                + "', '"
+                + dataObj.pocket
+                + "', '"
+                + dataObj.stock_market
+                + "'";
+        String sql = "insert into players_balance "
+                + "(player_id, pocket, stock_market)"
+                + "values (" + sqlString + ")";
+        stmt.executeUpdate(sql);
+        MMORPG.debugLog("Players_balanceTabel created: " + dataObj.player_id + "!");
+    }
     public static void createInventoryTrack(InventoryTrackObject dataObj) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sqlString = "'"
@@ -141,7 +156,7 @@ public class Functions {
                 + "(world_id, id, x, y, z, type)"
                 + "values (" + sqlString + ")";
         stmt.executeUpdate(sql);
-        MMORPG.debugLog("DataTabel created: " + dataObj.id + "!");
+        MMORPG.debugLog("Inventory_trackTabel created: " + dataObj.id + "!");
     }
     public static void createRank_permision(Rank_permissionObject dataObj) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
@@ -154,7 +169,7 @@ public class Functions {
                 + "(permission, id)"
                 + "values (" + sqlString + ")";
         stmt.executeUpdate(sql);
-        MMORPG.debugLog("DataTabel created: " + dataObj.permission + "!");
+        MMORPG.debugLog("Rank_permissionTabel created: " + dataObj.permission + "!");
     }
     public static void createBlock_break_count(Block_break_countObject dataObj) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
@@ -441,6 +456,20 @@ public class Functions {
             dataObj.soul = myRs.getInt("soul");
             dataObj.strength = myRs.getInt("strength");
             MMORPG.debugLog("Database read in player_stats for " + dataObj.player_id + " !");
+        }
+        return dataObj;
+    }
+    public static Player_balanceObject getPlayers_balance (String column, String value) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from players_balance where " + column + "=" + "'" + value + "';";
+        MMORPG.debugLog(sql);
+        ResultSet myRs = stmt.executeQuery(sql);
+        Player_balanceObject dataObj = new Player_balanceObject();
+        while (myRs.next()) {
+            dataObj.player_id = myRs.getString("player_id");
+            dataObj.pocket = myRs.getInt("pocket");
+            dataObj.stock_market = myRs.getInt("stock_market");
+            MMORPG.debugLog("Database read in players_balance for " + dataObj.player_id + " !");
         }
         return dataObj;
     }

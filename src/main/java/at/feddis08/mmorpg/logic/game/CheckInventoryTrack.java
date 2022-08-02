@@ -3,11 +3,18 @@ package at.feddis08.mmorpg.logic.game;
 import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.database.Functions;
 import at.feddis08.mmorpg.database.objects.InventoryTrackObject;
+import at.feddis08.mmorpg.database.objects.Player_balanceObject;
+import at.feddis08.mmorpg.logic.Clock;
+import at.feddis08.mmorpg.logic.game.trade.Wheat;
 import at.feddis08.mmorpg.minecraft.inventories.WheatTradeInv;
+import org.bukkit.Material;
 import org.bukkit.event.inventory.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.function.Function;
 
 public class CheckInventoryTrack {
 
@@ -30,9 +37,27 @@ public class CheckInventoryTrack {
             }
         }
     }
-    public static void checkInvClicked(InventoryClickEvent event){
+    public static void checkInvClicked(InventoryClickEvent event) throws SQLException {
         if (event.getClickedInventory() == WheatTradeInv.inv) {
-            event.setCancelled(true);
+            if (event.getSlot() == 2){
+                if (event.getCursor().getType().name().equals("WHEAT")){
+                    Clock.clear_wheat_inv = true;
+                    Clock.wheat_who_clicked = event.getWhoClicked().getUniqueId().toString();
+                    WheatTradeInv.inv.setItem(2, new ItemStack(Material.AIR));
+                }else{
+                    event.setCancelled(true);
+                }
+            }
+            if (event.getSlot() == 6){
+                event.setCancelled(true);
+                Player_balanceObject player_balance = Functions.getPlayers_balance("player_id", event.getWhoClicked().getUniqueId().toString());
+                if (player_balance.pocket >= Wheat.wheat_buy_price){
+                    Functions.update("players_balance", "pocket", String.valueOf(player_balance.pocket - Wheat.wheat_buy_price), player_balance.player_id, "player_id");
+                    event.getWhoClicked().getInventory().addItem(new ItemStack(Material.WHEAT, 32));
+                }
+            }
         }
+    }
+    public static void checkInvDrag(InventoryDragEvent event){
     }
 }

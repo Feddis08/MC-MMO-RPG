@@ -13,6 +13,7 @@ public class AddPlayer {
         dataObj.stage = 0;
         dataObj.id = player.getUniqueId().toString();
         dataObj.player_name = player.getName();
+        dataObj.current_world_id = "world";
         Functions.createPlayer(dataObj);
         return true;
     }

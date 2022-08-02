@@ -2,6 +2,7 @@ package at.feddis08.mmorpg.minecraft.inventories;
 
 import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.database.Functions;
+import at.feddis08.mmorpg.logic.game.trade.Wheat;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,6 +24,7 @@ public class WheatTradeInv {
             meta.setDisplayName("SELL");
             List<String> lore = new ArrayList<String>();
             lore.add("Put the wheat in there");
+            lore.add("For " + String.valueOf(Wheat.wheat_sell_price) + " coins.");
             meta.setLore(lore);
             item.setItemMeta(meta);
             inv.setItem(2, item);
@@ -38,6 +40,7 @@ public class WheatTradeInv {
             meta.setDisplayName("BUY");
             List<String> lore2 = new ArrayList<String>();
             lore2.add("Buy 32x wheat");
+            lore2.add("For " + String.valueOf(Wheat.wheat_buy_price) + " coins.");
             meta.setLore(lore2);
             item.setType(Material.WHEAT);
             item.setItemMeta(meta);

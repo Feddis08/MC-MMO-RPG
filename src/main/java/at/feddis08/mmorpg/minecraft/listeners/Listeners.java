@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.VillagerAcquireTradeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -30,8 +31,9 @@ public class Listeners implements org.bukkit.event.Listener {
         connectionEvents.onQuit(event);
     }
     @EventHandler
-    public static void test(InventoryPickupItemEvent event){
-        onEvent.onInventoryPickedUp(event);
+    public static void test(InventoryDragEvent event){
+        MMORPG.debugLog("dwa");
+        onEvent.onInventoryDrag(event);
     }
     @EventHandler
     public static void onDeath(PlayerDeathEvent event){
@@ -42,7 +44,7 @@ public class Listeners implements org.bukkit.event.Listener {
         onBlockEvents.onBlockBreak(event);
     }
     @EventHandler
-    public static void onTickEvent(ServerTickStartEvent event){Clock.tick(event);}
+    public static void onTickEvent(ServerTickStartEvent event) throws SQLException {Clock.tick(event);}
     @EventHandler
     public static void onPlayerInteractEvent(PlayerInteractEvent event){
         onPlayerInteract.playerInteract(event);

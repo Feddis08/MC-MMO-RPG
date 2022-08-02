@@ -4,7 +4,9 @@ import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.commands.Rank;
 import at.feddis08.mmorpg.database.*;
 import at.feddis08.mmorpg.database.objects.PlayerObject;
+import at.feddis08.mmorpg.database.objects.Player_balanceObject;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -21,7 +23,13 @@ public class connectionEvents {
         //event.setJoinMessage(ChatColor.AQUA + "User joined the Realm: " + ChatColor.GREEN + player.getName());
         player.sendMessage("Hi, and welcome to our MMO-RPG minecraft-server: " + player.getName());
         if (Objects.equals(dbPlayer.id, null)) {
+            Player_balanceObject player_balanceObject = new Player_balanceObject();
+            player_balanceObject.player_id = player.getUniqueId().toString();
+            player_balanceObject.pocket = 0;
+            player_balanceObject.stock_market = 0;
+            Functions.createPlayers_balance(player_balanceObject);
             AddPlayer.addPlayer(event);
+            Boolean rightTeleported = player.teleport(new Location(player.getServer().getWorld("world"), 0, 100, 0));
             if (player.isOp()){
                 Rank.set_player_rank_from("operator", player.getUniqueId().toString());
             }else{
