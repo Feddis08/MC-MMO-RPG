@@ -148,6 +148,7 @@ public class JDBC {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "inventory_tracks"
                 + "   (id INTEGER,"
                 + "   world_id VARCHAR(40),"
+                + "   type VARCHAR(256),"
                 + "   x INTEGER,"
                 + "   y INTEGER,"
                 + "   z INTEGER )";

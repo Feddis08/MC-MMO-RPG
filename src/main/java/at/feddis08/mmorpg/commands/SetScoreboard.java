@@ -22,9 +22,9 @@ public class SetScoreboard implements CommandExecutor {
             }
             if (Objects.equals(dbPlayer.didStartup, "true")) {
                 if (args.length == 1){
-                    if (Objects.equals(args[0], "playerInfo")){
+                    if (Objects.equals(args[0], "info")){
                         try {
-                            if (Rank.isPlayer_allowedTo(dbPlayer.id, "doSetPlayerInfoScoreboard") || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
+                            if (Rank.isPlayer_allowedTo(dbPlayer.id, "doSetInfoScoreboard") || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
                                 PlayerInfoScoreboard.setPlayerScoreboard(sender.getServer().getPlayer(sender.getName()));
                             }
                         } catch (SQLException e) {

@@ -134,9 +134,11 @@ public class Functions {
                 + dataObj.y
                 + "', '"
                 + dataObj.z
+                + "', '"
+                + dataObj.type
                 + "'";
         String sql = "insert into inventory_tracks "
-                + "(world_id, id, x, y, z)"
+                + "(world_id, id, x, y, z, type)"
                 + "values (" + sqlString + ")";
         stmt.executeUpdate(sql);
         MMORPG.debugLog("DataTabel created: " + dataObj.id + "!");
@@ -450,11 +452,12 @@ public class Functions {
         InventoryTrackObject dataObj = new InventoryTrackObject();
         while (myRs.next()) {
             dataObj.world_id = myRs.getString("world_id");
+            dataObj.type = myRs.getString("type");
             dataObj.id = myRs.getInt("id");
             dataObj.x = myRs.getInt("x");
             dataObj.y = myRs.getInt("y");
             dataObj.z = myRs.getInt("z");
-            MMORPG.debugLog("Database read in player_stats for " + dataObj.id + " !");
+            MMORPG.debugLog("Database read in inventoryTracks for " + dataObj.id + " !");
         }
         return dataObj;
     }

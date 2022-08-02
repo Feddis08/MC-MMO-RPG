@@ -29,22 +29,23 @@ public class SetInventoryTrack implements CommandExecutor {
                         InventoryTrackObject inventoryTrackObject = Functions.getInventoryTrack("id", args[0]);
                         if (Objects.equals(String.valueOf(inventoryTrackObject.id), args[0])){
                             Functions.update("inventory_tracks", "world_id", args[1], args[0], "id");
-                            Functions.update("inventory_tracks", "x", args[2], args[0], "id");
-                            Functions.update("inventory_tracks", "y", args[3], args[0], "id");
-                            Functions.update("inventory_tracks", "z", args[4], args[0], "id");
+                            Functions.update("inventory_tracks", "type", args[2], args[0], "id");
+                            Functions.update("inventory_tracks", "x", args[3], args[0], "id");
+                            Functions.update("inventory_tracks", "y", args[4], args[0], "id");
+                            Functions.update("inventory_tracks", "z", args[5], args[0], "id");
                             MMORPG.consoleLog("Created/Updated a InventoryTrack: " + inventoryTrackObject.id + "; for " + dbPlayer.display_name);
                             sender.sendMessage(ChatColor.GREEN + "Done!");
                         }else {
                             inventoryTrackObject.id = Integer.parseInt(args[0]);
                             inventoryTrackObject.world_id = args[1];
-                            inventoryTrackObject.x = Integer.parseInt(args[2]);
-                            inventoryTrackObject.y = Integer.parseInt(args[3]);
-                            inventoryTrackObject.z = Integer.parseInt(args[4]);
+                            inventoryTrackObject.type = args[2];
+                            inventoryTrackObject.x = Integer.parseInt(args[3]);
+                            inventoryTrackObject.y = Integer.parseInt(args[4]);
+                            inventoryTrackObject.z = Integer.parseInt(args[5]);
                             Functions.createInventoryTrack(inventoryTrackObject);
                             MMORPG.consoleLog("Created/Updated a InventoryTrack: " + inventoryTrackObject.id + "; for " + dbPlayer.display_name);
                             sender.sendMessage(ChatColor.GREEN + "Done!");
                         }
-
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
