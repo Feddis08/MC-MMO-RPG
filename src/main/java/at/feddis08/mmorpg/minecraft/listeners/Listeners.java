@@ -2,6 +2,7 @@ package at.feddis08.mmorpg.minecraft.listeners;
 
 import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.logic.Clock;
+import at.feddis08.mmorpg.logic.game.onEvent;
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -10,6 +11,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.VillagerAcquireTradeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -28,7 +30,8 @@ public class Listeners implements org.bukkit.event.Listener {
         connectionEvents.onQuit(event);
     }
     @EventHandler
-    public static void test(){
+    public static void test(InventoryPickupItemEvent event){
+        onEvent.onInventoryPickedUp(event);
     }
     @EventHandler
     public static void onDeath(PlayerDeathEvent event){
