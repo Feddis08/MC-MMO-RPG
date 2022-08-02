@@ -53,7 +53,7 @@ public class Listeners implements org.bukkit.event.Listener {
         onInventoryClick.onInventoryClick(event);
     }
     @EventHandler
-    public static void onInvOpened(InventoryOpenEvent event){
+    public static void onInvOpened(InventoryOpenEvent event) throws SQLException {
         onInvOpened.onInvOpened(event);
     }
     @EventHandler

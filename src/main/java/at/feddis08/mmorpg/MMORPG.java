@@ -4,6 +4,7 @@ import at.feddis08.mmorpg.commands.*;
 import at.feddis08.mmorpg.database.*;
 import at.feddis08.mmorpg.database.objects.RankObject;
 import at.feddis08.mmorpg.discord.DISCORD;
+import at.feddis08.mmorpg.minecraft.inventories.WheatTradeInv;
 import at.feddis08.mmorpg.minecraft.listeners.Listeners;
 import at.feddis08.mmorpg.minecraft.tools.StartLoadWorld;
 import at.feddis08.mmorpg.minecraft.tools.WorldAutoLoad;
@@ -18,7 +19,7 @@ public final class MMORPG extends JavaPlugin {
 
     public static String prefix = "MMO-RPG: ";
     public static boolean debugMode = true;
-    public static Integer current_dev_version = 8;
+    public static Integer current_dev_version = 9;
     public static boolean enable_discord_bot = false;
     public static boolean discord_bot_active = false;
 
@@ -90,6 +91,8 @@ public final class MMORPG extends JavaPlugin {
         getCommand("mail").setExecutor(new Mail());
         getCommand("setScoreboard").setExecutor(new SetScoreboard());
         getCommand("setInventoryTrack").setExecutor(new SetInventoryTrack());
+
+        WheatTradeInv.createInv();
     }
         @Override
     public void onDisable() {

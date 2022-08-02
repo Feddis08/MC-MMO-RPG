@@ -461,6 +461,23 @@ public class Functions {
         }
         return dataObj;
     }
+    public static InventoryTrackObject getInventoryTrackByLocation (String world_id, String x, String y, String z) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from inventory_tracks where world_id = '" + world_id + "' and x = '" + x + "' and y = '" + y + "' and z = '" + z + "';";
+        MMORPG.debugLog(sql);
+        ResultSet myRs = stmt.executeQuery(sql);
+        InventoryTrackObject dataObj = new InventoryTrackObject();
+        while (myRs.next()) {
+            dataObj.world_id = myRs.getString("world_id");
+            dataObj.type = myRs.getString("type");
+            dataObj.id = myRs.getInt("id");
+            dataObj.x = myRs.getInt("x");
+            dataObj.y = myRs.getInt("y");
+            dataObj.z = myRs.getInt("z");
+            MMORPG.debugLog("Database read in inventoryTracks for " + dataObj.id + " !");
+        }
+        return dataObj;
+    }
     public static void update(String tabel, String column, String newValue, String identityValue, String identityColumn) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sql = "update " + tabel + " set "
