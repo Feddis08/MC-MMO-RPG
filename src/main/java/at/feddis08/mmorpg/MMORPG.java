@@ -5,7 +5,7 @@ import at.feddis08.mmorpg.io.database.*;
 import at.feddis08.mmorpg.io.database.objects.RankObject;
 import at.feddis08.mmorpg.discord.DISCORD;
 import at.feddis08.mmorpg.io.files.Main;
-import at.feddis08.mmorpg.io.files.objects.ConfigFileObject;
+import at.feddis08.mmorpg.io.files.file_objects.ConfigFileObject;
 import at.feddis08.mmorpg.minecraft.inventories.WheatTradeInv;
 import at.feddis08.mmorpg.minecraft.listeners.Listeners;
 import at.feddis08.mmorpg.minecraft.tools.StartLoadWorld;
@@ -112,13 +112,13 @@ public final class MMORPG extends JavaPlugin {
         if (config.enable_debug_log){
             Bukkit.getConsoleSender().sendMessage("[" + config.console_prefix + "]: [Debug]: " + log);
             if (config.enable_discord_bot && discord_bot_active)
-                at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, ("[" + config.console_prefix + "]: [Debug]: " + log));
+                at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.config.server_log, ("[" + config.console_prefix + "]: [Debug]: " + log));
         }
     }
     public static void consoleLog(String log){
         Bukkit.getConsoleSender().sendMessage("[" + config.console_prefix + "]: [Log]: " + log);
         if (config.enable_discord_bot && discord_bot_active)
-            at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, ("[" + config.console_prefix + "]: [Log]: " + log));
+            at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.config.server_log, ("[" + config.console_prefix + "]: [Log]: " + log));
     }
     public static void shutdown(){
         consoleLog("Shutdown...");

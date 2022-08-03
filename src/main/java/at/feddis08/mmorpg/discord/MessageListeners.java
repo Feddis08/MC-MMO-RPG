@@ -9,7 +9,7 @@ import java.util.Objects;
 public class MessageListeners {
     public static void create_message_listener(){
         DISCORD.api.addMessageCreateListener(event -> {
-            if (String.valueOf(event.getChannel().getId()).equals(DISCORD.chat)){
+            if (String.valueOf(event.getChannel().getId()).equals(DISCORD.config.chat)){
                 if (!(event.getMessage().getAuthor().getId() == DISCORD.api.getYourself().getId())){
                     MMORPG.Server.broadcastMessage(ChatColor.GRAY + "[" + ChatColor.BLUE + "DISCORD" + ChatColor.GRAY + "][" + ChatColor.GREEN + event.getMessage().getAuthor().getName() + ChatColor.GRAY + "]: " + ChatColor.YELLOW + event.getMessage().getContent() + ChatColor.GRAY + " [" + Methods.getTime() + "]");
                 }
@@ -23,7 +23,7 @@ public class MessageListeners {
             }
         });
         DISCORD.api.addMessageCreateListener(event -> {
-            if (!(String.valueOf(event.getMessage().getChannel().getId()).equals(DISCORD.server_log))){
+            if (!(String.valueOf(event.getMessage().getChannel().getId()).equals(DISCORD.config.server_log))){
                 if (event.isPrivateMessage()){
                     MMORPG.consoleLog("DISCORD: got private_message: ; From: " + event.getMessage().getAuthor().getName() + "#" + event.getMessage().getAuthor().asUser().get().getMentionTag() + " ; Content: " + event.getMessage().getContent());
                 }else{

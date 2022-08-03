@@ -1,6 +1,4 @@
-package at.feddis08.mmorpg.io.files.objects;
-
-import at.feddis08.mmorpg.MMORPG;
+package at.feddis08.mmorpg.io.files.file_objects;
 
 import java.util.ArrayList;
 import java.util.Objects;

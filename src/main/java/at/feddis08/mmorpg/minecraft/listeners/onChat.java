@@ -32,9 +32,9 @@ public class onChat {
                     event.setFormat(ChatColor.GRAY + "[" + color_prefix + dbRank.prefix + ChatColor.GRAY + "][" + color_rank + dbPlayer.display_name + ChatColor.GRAY + "]" + ChatColor.BLUE + ": "
                         + ChatColor.YELLOW + chatMessage + ChatColor.GRAY + " [" + Methods.getTime() + "]");
 
-                    at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.read_only_chat, "[" +  dbRank.prefix +  "][" + dbPlayer.display_name + "]" + ": "
+                    at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "[" +  dbRank.prefix +  "][" + dbPlayer.display_name + "]" + ": "
                             + chatMessage + " [" + Methods.getTime() + "]");
-                    at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.chat, "[" +  dbRank.prefix +  "][" + dbPlayer.display_name + "]" + ": "
+                    at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.config.chat, "[" +  dbRank.prefix +  "][" + dbPlayer.display_name + "]" + ": "
                             + chatMessage + " [" + Methods.getTime() + "]");
 
             }else{
