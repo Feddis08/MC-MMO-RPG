@@ -48,7 +48,7 @@ public final class MMORPG extends JavaPlugin {
             debugLog("Discord_bot disabled");
         }
         consoleLog("Starting...");
-        if (debugMode){
+        if (config.enable_debug_log){
             consoleLog("DebugMode enabled...");
         }else{
             consoleLog("DebugMode disabled...");
