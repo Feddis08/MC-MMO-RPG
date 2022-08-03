@@ -109,7 +109,7 @@ public final class MMORPG extends JavaPlugin {
             shutdown();
         }
     public static void debugLog(String log){
-        if (debugMode){
+        if (config.enable_debug_log){
             Bukkit.getConsoleSender().sendMessage("[" + config.console_prefix + "]: [Debug]: " + log);
             if (config.enable_discord_bot && discord_bot_active)
                 at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, ("[" + config.console_prefix + "]: [Debug]: " + log));
