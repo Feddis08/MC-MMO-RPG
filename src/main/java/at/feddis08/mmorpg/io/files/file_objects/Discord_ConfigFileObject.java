@@ -1,5 +1,7 @@
 package at.feddis08.mmorpg.io.files.file_objects;
 
+import at.feddis08.mmorpg.MMORPG;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -10,7 +12,7 @@ public class Discord_ConfigFileObject {
    public String chat = "";
 
     public void parse_config_file(ArrayList<String> lines) {
-        System.out.println("Parsing discord_config file ...");
+        MMORPG.debugLog("Parsing discord_config file ...");
         Integer index = 0;
         Boolean parse_ok = false;
         while ((index + 1) <= lines.size()) {
@@ -50,7 +52,7 @@ public class Discord_ConfigFileObject {
             }
         index = index + 1;
         if (!(parse_ok))
-            System.out.println("ERROR: Could not parse config file. Load default value. Error at line: " + String.valueOf(index));
+            MMORPG.consoleLog("ERROR: Could not parse config file. Load default value. Error at line: " + String.valueOf(index));
 
         }
     }

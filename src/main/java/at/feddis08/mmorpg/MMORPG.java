@@ -6,7 +6,6 @@ import at.feddis08.mmorpg.io.database.objects.RankObject;
 import at.feddis08.mmorpg.discord.DISCORD;
 import at.feddis08.mmorpg.io.files.Main;
 import at.feddis08.mmorpg.io.files.file_objects.ConfigFileObject;
-import at.feddis08.mmorpg.minecraft.inventories.WheatTradeInv;
 import at.feddis08.mmorpg.minecraft.listeners.Listeners;
 import at.feddis08.mmorpg.minecraft.tools.StartLoadWorld;
 import at.feddis08.mmorpg.minecraft.tools.WorldAutoLoad;
@@ -101,7 +100,6 @@ public final class MMORPG extends JavaPlugin {
         getCommand("setScoreboard").setExecutor(new SetScoreboard());
         getCommand("setInventoryTrack").setExecutor(new SetInventoryTrack());
 
-        WheatTradeInv.createInv();
     }
         @Override
     public void onDisable() {

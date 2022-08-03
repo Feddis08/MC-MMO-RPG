@@ -5,7 +5,6 @@ import at.feddis08.mmorpg.io.database.objects.InventoryTrackObject;
 import at.feddis08.mmorpg.io.database.objects.Player_balanceObject;
 import at.feddis08.mmorpg.logic.Clock;
 import at.feddis08.mmorpg.logic.game.trade.Wheat;
-import at.feddis08.mmorpg.minecraft.inventories.WheatTradeInv;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.ItemStack;
@@ -29,18 +28,18 @@ public class CheckInventoryTrack {
                 event.setCancelled(true);
                 if (Objects.equals(inventoryTrackObject.type, "trade_wheat")){
                     event.getPlayer().closeInventory();
-                    event.getPlayer().openInventory(WheatTradeInv.inv);
+                    event.getPlayer().openInventory(Var.get_inventory_by_display_name("trade_wheat").inv);
                 }
             }
         }
     }
     public static void checkInvClicked(InventoryClickEvent event) throws SQLException {
-        if (event.getClickedInventory() == WheatTradeInv.inv) {
+        if (event.getClickedInventory() == Var.get_inventory_by_display_name("trade_wheat").inv) {
             if (event.getSlot() == 2){
                 if (event.getCursor().getType().name().equals("WHEAT")){
                     Clock.clear_wheat_inv = true;
                     Clock.wheat_who_clicked = event.getWhoClicked().getUniqueId().toString();
-                    WheatTradeInv.inv.setItem(2, new ItemStack(Material.AIR));
+                    Var.get_inventory_by_display_name("trade_wheat").inv.setItem(2, new ItemStack(Material.AIR));
                 }else{
                     event.setCancelled(true);
                 }

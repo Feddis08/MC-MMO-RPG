@@ -3,8 +3,8 @@ package at.feddis08.mmorpg.logic;
 import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.io.database.Functions;
 import at.feddis08.mmorpg.io.database.objects.Player_balanceObject;
+import at.feddis08.mmorpg.logic.game.Var;
 import at.feddis08.mmorpg.logic.game.trade.Wheat;
-import at.feddis08.mmorpg.minecraft.inventories.WheatTradeInv;
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,7 +24,7 @@ public class Clock {
     public static void tick(ServerTickStartEvent event) throws SQLException {
         if (clear_wheat_inv){
             Player_balanceObject player_balance = Functions.getPlayers_balance("player_id", wheat_who_clicked);
-            Functions.update("players_balance", "pocket", String.valueOf(player_balance.pocket + (Wheat.wheat_sell_price * Objects.requireNonNull(WheatTradeInv.inv.getItem(2)).getAmount())), player_balance.player_id, "player_id");
+            Functions.update("players_balance", "pocket", String.valueOf(player_balance.pocket + (Wheat.wheat_sell_price * Objects.requireNonNull(Var.get_inventory_by_display_name("trade_wheat").inv.getItem(2)).getAmount())), player_balance.player_id, "player_id");
             player_balance = Functions.getPlayers_balance("player_id", wheat_who_clicked);
             ItemStack item = new ItemStack(Material.RED_STAINED_GLASS_PANE);
             ItemMeta meta = item.getItemMeta();
@@ -34,7 +34,7 @@ public class Clock {
             lore.add("Put the wheat in there");
             meta.setLore(lore);
             item.setItemMeta(meta);
-            WheatTradeInv.inv.setItem(2, item);
+            Var.get_inventory_by_display_name("trade_wheat").inv.setItem(2, item);
 
             MMORPG.Server.getPlayer(Functions.getPlayer("id", player_balance.player_id).player_name).sendMessage(ChatColor.GREEN + "You sold " + ChatColor.YELLOW + "WHEAT" + ChatColor.GREEN + ". Now you have " + ChatColor.YELLOW + player_balance.pocket + ChatColor.GREEN + " coins in your pocket!");
             clear_wheat_inv = false;
