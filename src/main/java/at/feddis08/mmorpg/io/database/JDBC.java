@@ -1,4 +1,4 @@
-package at.feddis08.mmorpg.database;
+package at.feddis08.mmorpg.io.database;
 import at.feddis08.mmorpg.MMORPG;
 
 import java.sql.*;

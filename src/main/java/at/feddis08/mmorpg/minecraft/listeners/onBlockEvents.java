@@ -1,8 +1,8 @@
 package at.feddis08.mmorpg.minecraft.listeners;
 
 import at.feddis08.mmorpg.commands.Rank;
-import at.feddis08.mmorpg.database.Functions;
-import at.feddis08.mmorpg.database.objects.PlayerObject;
+import at.feddis08.mmorpg.io.database.Functions;
+import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import at.feddis08.mmorpg.logic.game.CountBlocks;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

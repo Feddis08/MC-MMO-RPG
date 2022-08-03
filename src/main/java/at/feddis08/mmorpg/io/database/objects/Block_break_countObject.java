@@ -1,4 +1,4 @@
-package at.feddis08.mmorpg.database.objects;
+package at.feddis08.mmorpg.io.database.objects;
 
 public class Block_break_countObject {
     public String player_id;

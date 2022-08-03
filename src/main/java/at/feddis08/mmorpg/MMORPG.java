@@ -1,9 +1,11 @@
 package at.feddis08.mmorpg;
 
 import at.feddis08.mmorpg.commands.*;
-import at.feddis08.mmorpg.database.*;
-import at.feddis08.mmorpg.database.objects.RankObject;
+import at.feddis08.mmorpg.io.database.*;
+import at.feddis08.mmorpg.io.database.objects.RankObject;
 import at.feddis08.mmorpg.discord.DISCORD;
+import at.feddis08.mmorpg.io.files.Main;
+import at.feddis08.mmorpg.io.files.objects.ConfigFileObject;
 import at.feddis08.mmorpg.minecraft.inventories.WheatTradeInv;
 import at.feddis08.mmorpg.minecraft.listeners.Listeners;
 import at.feddis08.mmorpg.minecraft.tools.StartLoadWorld;
@@ -11,16 +13,19 @@ import at.feddis08.mmorpg.minecraft.tools.WorldAutoLoad;
 import org.bukkit.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.net.ServerSocket;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Objects;
 
 public final class MMORPG extends JavaPlugin {
 
+    public static ConfigFileObject config;
     public static String prefix = "MMO-RPG: ";
     public static boolean debugMode = true;
-    public static Integer current_dev_version = 11;
+    public static Integer current_dev_version = 12;
     public static boolean enable_discord_bot = false;
+
+
     public static boolean discord_bot_active = false;
 
     public static Server Server;
@@ -28,10 +33,14 @@ public final class MMORPG extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        debugLog("Current_dev_version: " + current_dev_version);
-
+        System.out.println("Current_dev_version: " + current_dev_version);
+        try {
+            Main.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Server = getServer();
-        if (enable_discord_bot) {
+        if (config.enable_discord_bot) {
             discord_bot_active = true;
             DISCORD.start_bot();
             debugLog("Discord_bot enabled");
@@ -44,7 +53,7 @@ public final class MMORPG extends JavaPlugin {
         }else{
             consoleLog("DebugMode disabled...");
         }
-        JDBC.connectToDb("10.0.1.46", "3306", "MMORPG", "MMORPG", "felix123");
+        JDBC.connectToDb(config.database_ip, config.database_port, config.database_database_name, config.database_username, config.database_password);
         RankObject dbRank = null;
         try {
             dbRank = Functions.getRank("id", "default");
@@ -101,20 +110,20 @@ public final class MMORPG extends JavaPlugin {
         }
     public static void debugLog(String log){
         if (debugMode){
-            Bukkit.getConsoleSender().sendMessage(prefix + "Debug: " + log);
-            if (enable_discord_bot && discord_bot_active)
-                at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, (prefix + "Debug: " + log));
+            Bukkit.getConsoleSender().sendMessage("[" + config.console_prefix + "]: [Debug]: " + log);
+            if (config.enable_discord_bot && discord_bot_active)
+                at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, ("[" + config.console_prefix + "]: [Debug]: " + log));
         }
     }
     public static void consoleLog(String log){
-        Bukkit.getConsoleSender().sendMessage(prefix + "Log: " + log);
-        if (enable_discord_bot && discord_bot_active)
-            at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, (prefix + "Log: " + log));
+        Bukkit.getConsoleSender().sendMessage("[" + config.console_prefix + "]: [Log]: " + log);
+        if (config.enable_discord_bot && discord_bot_active)
+            at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.server_log, ("[" + config.console_prefix + "]: [Log]: " + log));
     }
     public static void shutdown(){
         consoleLog("Shutdown...");
         debugLog("Disconnecting systems...");
-        if (enable_discord_bot){
+        if (config.enable_discord_bot){
             DISCORD.api.disconnect();
             debugLog("Disconnected Discord_bot");
         }

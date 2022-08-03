@@ -1,7 +1,6 @@
 package at.feddis08.mmorpg.minecraft.inventories;
 
 import at.feddis08.mmorpg.MMORPG;
-import at.feddis08.mmorpg.database.Functions;
 import at.feddis08.mmorpg.logic.game.trade.Wheat;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

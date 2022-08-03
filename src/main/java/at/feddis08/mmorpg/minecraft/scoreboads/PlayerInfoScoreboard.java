@@ -1,7 +1,7 @@
 package at.feddis08.mmorpg.minecraft.scoreboads;
 
-import at.feddis08.mmorpg.database.Functions;
-import at.feddis08.mmorpg.database.objects.PlayerObject;
+import at.feddis08.mmorpg.io.database.Functions;
+import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

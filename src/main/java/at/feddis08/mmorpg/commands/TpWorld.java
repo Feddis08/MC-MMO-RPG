@@ -1,8 +1,8 @@
 package at.feddis08.mmorpg.commands;
 
-import at.feddis08.mmorpg.database.Functions;
-import at.feddis08.mmorpg.database.objects.PlayerInWorlds;
-import at.feddis08.mmorpg.database.objects.PlayerObject;
+import at.feddis08.mmorpg.io.database.Functions;
+import at.feddis08.mmorpg.io.database.objects.PlayerInWorlds;
+import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

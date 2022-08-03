@@ -1,6 +1,6 @@
-package at.feddis08.mmorpg.database;
+package at.feddis08.mmorpg.io.database;
 
-import at.feddis08.mmorpg.database.objects.PlayerObject;
+import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 

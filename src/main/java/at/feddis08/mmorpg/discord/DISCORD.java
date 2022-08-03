@@ -16,7 +16,7 @@ public class DISCORD {
     public static void start_bot(){
     //public static void main(String[] args) {
         api = new DiscordApiBuilder()
-                .setToken("MTAwMDgxMzg3OTYwMjk4Mjk5Mw.GObeoF.pEnqkRk9SEsS6s_k0ZFNIWTXHasr1kYjpCaLKk")
+                .setToken(MMORPG.config.discord_bot_token)
                 .login().join();
         MessageListeners.create_message_listener();
         //dcFunctions.send_message_in_channel(DISCORD.text_channel_Allgemein_id, "I'm back!");

@@ -1,14 +1,12 @@
-package at.feddis08.mmorpg.database.objects;
+package at.feddis08.mmorpg.io.database.objects;
 
 import at.feddis08.mmorpg.MMORPG;
-import at.feddis08.mmorpg.database.Functions;
+import at.feddis08.mmorpg.io.database.Functions;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import java.sql.SQLException;
-import java.util.SplittableRandom;
 
 public class PlayerObject {
     public String id = null;

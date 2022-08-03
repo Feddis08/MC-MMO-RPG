@@ -1,7 +1,7 @@
 package at.feddis08.mmorpg.minecraft.tools;
 
-import at.feddis08.mmorpg.database.Functions;
-import at.feddis08.mmorpg.database.objects.WorldObject;
+import at.feddis08.mmorpg.io.database.Functions;
+import at.feddis08.mmorpg.io.database.objects.WorldObject;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

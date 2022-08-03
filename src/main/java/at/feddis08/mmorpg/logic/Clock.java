@@ -1,8 +1,8 @@
 package at.feddis08.mmorpg.logic;
 
 import at.feddis08.mmorpg.MMORPG;
-import at.feddis08.mmorpg.database.Functions;
-import at.feddis08.mmorpg.database.objects.Player_balanceObject;
+import at.feddis08.mmorpg.io.database.Functions;
+import at.feddis08.mmorpg.io.database.objects.Player_balanceObject;
 import at.feddis08.mmorpg.logic.game.trade.Wheat;
 import at.feddis08.mmorpg.minecraft.inventories.WheatTradeInv;
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;

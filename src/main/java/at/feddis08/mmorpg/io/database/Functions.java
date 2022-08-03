@@ -1,7 +1,6 @@
-package at.feddis08.mmorpg.database;
+package at.feddis08.mmorpg.io.database;
 import at.feddis08.mmorpg.MMORPG;
-import at.feddis08.mmorpg.database.objects.*;
-import org.bukkit.World;
+import at.feddis08.mmorpg.io.database.objects.*;
 
 import java.sql.*;
 import java.util.ArrayList;

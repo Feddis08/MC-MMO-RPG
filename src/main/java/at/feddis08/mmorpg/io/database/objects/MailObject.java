@@ -1,4 +1,4 @@
-package at.feddis08.mmorpg.database.objects;
+package at.feddis08.mmorpg.io.database.objects;
 
 public class MailObject {
     public String sender_id = "";
