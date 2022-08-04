@@ -21,9 +21,11 @@ public class CheckInventory_ConfigFile {
             FileWriter myWriter = new FileWriter(Main.path + "inventory_config.txt");
             myWriter.write("# This is the inventory config file of the MMORPG!");
             myWriter.write(System.lineSeparator());
-            myWriter.write("# add a inventory: add: <file_name>");
+            myWriter.write("# add_inv a inventory: add_inv: <file_name>");
             myWriter.write(System.lineSeparator());
-            myWriter.write("add: trade_wheat.txt");
+            myWriter.write("# add_trade a inventory: add_trade: <file_name>");
+            myWriter.write(System.lineSeparator());
+            myWriter.write("# add_inv: wheat_trade_table.txt");
             myWriter.write(System.lineSeparator());
             myWriter.close();
         }

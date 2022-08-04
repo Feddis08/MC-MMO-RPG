@@ -8,6 +8,7 @@ import java.util.Objects;
 public class Inventory_ConfigFileObject {
 
     public ArrayList<String> inventories = new ArrayList<>();
+    public ArrayList<String> trade_tables = new ArrayList<>();
 
     public void parse_config_file(ArrayList<String> lines) {
         MMORPG.debugLog("Parsing discord_config file ...");
@@ -24,9 +25,18 @@ public class Inventory_ConfigFileObject {
             if (Objects.equals(params[0], "")) {
                 parse_ok = true;
             }
-            if (Objects.equals(params[0], "add:")) {
+            if (Objects.equals(params[0], "add_inv:")) {
                 if (params.length == 2){
                     inventories.add(params[1]);
+                    parse_ok = true;
+                }else{
+                    parse_ok = true;
+                    MMORPG.consoleLog("ERROR: Could not parse config file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
+                }
+            }
+            if (Objects.equals(params[0], "add_trade:")) {
+                if (params.length == 2){
+                    trade_tables.add(params[1]);
                     parse_ok = true;
                 }else{
                     parse_ok = true;

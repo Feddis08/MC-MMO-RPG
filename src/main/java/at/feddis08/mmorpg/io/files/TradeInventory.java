@@ -1,12 +1,9 @@
 package at.feddis08.mmorpg.io.files;
 
 import at.feddis08.mmorpg.MMORPG;
-import at.feddis08.mmorpg.io.files.config_patterns.CheckConfigFile;
-import at.feddis08.mmorpg.io.files.config_patterns.CheckDiscordFile;
 import at.feddis08.mmorpg.io.files.file_objects.InventoryParser;
-import at.feddis08.mmorpg.io.files.file_objects.Inventory_ConfigFileObject;
+import at.feddis08.mmorpg.io.files.file_objects.TradeTable_Config_FileObject;
 import at.feddis08.mmorpg.logic.game.Var;
-import at.feddis08.mmorpg.logic.game.trade.invObjects.Inventory;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +27,14 @@ public class TradeInventory {
             inventoryParser.parse_config_file(ReadFile.getFile(path + inventory_filename));
             inventoryParser.inventory.construct();
             Var.inventories.add(inventoryParser.inventory);
+            index = index + 1;
+        }
+        index = 0;
+        while (index < Var.config.trade_tables.size()){
+            String trade_table_filename = Var.config.trade_tables.get(index);
+            TradeTable_Config_FileObject tradeTable_Config_File = new TradeTable_Config_FileObject();
+            tradeTable_Config_File.parse_config_file(ReadFile.getFile(path + trade_table_filename));
+            Var.tradeTables.add(tradeTable_Config_File);
             index = index + 1;
         }
     }

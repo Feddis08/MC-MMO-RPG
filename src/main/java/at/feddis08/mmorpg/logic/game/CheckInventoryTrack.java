@@ -4,7 +4,9 @@ import at.feddis08.mmorpg.io.database.Functions;
 import at.feddis08.mmorpg.io.database.objects.InventoryTrackObject;
 import at.feddis08.mmorpg.io.database.objects.Player_balanceObject;
 import at.feddis08.mmorpg.logic.Clock;
+import at.feddis08.mmorpg.logic.game.trade.InventoryManagment;
 import at.feddis08.mmorpg.logic.game.trade.Wheat;
+import at.feddis08.mmorpg.logic.game.trade.invObjects.PlayerInvObject;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.*;
 import org.bukkit.inventory.ItemStack;
@@ -19,6 +21,14 @@ public class CheckInventoryTrack {
     }
     public static void checkInvOpen(InventoryOpenEvent event) throws SQLException {
         if(!( event.getInventory().getLocation() == null)){
+            PlayerInvObject playerInvObject = Var.get_Player_inv_object_by_player_id(event.getPlayer().getUniqueId().toString());
+            if (playerInvObject == null) {
+                playerInvObject = new PlayerInvObject();
+                Var.playerInvObjects.add(playerInvObject);
+            }
+            playerInvObject.player_id = event.getPlayer().getUniqueId().toString();
+            playerInvObject.origin_opened_inv_location = event.getInventory().getLocation();
+
             String world_id = Objects.requireNonNull(event.getPlayer().getLocation().getWorld()).getName();
             String x = String.valueOf(event.getInventory().getLocation().getBlock().getX());
             String y = String.valueOf(event.getInventory().getLocation().getBlock().getY());
@@ -26,19 +36,19 @@ public class CheckInventoryTrack {
             InventoryTrackObject inventoryTrackObject = get(world_id, x, y, z);
             if (Objects.equals(inventoryTrackObject.world_id, world_id)){
                 event.setCancelled(true);
-                if (Objects.equals(inventoryTrackObject.type, "trade_wheat")){
                     event.getPlayer().closeInventory();
-                    event.getPlayer().openInventory(Var.get_inventory_by_display_name("trade_wheat").inv);
-                }
+                    event.getPlayer().openInventory(Var.get_inventory_by_display_name(inventoryTrackObject.type).inv);
             }
         }
     }
     public static void checkInvClicked(InventoryClickEvent event) throws SQLException {
+        InventoryManagment.inv_interact(event);
+        /*
         if (event.getClickedInventory() == Var.get_inventory_by_display_name("trade_wheat").inv) {
             if (event.getSlot() == 2){
                 if (event.getCursor().getType().name().equals("WHEAT")){
                     Clock.clear_wheat_inv = true;
-                    Clock.wheat_who_clicked = event.getWhoClicked().getUniqueId().toString();
+                    Clock.inventory_who_clicked = event.getWhoClicked().getUniqueId().toString();
                     Var.get_inventory_by_display_name("trade_wheat").inv.setItem(2, new ItemStack(Material.AIR));
                 }else{
                     event.setCancelled(true);
@@ -53,6 +63,7 @@ public class CheckInventoryTrack {
                 }
             }
         }
+         */
     }
     public static void checkInvDrag(InventoryDragEvent event){
     }
