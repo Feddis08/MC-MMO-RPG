@@ -2,6 +2,7 @@ package at.feddis08.mmorpg.io.files.file_objects;
 
 import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.logic.game.trade.TradeTable;
+import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -75,6 +76,7 @@ public class TradeTable_Config_FileObject {
                 if (parsing_trade_table){
                     tradeTables.get(trade_table_count).buy_item = params[1];
                     parse_ok = true;
+
                 }
             }
             if (Objects.equals(params[0], "buy_price:")) {
