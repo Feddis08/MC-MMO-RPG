@@ -1,10 +1,8 @@
-package at.feddis08.mmorpg.io.files.config_patterns;
+package at.feddis08.mmorpg.io.text_files.files.config_patterns;
 
-import at.feddis08.mmorpg.discord.DISCORD;
-import at.feddis08.mmorpg.io.files.Main;
-import at.feddis08.mmorpg.io.files.ReadFile;
-import at.feddis08.mmorpg.io.files.file_objects.Discord_ConfigFileObject;
-import at.feddis08.mmorpg.io.files.file_objects.Inventory_ConfigFileObject;
+import at.feddis08.mmorpg.io.text_files.files.Main;
+import at.feddis08.mmorpg.io.text_files.files.ReadFile;
+import at.feddis08.mmorpg.io.text_files.files.file_objects.Inventory_ConfigFileObject;
 import at.feddis08.mmorpg.logic.game.Var;
 
 import java.io.File;

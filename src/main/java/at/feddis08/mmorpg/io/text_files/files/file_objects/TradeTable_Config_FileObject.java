@@ -1,8 +1,7 @@
-package at.feddis08.mmorpg.io.files.file_objects;
+package at.feddis08.mmorpg.io.text_files.files.file_objects;
 
 import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.logic.game.trade.TradeTable;
-import org.bukkit.Material;
 
 import java.util.ArrayList;
 import java.util.Objects;

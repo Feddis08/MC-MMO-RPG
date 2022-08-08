@@ -1,9 +1,9 @@
-package at.feddis08.mmorpg.io.files.config_patterns;
+package at.feddis08.mmorpg.io.text_files.files.config_patterns;
 
 import at.feddis08.mmorpg.MMORPG;
-import at.feddis08.mmorpg.io.files.Main;
-import at.feddis08.mmorpg.io.files.ReadFile;
-import at.feddis08.mmorpg.io.files.file_objects.ConfigFileObject;
+import at.feddis08.mmorpg.io.text_files.files.Main;
+import at.feddis08.mmorpg.io.text_files.files.ReadFile;
+import at.feddis08.mmorpg.io.text_files.files.file_objects.ConfigFileObject;
 
 import java.io.File;
 import java.io.FileWriter;

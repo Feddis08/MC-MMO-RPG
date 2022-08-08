@@ -1,4 +1,4 @@
-package at.feddis08.mmorpg.io.files;
+package at.feddis08.mmorpg.io.text_files.files;
 
 import java.io.BufferedReader;
 import java.io.File;

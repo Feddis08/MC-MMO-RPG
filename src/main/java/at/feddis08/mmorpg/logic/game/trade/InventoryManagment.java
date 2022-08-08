@@ -3,7 +3,7 @@ package at.feddis08.mmorpg.logic.game.trade;
 import at.feddis08.mmorpg.io.database.Functions;
 import at.feddis08.mmorpg.io.database.objects.InventoryTrackObject;
 import at.feddis08.mmorpg.io.database.objects.Player_balanceObject;
-import at.feddis08.mmorpg.io.files.file_objects.TradeTable_Config_FileObject;
+import at.feddis08.mmorpg.io.text_files.files.file_objects.TradeTable_Config_FileObject;
 import at.feddis08.mmorpg.logic.Clock;
 import at.feddis08.mmorpg.logic.game.CheckInventoryTrack;
 import at.feddis08.mmorpg.logic.game.Var;

@@ -1,11 +1,10 @@
 package at.feddis08.mmorpg.logic.game;
 
-import at.feddis08.mmorpg.io.files.file_objects.Inventory_ConfigFileObject;
-import at.feddis08.mmorpg.io.files.file_objects.TradeTable_Config_FileObject;
+import at.feddis08.mmorpg.io.text_files.files.file_objects.Inventory_ConfigFileObject;
+import at.feddis08.mmorpg.io.text_files.files.file_objects.TradeTable_Config_FileObject;
 import at.feddis08.mmorpg.logic.game.trade.invObjects.Inventory;
 import at.feddis08.mmorpg.logic.game.trade.invObjects.PlayerInvObject;
 import at.feddis08.mmorpg.logic.game.trade.invObjects.Slot;
-import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Objects;

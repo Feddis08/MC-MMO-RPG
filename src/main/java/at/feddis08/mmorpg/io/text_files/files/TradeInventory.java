@@ -1,8 +1,8 @@
-package at.feddis08.mmorpg.io.files;
+package at.feddis08.mmorpg.io.text_files.files;
 
 import at.feddis08.mmorpg.MMORPG;
-import at.feddis08.mmorpg.io.files.file_objects.InventoryParser;
-import at.feddis08.mmorpg.io.files.file_objects.TradeTable_Config_FileObject;
+import at.feddis08.mmorpg.io.text_files.files.file_objects.InventoryParser;
+import at.feddis08.mmorpg.io.text_files.files.file_objects.TradeTable_Config_FileObject;
 import at.feddis08.mmorpg.logic.game.Var;
 
 import java.io.File;

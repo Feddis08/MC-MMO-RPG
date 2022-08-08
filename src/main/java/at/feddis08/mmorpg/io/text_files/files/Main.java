@@ -1,8 +1,8 @@
-package at.feddis08.mmorpg.io.files;
+package at.feddis08.mmorpg.io.text_files.files;
 
-import at.feddis08.mmorpg.io.files.config_patterns.CheckConfigFile;
-import at.feddis08.mmorpg.io.files.config_patterns.CheckDiscordFile;
-import at.feddis08.mmorpg.io.files.config_patterns.CheckInventory_ConfigFile;
+import at.feddis08.mmorpg.io.text_files.files.config_patterns.CheckConfigFile;
+import at.feddis08.mmorpg.io.text_files.files.config_patterns.CheckDiscordFile;
+import at.feddis08.mmorpg.io.text_files.files.config_patterns.CheckInventory_ConfigFile;
 
 import java.io.File;
 import java.io.IOException;

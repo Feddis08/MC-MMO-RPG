@@ -1,18 +1,15 @@
-package at.feddis08.mmorpg.io.files.config_patterns;
+package at.feddis08.mmorpg.io.text_files.files.config_patterns;
 
-import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.discord.DISCORD;
-import at.feddis08.mmorpg.io.files.Main;
-import at.feddis08.mmorpg.io.files.ReadFile;
-import at.feddis08.mmorpg.io.files.file_objects.ConfigFileObject;
-import at.feddis08.mmorpg.io.files.file_objects.Discord_ConfigFileObject;
+import at.feddis08.mmorpg.io.text_files.files.Main;
+import at.feddis08.mmorpg.io.text_files.files.ReadFile;
+import at.feddis08.mmorpg.io.text_files.files.file_objects.Discord_ConfigFileObject;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Date;
 
 public class CheckDiscordFile {
 

@@ -1,6 +1,6 @@
 package at.feddis08.mmorpg.discord;
 import at.feddis08.mmorpg.MMORPG;
-import at.feddis08.mmorpg.io.files.file_objects.Discord_ConfigFileObject;
+import at.feddis08.mmorpg.io.text_files.files.file_objects.Discord_ConfigFileObject;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 

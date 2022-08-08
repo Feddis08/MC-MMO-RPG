@@ -1,14 +1,15 @@
-package at.feddis08.mmorpg.io.files.file_objects;
+package at.feddis08.mmorpg.io.text_files.files.file_objects;
 
 import at.feddis08.mmorpg.MMORPG;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Inventory_ConfigFileObject {
+public class Discord_ConfigFileObject {
 
-    public ArrayList<String> inventories = new ArrayList<>();
-    public ArrayList<String> trade_tables = new ArrayList<>();
+   public String server_log = "";
+   public String read_only_chat = "";
+   public String chat = "";
 
     public void parse_config_file(ArrayList<String> lines) {
         MMORPG.debugLog("Parsing discord_config file ...");
@@ -25,27 +26,33 @@ public class Inventory_ConfigFileObject {
             if (Objects.equals(params[0], "")) {
                 parse_ok = true;
             }
-            if (Objects.equals(params[0], "add_inv:")) {
+            if (Objects.equals(params[0], "server_log:")) {
                 if (params.length == 2){
-                    inventories.add(params[1]);
+                    server_log = params[1];
                     parse_ok = true;
                 }else{
                     parse_ok = true;
-                    MMORPG.consoleLog("ERROR: Could not parse config file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
                 }
             }
-            if (Objects.equals(params[0], "add_trade:")) {
+            if (Objects.equals(params[0], "read_only_chat:")) {
                 if (params.length == 2){
-                    trade_tables.add(params[1]);
+                    read_only_chat = params[1];
                     parse_ok = true;
                 }else{
                     parse_ok = true;
-                    MMORPG.consoleLog("ERROR: Could not parse config file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
                 }
             }
-            index = index + 1;
-            if (!(parse_ok))
-                MMORPG.consoleLog("ERROR: Could not parse config file. Load default value. Error at line: " + String.valueOf(index));
+            if (Objects.equals(params[0], "chat:")) {
+                if (params.length == 2){
+                    chat = params[1];
+                    parse_ok = true;
+                }else{
+                    parse_ok = true;
+                }
+            }
+        index = index + 1;
+        if (!(parse_ok))
+            MMORPG.consoleLog("ERROR: Could not parse config file. Load default value. Error at line: " + String.valueOf(index));
 
         }
     }
