@@ -2,6 +2,7 @@ package at.feddis08.mmorpg.io.database.objects;
 
 import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.io.database.Functions;
+import at.feddis08.mmorpg.io.database.Object_Manager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -32,7 +33,28 @@ public class PlayerObject {
             player.sendMessage(ChatColor.GOLD + "You have " + ChatColor.DARK_PURPLE + mailsize + ChatColor.GOLD + " unread mails!");
         }
     }
-    public void destroy_block (BlockBreakEvent event){
-        MMORPG.debugLog("da " + event.getPlayer().getItemInHand().getType().name());
+    public String getCurrent_world_id(){
+        Object_Manager.addRequest("player", "get", id);
+        return current_world_id;
+    }
+    public String getPlayer_rank(){
+        Object_Manager.addRequest("player", "get", id);
+        return player_rank;
+    }
+    public String getPlayer_name(){
+        Object_Manager.addRequest("player", "get", id);
+        return player_name;
+    }
+    public String getDidStartup() {
+        Object_Manager.addRequest("player", "get", id);
+        return didStartup;
+    }
+    public String getDisplay_name() {
+        Object_Manager.addRequest("player", "get", id);
+        return display_name;
+    }
+    public String getOnline() {
+        Object_Manager.addRequest("player", "get", id);
+        return online;
     }
 }
