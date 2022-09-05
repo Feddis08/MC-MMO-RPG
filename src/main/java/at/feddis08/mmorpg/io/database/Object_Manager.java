@@ -7,11 +7,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Object_Manager {
+public class Object_Manager extends Thread{
 
     public static ArrayList<Request> requests = new ArrayList<>();
-
-
+    public void run(){
+        try {
+            checkRequests();
+        } catch (SQLException e) {
+        }
+    }
     public static void addRequest(String type, String function, String identifier){
         Request request = new Request();
         request.type = type;

@@ -23,6 +23,7 @@ public final class MMORPG extends JavaPlugin {
     public static boolean debugMode = true;
     public static Integer current_dev_version = 12;
     public static boolean enable_discord_bot = false;
+    public static Thread thread1 = new Object_Manager();
 
 
     public static boolean discord_bot_active = false;
@@ -47,6 +48,7 @@ public final class MMORPG extends JavaPlugin {
             debugLog("Discord_bot disabled");
         }
         consoleLog("Starting...");
+        thread1.start();
         if (config.enable_debug_log){
             consoleLog("DebugMode enabled...");
         }else{

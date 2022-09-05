@@ -20,6 +20,7 @@ public class connectionEvents {
         player.setDisplayName("test");
         PlayerObject dbPlayer = null;
         dbPlayer = Functions.getPlayer("id", player.getUniqueId().toString());
+        MMORPG.debugLog(dbPlayer.getPlayer_name() + " ds");
         //event.setJoinMessage(ChatColor.AQUA + "User joined the Realm: " + ChatColor.GREEN + player.getName());
         player.sendMessage("Hi, and welcome to our MMO-RPG minecraft-server: " + player.getName());
         if (Objects.equals(dbPlayer.id, null)) {
