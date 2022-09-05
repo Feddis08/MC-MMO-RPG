@@ -1,2 +1,2 @@
 # MC-MMO-RPG
-This is a Minecraft 1.18.2 spigot/paper plugin
+This is a Minecraft 1.19 spigot/paper plugin
