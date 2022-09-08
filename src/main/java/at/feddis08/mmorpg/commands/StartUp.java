@@ -7,6 +7,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class StartUp implements CommandExecutor {
     @Override
@@ -18,25 +19,16 @@ public class StartUp implements CommandExecutor {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            if (dbPlayer.didStartup == "true"){
+            if (Objects.equals(dbPlayer.didStartup, "true")){
                 sender.sendMessage("You already did the startup!");
                 return true;
             }else {
                 if (args.length == 0 || args.length == 1) {
                     sender.sendMessage("For the startup you need to write this command. You must change the parameter:" +
-                            " /startUp {your player_name} {your realm(MagicRealm/BuildingRealm/FightingRealm)}");
+                            " /startUp {your player_name}");
                 }else{
-                    if (args.length >= 1){
+                    if (args.length == 1){
                         String DisplayName = args[0];
-                        Integer realm = 0;
-                        if (args[1].equalsIgnoreCase("MagicRealm"))realm = 1;
-                        if (args[1].equalsIgnoreCase("BuildingRealm"))realm = 2;
-                        if (args[1].equalsIgnoreCase("FightingRealm"))realm = 3;
-                        if (realm == 0){
-                            sender.sendMessage("For the startup you need to write this command. You must change the parameter:" +
-                                    " /startUp {your player_name} {your realm(MagicRealm/BuildingRealm/FightingRealm)}");
-                            return true;
-                        }
                         try {
                             Functions.update("players" , "display_name", DisplayName, dbPlayer.id, "id");
                         } catch (SQLException e) {
@@ -47,8 +39,8 @@ public class StartUp implements CommandExecutor {
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
-                        sender.sendMessage("You are now in the Realm: " + args[1] + " and your name is " + DisplayName
-                                    + ". You can change it with: /change player_name");
+                        sender.sendMessage("You are now " + DisplayName
+                                    + ". You can change the player_name with doing the startup again!");
                             return true;
                         }
                     }
