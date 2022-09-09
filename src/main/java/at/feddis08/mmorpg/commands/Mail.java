@@ -80,7 +80,6 @@ public class Mail implements CommandExecutor {
                                 ArrayList<MailObject> mails = Functions.getMails("receiver_id", dbPlayer.id, "sender_id", Functions.getPlayer("display_name", args[1]).id);
                                 Integer i = 0;
                                 sender.sendMessage(ChatColor.BLUE + "All your mails you got from " + args[1] + "! The format:");
-                                sender.sendMessage(ChatColor.AQUA + "From | Date | Seen/Opened | Title | Id");
                                 while (!(i >= mails.size())) {
                                     PlayerObject dbSender = Functions.getPlayer("id", mails.get(i).sender_id);
                                     RankObject dbRank = Functions.getRank("name", dbSender.player_rank);
