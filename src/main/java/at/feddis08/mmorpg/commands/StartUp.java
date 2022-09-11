@@ -23,7 +23,7 @@ public class StartUp implements CommandExecutor {
                 sender.sendMessage("You already did the startup!");
                 return true;
             }else {
-                if (args.length == 0 || args.length == 1) {
+                if (args.length > 1) {
                     sender.sendMessage("For the startup you need to write this command. You must change the parameter:" +
                             " /startUp {your player_name}");
                 }else{
