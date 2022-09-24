@@ -60,6 +60,33 @@ public class Functions {
         stmt.executeUpdate(sql);
         MMORPG.debugLog("Rank created: " + dataObj.name + "!");
     }
+    public static void createPortalTrack(PortalTrackObject dataObj) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sqlString = "'"
+                + dataObj.id
+                + "', '"
+                + dataObj.from_world
+                + "', '"
+                + dataObj.to_world
+                + "', '"
+                + dataObj.x1
+                + "', '"
+                + dataObj.x2
+                + "', '"
+                + dataObj.y1
+                + "', '"
+                + dataObj.y2
+                + "', '"
+                + dataObj.z1
+                + "', '"
+                + dataObj.z2
+                + "'";
+        String sql = "insert into portal_tracks "
+                + "(id, from_world, to_world, x1, x2, y1, y2, z1, z2)"
+                + "values (" + sqlString + ")";
+        stmt.executeUpdate(sql);
+        MMORPG.debugLog("Rank created: " + dataObj.id + "!");
+    }
     public static void createData(DataObject dataObj) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sqlString = "'"
@@ -379,6 +406,26 @@ public class Functions {
             MMORPG.debugLog("Database read in mails for " + dataObj.message + " !");
         }
         return dataObjList;
+    }
+    public static MailObject getPortalTrack(String column, String value, String column2, String value2, String column3, String value3, String column4, String value4) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from portal_tracks where " + column + " = " + "'" + value + "' and " + column2 + "='" + value2 + "' and " + column3 + " = " + "'" + value3 + "' and " + column4 + "='" + value4 + "'" ;
+        ResultSet myRs = stmt.executeQuery(sql);
+
+        PortalTrackObject dataObj = new PortalTrackObject();
+        while (myRs.next()) {
+            dataObj.id = myRs.getString("id");
+            dataObj.from_world = myRs.getString("from_world");
+            dataObj.to_world = myRs.getString("to_world");
+            dataObj.x1 = myRs.getInt("x1");
+            dataObj.x2 = myRs.getInt("x2");
+            dataObj.x1 = myRs.getInt("x1");
+            dataObj.x2 = myRs.getInt("x2");
+            dataObj.x1 = myRs.getInt("x1");
+            dataObj.x2 = myRs.getInt("x2");
+            MMORPG.debugLog("Database read in mails for " + dataObj.message + " !");
+        }
+        return dataObj;
     }
     public static MailObject getMail(String column, String value, String column2, String value2) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();

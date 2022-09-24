@@ -13,10 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 
 import java.sql.SQLException;
 
@@ -32,12 +29,15 @@ public class Listeners implements org.bukkit.event.Listener {
     }
     @EventHandler
     public static void test(InventoryDragEvent event){
-        MMORPG.debugLog("dwa");
         onEvent.onInventoryDrag(event);
     }
     @EventHandler
     public static void onDeath(PlayerDeathEvent event){
         onDeath.onDeath(event);
+    }
+    @EventHandler
+    public static void onPlayerMove(PlayerMoveEvent event){
+        onEvent.onPlayerMove(event);
     }
     @EventHandler
     public static void onBlockBreak(BlockBreakEvent event) throws SQLException {
