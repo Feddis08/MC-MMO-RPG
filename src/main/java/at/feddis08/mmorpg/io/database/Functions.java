@@ -152,7 +152,26 @@ public class Functions {
                 + "(world_id, id, x, y, z)"
                 + "values (" + sqlString + ")";
         stmt.executeUpdate(sql);
-        MMORPG.debugLog("DataTabel created: " + dataObj.world_id + "!");
+        MMORPG.debugLog("PlayerInWorld created: " + dataObj.world_id + "!");
+    }
+    public static void createWarp(WarpObject dataObj) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sqlString = "'"
+                + dataObj.world_name
+                + "', '"
+                + dataObj.id
+                + "', '"
+                + dataObj.x
+                + "', '"
+                + dataObj.y
+                + "', '"
+                + dataObj.z
+                + "'";
+        String sql = "insert into warps "
+                + "(world_name, id, x, y, z)"
+                + "values (" + sqlString + ")";
+        stmt.executeUpdate(sql);
+        MMORPG.debugLog("Warp created: " + dataObj.id + "!");
     }
     public static void createPlayers_balance(Player_balanceObject dataObj) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
@@ -437,6 +456,22 @@ public class Functions {
             MMORPG.debugLog("Database read in portal_tracks for " + dataObj.id + " !");
         }
         return dataObjs;
+    }
+    public static WarpObject getWarp(String column, String value) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from warps where " + column + " = " + "'" + value + "'";
+        ResultSet myRs = stmt.executeQuery(sql);
+
+        WarpObject dataObj = new WarpObject();
+        while (myRs.next()) {
+            dataObj.id = myRs.getString("id");
+            dataObj.world_name = myRs.getString("world_name");
+            dataObj.x = myRs.getInt("x");
+            dataObj.y = myRs.getInt("y");
+            dataObj.z = myRs.getInt("z");
+            MMORPG.debugLog("Database read in warps for " + dataObj.id + " !");
+        }
+        return dataObj;
     }
     public static PortalTrackObject getPortalTrackById(String id) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
