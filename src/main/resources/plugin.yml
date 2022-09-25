@@ -18,3 +18,5 @@ commands:
   setInventoryTrack:
   setPortalTrack:
   setWarp:
+  warp:
+  removeWarp:
