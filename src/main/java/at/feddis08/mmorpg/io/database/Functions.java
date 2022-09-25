@@ -73,16 +73,22 @@ public class Functions {
                 + "', '"
                 + dataObj.x2
                 + "', '"
+                + dataObj.x3
+                + "', '"
                 + dataObj.y1
                 + "', '"
                 + dataObj.y2
                 + "', '"
+                + dataObj.y3
+                + "', '"
                 + dataObj.z1
                 + "', '"
                 + dataObj.z2
+                + "', '"
+                + dataObj.z3
                 + "'";
         String sql = "insert into portal_tracks "
-                + "(id, from_world, to_world, x1, x2, y1, y2, z1, z2)"
+                + "(id, from_world, to_world, x1, x2, x3, y1, y2, y3, z1, z2, z3)"
                 + "values (" + sqlString + ")";
         stmt.executeUpdate(sql);
         MMORPG.debugLog("Rank created: " + dataObj.id + "!");
@@ -407,7 +413,55 @@ public class Functions {
         }
         return dataObjList;
     }
-    public static MailObject getPortalTrack(String column, String value, String column2, String value2, String column3, String value3, String column4, String value4) throws SQLException {
+    public static ArrayList<PortalTrackObject> getAllPortalTracks() throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from portal_tracks";
+        ResultSet myRs = stmt.executeQuery(sql);
+
+        ArrayList<PortalTrackObject> dataObjs = new ArrayList<>();
+        while (myRs.next()) {
+            PortalTrackObject dataObj = new PortalTrackObject();
+            dataObj.id = myRs.getString("id");
+            dataObj.from_world = myRs.getString("from_world");
+            dataObj.to_world = myRs.getString("to_world");
+            dataObj.x1 = myRs.getInt("x1");
+            dataObj.x2 = myRs.getInt("x2");
+            dataObj.x3 = myRs.getInt("x3");
+            dataObj.y1 = myRs.getInt("y1");
+            dataObj.y2 = myRs.getInt("y2");
+            dataObj.y3 = myRs.getInt("y3");
+            dataObj.z1 = myRs.getInt("z1");
+            dataObj.z2 = myRs.getInt("z2");
+            dataObj.z3 = myRs.getInt("z3");
+            dataObjs.add(dataObj);
+            MMORPG.debugLog("Database read in portal_tracks for " + dataObj.id + " !");
+        }
+        return dataObjs;
+    }
+    public static PortalTrackObject getPortalTrackById(String id) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from portal_tracks where id = " + "'" + id + "'";
+        ResultSet myRs = stmt.executeQuery(sql);
+
+        PortalTrackObject dataObj = new PortalTrackObject();
+        while (myRs.next()) {
+            dataObj.id = myRs.getString("id");
+            dataObj.from_world = myRs.getString("from_world");
+            dataObj.to_world = myRs.getString("to_world");
+            dataObj.x1 = myRs.getInt("x1");
+            dataObj.x2 = myRs.getInt("x2");
+            dataObj.x3 = myRs.getInt("x3");
+            dataObj.y1 = myRs.getInt("y1");
+            dataObj.y2 = myRs.getInt("y2");
+            dataObj.y3 = myRs.getInt("y3");
+            dataObj.z1 = myRs.getInt("z1");
+            dataObj.z2 = myRs.getInt("z2");
+            dataObj.z3 = myRs.getInt("z3");
+            MMORPG.debugLog("Database read in portal_tracks for " + dataObj.id + " !");
+        }
+        return dataObj;
+    }
+    public static PortalTrackObject getPortalTrackByCoords(String column, String value, String column2, String value2, String column3, String value3, String column4, String value4) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sql = "select * from portal_tracks where " + column + " = " + "'" + value + "' and " + column2 + "='" + value2 + "' and " + column3 + " = " + "'" + value3 + "' and " + column4 + "='" + value4 + "'" ;
         ResultSet myRs = stmt.executeQuery(sql);
@@ -419,11 +473,14 @@ public class Functions {
             dataObj.to_world = myRs.getString("to_world");
             dataObj.x1 = myRs.getInt("x1");
             dataObj.x2 = myRs.getInt("x2");
-            dataObj.x1 = myRs.getInt("x1");
-            dataObj.x2 = myRs.getInt("x2");
-            dataObj.x1 = myRs.getInt("x1");
-            dataObj.x2 = myRs.getInt("x2");
-            MMORPG.debugLog("Database read in mails for " + dataObj.message + " !");
+            dataObj.x3 = myRs.getInt("x3");
+            dataObj.y1 = myRs.getInt("y1");
+            dataObj.y2 = myRs.getInt("y2");
+            dataObj.y3 = myRs.getInt("y3");
+            dataObj.z1 = myRs.getInt("z1");
+            dataObj.z2 = myRs.getInt("z2");
+            dataObj.z3 = myRs.getInt("z3");
+            MMORPG.debugLog("Database read in portal_tracks for " + dataObj.id + " !");
         }
         return dataObj;
     }

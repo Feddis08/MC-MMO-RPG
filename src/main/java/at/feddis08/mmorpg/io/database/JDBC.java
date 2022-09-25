@@ -80,10 +80,13 @@ public class JDBC {
                 + "  to_world VARCHAR(40),"
                 + "  x1 INTEGER,"
                 + "  x2 INTEGER,"
+                + "  x3 INTEGER,"
                 + "  y1 INTEGER,"
                 + "  y2 INTEGER,"
+                + "  y3 INTEGER,"
                 + "  z1 INTEGER,"
-                + "  z2 INTEGER )";
+                + "  z2 INTEGER,"
+                + "  z3 INTEGER )";
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);

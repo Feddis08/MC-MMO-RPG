@@ -16,3 +16,4 @@ commands:
   mail:
   setScoreboard:
   setInventoryTrack:
+  setPortalTrack:

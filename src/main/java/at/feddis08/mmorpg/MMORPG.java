@@ -100,6 +100,7 @@ public final class MMORPG extends JavaPlugin {
         getCommand("mail").setExecutor(new Mail());
         getCommand("setScoreboard").setExecutor(new SetScoreboard());
         getCommand("setInventoryTrack").setExecutor(new SetInventoryTrack());
+        getCommand("setPortalTrack").setExecutor(new SetPortalTrack());
 
     }
         @Override

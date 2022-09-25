@@ -36,7 +36,7 @@ public class Listeners implements org.bukkit.event.Listener {
         onDeath.onDeath(event);
     }
     @EventHandler
-    public static void onPlayerMove(PlayerMoveEvent event){
+    public static void onPlayerMove(PlayerMoveEvent event) throws SQLException {
         onEvent.onPlayerMove(event);
     }
     @EventHandler

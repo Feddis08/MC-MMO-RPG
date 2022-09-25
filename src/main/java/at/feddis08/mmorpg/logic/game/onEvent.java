@@ -22,7 +22,7 @@ public class onEvent {
     public static void onInventoryDrag(InventoryDragEvent event){
         CheckInventoryTrack.checkInvDrag(event);
     }
-    public static void onPlayerMove(PlayerMoveEvent event){
+    public static void onPlayerMove(PlayerMoveEvent event) throws SQLException {
         checkMove.check(event);
     }
 }
