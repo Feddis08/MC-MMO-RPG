@@ -303,6 +303,28 @@ public class Functions {
         MMORPG.debugLog("DataBase read in players for " + dataObj.id);
         return dataObj;
     }
+    public static ArrayList<PlayerObject> getPlayers(String column, String value) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from players where " + column + " = " + "'" + value + "'";
+        ResultSet myRs = stmt.executeQuery(sql);
+        ArrayList<PlayerObject> dataObjs = new ArrayList<>();
+        while (myRs.next()) {
+            PlayerObject dataObj = new PlayerObject();
+            dataObj.stage = myRs.getInt("stage");
+            dataObj.id = myRs.getString("id");
+            dataObj.job = myRs.getString("job");
+            dataObj.online = myRs.getString("online");
+            dataObj.player_rank = myRs.getString("player_rank");
+            dataObj.display_name = myRs.getString("display_name");
+            dataObj.player_name = myRs.getString("player_name");
+            dataObj.current_world_id = myRs.getString("current_world_id");
+            dataObj.gamemode = myRs.getInt("gamemode");
+            dataObj.didStartup = myRs.getString("didStartup");
+            dataObjs.add(dataObj);
+        }
+        MMORPG.debugLog("DataBase read in players for " + value);
+        return dataObjs;
+    }
     public static RankObject getRank(String column, String value) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sql = "select * from ranks where " + column + " = " + "'" + value + "'";

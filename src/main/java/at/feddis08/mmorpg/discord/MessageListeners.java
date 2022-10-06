@@ -1,9 +1,14 @@
 package at.feddis08.mmorpg.discord;
 
 import at.feddis08.mmorpg.MMORPG;
+import at.feddis08.mmorpg.io.database.Functions;
+import at.feddis08.mmorpg.io.database.objects.PlayerObject;
+import at.feddis08.mmorpg.io.database.objects.RankObject;
 import at.feddis08.mmorpg.minecraft.tools.Methods;
 import org.bukkit.ChatColor;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class MessageListeners {
@@ -34,6 +39,25 @@ public class MessageListeners {
         DISCORD.api.addMessageCreateListener(event -> {
             if (event.getMessageContent().equalsIgnoreCase("ping")) {
                 event.getChannel().sendMessage("Pong!");
+            }
+        });
+        DISCORD.api.addMessageCreateListener(event -> {
+            if (event.getMessageContent().equalsIgnoreCase("!showOnlineMinecraftPlayers")) {
+                try {
+                    ArrayList<PlayerObject> dbPlayers = Functions.getPlayers("online", "1");
+                    String result = "There are: \n ```";
+                    Integer index = 0;
+                    while (index < dbPlayers.size()){
+                        PlayerObject dbPlayer = dbPlayers.get(index);
+                        RankObject dbRank = Functions.getRank("name", dbPlayer.player_rank);
+                        result = result + "\n   [" + dbRank.prefix + "][" + dbPlayer.getDisplay_name() + "]";
+                        index = index + 1;
+                    }
+                    result = result + "\n ```";
+                    event.getChannel().sendMessage(result);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         DISCORD.api.addMessageCreateListener(event -> {

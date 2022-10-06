@@ -1,5 +1,13 @@
 package at.feddis08.mmorpg.minecraft.tools;
 
+import at.feddis08.mmorpg.MMORPG;
+import at.feddis08.mmorpg.io.database.Functions;
+import at.feddis08.mmorpg.io.database.objects.PlayerObject;
+import org.bukkit.Server;
+import org.bukkit.entity.Player;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Methods {
@@ -17,5 +25,19 @@ public class Methods {
             }
         }
         return result;
+    }
+    public static void update_all_players_online_state() throws SQLException {
+        ArrayList<PlayerObject> dbPlayers = Functions.getPlayers("online", "1");
+        Integer index = 0;
+        while (index < dbPlayers.size()){
+            PlayerObject dbPlayer = dbPlayers.get(index);
+            Functions.update("players", "online", "0", dbPlayer.id, "id");
+            index = index + 1;
+        }
+        for(Player p : MMORPG.Server.getOnlinePlayers()) {
+            PlayerObject dbPlayer = Functions.getPlayer("id" , p.getUniqueId().toString());
+            Functions.update("players", "online", "1", dbPlayer.id, "id");
+            index = index + 1;
+        }
     }
 }

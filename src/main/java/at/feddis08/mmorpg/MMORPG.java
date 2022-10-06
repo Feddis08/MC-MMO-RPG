@@ -7,6 +7,7 @@ import at.feddis08.mmorpg.discord.DISCORD;
 import at.feddis08.mmorpg.io.text_files.files.Main;
 import at.feddis08.mmorpg.io.text_files.files.file_objects.ConfigFileObject;
 import at.feddis08.mmorpg.minecraft.listeners.Listeners;
+import at.feddis08.mmorpg.minecraft.tools.Methods;
 import at.feddis08.mmorpg.minecraft.tools.StartLoadWorld;
 import at.feddis08.mmorpg.minecraft.tools.WorldAutoLoad;
 import at.feddis08.mmorpg.web.httpServer.Start;
@@ -68,6 +69,7 @@ public final class MMORPG extends JavaPlugin {
             Rank.set_prefix("default", "Player");
             Rank.add_rule("default", "doChat");
             Rank.add_rule("default", "doMail");
+            Rank.add_rule("default", "doWarp");
             Rank.add_rule("default", "doSetPlayerInfoScoreboard");
         }
         RankObject dbRank2 = null;
@@ -110,6 +112,11 @@ public final class MMORPG extends JavaPlugin {
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            Methods.update_all_players_online_state();
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
