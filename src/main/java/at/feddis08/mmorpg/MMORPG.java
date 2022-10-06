@@ -9,6 +9,7 @@ import at.feddis08.mmorpg.io.text_files.files.file_objects.ConfigFileObject;
 import at.feddis08.mmorpg.minecraft.listeners.Listeners;
 import at.feddis08.mmorpg.minecraft.tools.StartLoadWorld;
 import at.feddis08.mmorpg.minecraft.tools.WorldAutoLoad;
+import at.feddis08.mmorpg.web.httpServer.Start;
 import org.bukkit.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -104,12 +105,22 @@ public final class MMORPG extends JavaPlugin {
         getCommand("setWarp").setExecutor(new SetWarp());
         getCommand("warp").setExecutor(new Warp());
         getCommand("removeWarp").setExecutor(new RemoveWarp());
-
+        try {
+            Start.startHttpServer();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
         @Override
     public void onDisable() {
         // Plugin shutdown logic
-            shutdown();
+            try {
+                shutdown();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     public static void debugLog(String log){
         if (config.enable_debug_log){
@@ -123,7 +134,7 @@ public final class MMORPG extends JavaPlugin {
         if (config.enable_discord_bot && discord_bot_active)
             at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.config.server_log, ("[" + config.console_prefix + "]: [Log]: " + log));
     }
-    public static void shutdown(){
+    public static void shutdown() throws IOException {
         consoleLog("Shutdown...");
         debugLog("Disconnecting systems...");
         if (config.enable_discord_bot){

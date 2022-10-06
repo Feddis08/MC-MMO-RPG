@@ -6,6 +6,7 @@ import at.feddis08.mmorpg.logic.game.onEvent;
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.VillagerAcquireTradeEvent;
@@ -63,4 +64,6 @@ public class Listeners implements org.bukkit.event.Listener {
     }
     @EventHandler
     public static void onChat(AsyncPlayerChatEvent event) throws SQLException {onChat.onChat(event);}
+    @EventHandler
+    public static void onPlaced(BlockPlaceEvent event) throws SQLException {onEvent.onBlockPlaced(event);}
 }
