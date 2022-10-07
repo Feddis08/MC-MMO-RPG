@@ -36,7 +36,7 @@ public class onEvent {
         if (Rank.isPlayer_allowedTo(dbPlayer.id, "doPlaceBlock") || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
             if (Objects.equals(event.getBlockPlaced().getType().toString(), "TNT")){
                 if (Rank.isPlayer_allowedTo(dbPlayer.id, "doPlaceTntBlock") || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
-                    event.getPlayer().sendMessage(ChatColor.YELLOW + "I hope, you now what you are doing!");
+                    event.getPlayer().sendMessage(ChatColor.YELLOW + "I hope, you know what you are doing!");
                 }else{
                     event.setCancelled(true);
                     event.getPlayer().sendMessage(ChatColor.RED + "You need permissions: doPlaceTntBlock!");

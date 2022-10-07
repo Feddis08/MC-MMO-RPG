@@ -1,6 +1,7 @@
 package at.feddis08.mmorpg;
 
 import at.feddis08.mmorpg.commands.*;
+import at.feddis08.mmorpg.discord.dcFunctions;
 import at.feddis08.mmorpg.io.database.*;
 import at.feddis08.mmorpg.io.database.objects.RankObject;
 import at.feddis08.mmorpg.discord.DISCORD;
@@ -119,6 +120,9 @@ public final class MMORPG extends JavaPlugin {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        consoleLog("Server running ...");
+        dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "Server started and is running ...");
+        dcFunctions.send_message_in_channel(DISCORD.config.chat, "<@&1000897321745260594> Server started and is running ...");
     }
         @Override
     public void onDisable() {
@@ -126,6 +130,8 @@ public final class MMORPG extends JavaPlugin {
             try {
                 shutdown();
             } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -141,8 +147,16 @@ public final class MMORPG extends JavaPlugin {
         if (config.enable_discord_bot && discord_bot_active)
             at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.config.server_log, ("[" + config.console_prefix + "]: [Log]: " + log));
     }
-    public static void shutdown() throws IOException {
-        consoleLog("Shutdown...");
+    public static void shutdown() throws IOException, InterruptedException {
+        dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "Server is closing in 3 seconds ...");
+        dcFunctions.send_message_in_channel(DISCORD.config.chat, "<@&1000897321745260594> Server is closing in 3 seconds ...");
+        consoleLog("Shutdown... in 3 seconds.");
+        consoleLog("3 ...");
+        Thread.sleep(1000);
+        consoleLog("2 ...");
+        Thread.sleep(1000);
+        consoleLog("1 ...");
+        Thread.sleep(1000);
         debugLog("Disconnecting systems...");
         if (config.enable_discord_bot){
             DISCORD.api.disconnect();
