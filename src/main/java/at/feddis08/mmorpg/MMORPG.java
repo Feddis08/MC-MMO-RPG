@@ -71,6 +71,7 @@ public final class MMORPG extends JavaPlugin {
             Rank.add_rule("default", "doChat");
             Rank.add_rule("default", "doMail");
             Rank.add_rule("default", "doWarp");
+            Rank.add_rule("default", "doDiscord");
             Rank.add_rule("default", "doSetPlayerInfoScoreboard");
         }
         RankObject dbRank2 = null;
@@ -108,6 +109,7 @@ public final class MMORPG extends JavaPlugin {
         getCommand("setWarp").setExecutor(new SetWarp());
         getCommand("warp").setExecutor(new Warp());
         getCommand("removeWarp").setExecutor(new RemoveWarp());
+        getCommand("discord").setExecutor(new Discord());
         try {
             Start.startHttpServer();
         } catch (IOException e) {

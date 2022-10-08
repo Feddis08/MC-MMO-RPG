@@ -23,10 +23,22 @@ public class JDBC {
             createPlayers_balanceTable();
             createPortalTracksTable();
             createWarpsTable();
+            createDiscordPlayerTable();
         }catch (Exception e){
             MMORPG.debugLog("Connection to DataBase failed!");
             e.printStackTrace();
         }
+    }
+    public static void createDiscordPlayerTable() throws SQLException {
+        String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "players_discord"
+                + "  (online           INTEGER ,"
+                + "   discord_id VARCHAR(40),"
+                + "   id                VARCHAR(40),"
+                + "   display_name     VARCHAR(20))";
+
+        Statement stmt = myConn.createStatement();
+        stmt.execute(sqlCreate);
+        MMORPG.debugLog("MYSQL players_discord table created!");
     }
     public static void createPlayerTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "players"

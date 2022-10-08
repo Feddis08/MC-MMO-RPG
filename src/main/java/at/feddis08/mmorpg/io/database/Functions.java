@@ -1,11 +1,29 @@
 package at.feddis08.mmorpg.io.database;
 import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.io.database.objects.*;
+import org.javacord.api.DiscordApi;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 public class Functions {
+    public static void createDiscordPlayer(Discord_playerObject playerObj) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sqlString = "'"
+                + playerObj.discord_id
+                + "', '"
+                + playerObj.id
+                + "', '"
+                + playerObj.display_name
+                + "', '"
+                + playerObj.online
+                + "'";
+        String sql = "insert into players_discord "
+                + "(discord_id, id, display_name, online)"
+                + "values (" + sqlString + ")";
+        stmt.executeUpdate(sql);
+        MMORPG.debugLog("Discord_player created: " + playerObj.discord_id + "!");
+    }
     public static void createPlayer(PlayerObject playerObj) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sqlString = "'"
@@ -282,6 +300,36 @@ public class Functions {
                 + "values (" + sqlString + ")";
         stmt.executeUpdate(sql);
         MMORPG.debugLog("DataTabel created: " + dataObj.sender_id + "!");
+    }
+    public static Discord_playerObject getDiscordPlayer(String column, String value) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from players_discord where " + column + " = " + "'" + value + "'";
+        ResultSet myRs = stmt.executeQuery(sql);
+        Discord_playerObject dataObj = new Discord_playerObject();
+        while (myRs.next()) {
+            dataObj.id = myRs.getString("id");
+            dataObj.discord_id = myRs.getString("discord_id");
+            dataObj.online = myRs.getInt("online");
+            dataObj.display_name = myRs.getString("display_name");
+        }
+        MMORPG.debugLog("DataBase read in players_discord for " + dataObj.id);
+        return dataObj;
+    }
+    public static ArrayList<Discord_playerObject> getDiscordPlayers(String column, String value) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from players_discord where " + column + " = " + "'" + value + "'";
+        ResultSet myRs = stmt.executeQuery(sql);
+        ArrayList<Discord_playerObject> dataObjs = new ArrayList<>();
+        while (myRs.next()) {
+            Discord_playerObject dataObj = new Discord_playerObject();
+            dataObj.id = myRs.getString("id");
+            dataObj.discord_id = myRs.getString("discord_id");
+            dataObj.online = myRs.getInt("online");
+            dataObj.display_name = myRs.getString("display_name");
+            dataObjs.add(dataObj);
+        }
+        MMORPG.debugLog("DataBase read in players_discord for " + value);
+        return dataObjs;
     }
     public static PlayerObject getPlayer(String column, String value) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();

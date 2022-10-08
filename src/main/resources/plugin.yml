@@ -20,3 +20,4 @@ commands:
   setWarp:
   warp:
   removeWarp:
+  discord:
