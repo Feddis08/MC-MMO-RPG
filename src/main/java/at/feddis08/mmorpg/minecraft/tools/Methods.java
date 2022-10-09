@@ -40,4 +40,7 @@ public class Methods {
             index = index + 1;
         }
     }
+    public static PlayerObject get_player_by_dcId(String dcId) throws SQLException {
+        return Functions.getPlayer("id", Functions.getDiscordPlayer("id", dcId).discord_id);
+    }
 }
