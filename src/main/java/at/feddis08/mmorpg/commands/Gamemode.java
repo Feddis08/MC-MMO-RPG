@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Gamemode implements CommandExecutor {
     @Override
@@ -43,47 +44,7 @@ public class Gamemode implements CommandExecutor {
                                 player = sender.getServer().getPlayer(args[1]);
                                 dbPlayer = Functions.getPlayer("display_name", args[1]);
                             }
-                            if (args[0].equalsIgnoreCase("1")) {
-                                try {
-                                    Functions.update("players", "gamemode", "1", dbPlayer.id, "id");
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                }
-                                player.setGameMode(GameMode.CREATIVE);
-                                player.sendMessage(ChatColor.GRAY + "Your gamemode changed to CREATIVE");
-                                return true;
-                            }
-                            if (args[0].equalsIgnoreCase("0")) {
-                                try {
-                                    Functions.update("players", "gamemode", "0", dbPlayer.id, "id");
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                }
-                                player.setGameMode(GameMode.SURVIVAL);
-                                player.sendMessage(ChatColor.GRAY + "Your gamemode changed to SURVIVAL");
-                                return true;
-                            }
-                            if (args[0].equalsIgnoreCase("3")) {
-                                try {
-                                    MMORPG.consoleLog("ddd " + dbPlayer.id);
-                                    Functions.update("players", "gamemode", "3", dbPlayer.id, "id");
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                }
-                                player.setGameMode(GameMode.SPECTATOR);
-                                player.sendMessage(ChatColor.GRAY + "Your gamemode changed to SPECTATOR");
-                                return true;
-                            }
-                            if (args[0].equalsIgnoreCase("2")) {
-                                try {
-                                    Functions.update("players", "gamemode", "2", dbPlayer.id, "id");
-                                } catch (SQLException e) {
-                                    e.printStackTrace();
-                                }
-                                player.setGameMode(GameMode.ADVENTURE);
-                                player.sendMessage(ChatColor.GRAY + "Your gamemode changed to ADVENTURE");
-                                return true;
-                            }
+                            changeBukkitPlayerGamemode(player.getUniqueId().toString(), args[1]);
                             sender.sendMessage("Wrong usage: /gm 1/2/3");
                     }else{
                         sender.sendMessage(ChatColor.RED + "You need the permission: 'doGamemode'!");
@@ -93,5 +54,49 @@ public class Gamemode implements CommandExecutor {
                 }
             }
         }return false;
+    }
+    public static void changeBukkitPlayerGamemode(String player_id, String gamemode) throws SQLException {
+        String[] args = new String[0];
+        args[0] = gamemode;
+        Player player = null;
+        player = MMORPG.Server.getPlayer(UUID.fromString(player_id));
+        PlayerObject dbPlayer = Functions.getPlayer("id", player_id);
+        if (args[0].equalsIgnoreCase("1")) {
+            try {
+                Functions.update("players", "gamemode", "1", dbPlayer.id, "id");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            player.setGameMode(GameMode.CREATIVE);
+            player.sendMessage(ChatColor.GRAY + "Your gamemode changed to CREATIVE");
+        }
+        if (args[0].equalsIgnoreCase("0")) {
+            try {
+                Functions.update("players", "gamemode", "0", dbPlayer.id, "id");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            player.setGameMode(GameMode.SURVIVAL);
+            player.sendMessage(ChatColor.GRAY + "Your gamemode changed to SURVIVAL");
+        }
+        if (args[0].equalsIgnoreCase("3")) {
+            try {
+                MMORPG.consoleLog("ddd " + dbPlayer.id);
+                Functions.update("players", "gamemode", "3", dbPlayer.id, "id");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            player.setGameMode(GameMode.SPECTATOR);
+            player.sendMessage(ChatColor.GRAY + "Your gamemode changed to SPECTATOR");
+        }
+        if (args[0].equalsIgnoreCase("2")) {
+            try {
+                Functions.update("players", "gamemode", "2", dbPlayer.id, "id");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            player.setGameMode(GameMode.ADVENTURE);
+            player.sendMessage(ChatColor.GRAY + "Your gamemode changed to ADVENTURE");
+        }
     }
 }

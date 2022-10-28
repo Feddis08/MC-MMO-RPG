@@ -120,7 +120,7 @@ public class JDBC {
     public static void createRanks_permissionsTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "ranks_permissions"
                 + "   (id VARCHAR(40),"
-                + "  permission VARCHAR(20))";
+                + "  permission VARCHAR(256))";
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);

@@ -122,6 +122,11 @@ public final class MMORPG extends JavaPlugin {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        try {
+            at.feddis08.mmorpg.logic.scripts.Main.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         consoleLog("Server running ...");
         dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "Server started and is running ...");
         dcFunctions.send_message_in_channel(DISCORD.config.chat, "<@&1000897321745260594> Server started and is running ...");

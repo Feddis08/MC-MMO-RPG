@@ -40,7 +40,7 @@ public class StartUp implements CommandExecutor {
                             e.printStackTrace();
                         }
                         sender.sendMessage("You are now " + DisplayName
-                                    + ". You can change the player_name with doing the startup again!");
+                                    + ". You can change the player_name by resetting your player. /reset");
                             return true;
                         }
                     }

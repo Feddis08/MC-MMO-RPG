@@ -22,39 +22,38 @@ public class LoadWorld implements CommandExecutor {
                 e.printStackTrace();
             }
             if (Objects.equals(dbPlayer.didStartup, "true")) {
-                    if (args.length == 1) {
-                        try {
-                            if (Rank.isPlayer_allowedTo(dbPlayer.id, "doLoadWorld") || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
-                                sender.sendMessage("Loading world: " + args[0]);
-                                StartLoadWorld.loadWorld(args[0]);
-                                sender.sendMessage("World load complete");
+                if (args.length == 1) {
+                    try {
+                        if (Rank.isPlayer_allowedTo(dbPlayer.id, "doLoadWorld") || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
+                            sender.sendMessage("Loading world: " + args[0]);
+                            StartLoadWorld.loadWorld(args[0]);
+                            sender.sendMessage("World load complete");
 
-                            } else {
-                                sender.sendMessage(ChatColor.RED + "You need the permission: 'doLoadWorld'!");
-                            }
-                        } catch (SQLException e) {
-                            e.printStackTrace();
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "You need the permission: 'doLoadWorld'!");
                         }
-                    } else if (args.length == 2) {
-                        try {
-                            if ((Rank.isPlayer_allowedTo(dbPlayer.id, "doLoadWorld") && Rank.isPlayer_allowedTo(dbPlayer.id, "doSetAutoloadWorld")) || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
-                                sender.sendMessage("Loading world: " + args[0]);
-                                StartLoadWorld.startLoadWorldWithAutoload(args[0], args[1]);
-                                sender.sendMessage("World load complete");
-                            } else {
-                                sender.sendMessage(ChatColor.RED + "You need the permission: 'doLoadWorld' and 'doSetAutoloadWorld'!");
-                            }
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    }else{
-                        sender.sendMessage("Wrong usage: /loadWorld worldName  or  /loadWorld worldName autoload 0/1");
+                    } catch (SQLException e) {
+                        e.printStackTrace();
                     }
-            } else{
+                } else if (args.length == 2) {
+                    try {
+                        if ((Rank.isPlayer_allowedTo(dbPlayer.id, "doLoadWorld") && Rank.isPlayer_allowedTo(dbPlayer.id, "doSetAutoloadWorld")) || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
+                            sender.sendMessage("Loading world: " + args[0]);
+                            StartLoadWorld.startLoadWorldWithAutoload(args[0], args[1]);
+                            sender.sendMessage("World load complete");
+                        } else {
+                            sender.sendMessage(ChatColor.RED + "You need the permission: 'doLoadWorld' and 'doSetAutoloadWorld'!");
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    sender.sendMessage("Wrong usage: /loadWorld worldName  or  /loadWorld worldName autoload 0/1");
+                }
+            } else {
                 sender.sendMessage(ChatColor.RED + "Please do the startup. " + ChatColor.GOLD + "/startup");
             }
         }
         return false;
     }
-
 }

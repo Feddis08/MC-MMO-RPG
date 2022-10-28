@@ -3,6 +3,7 @@ package at.feddis08.mmorpg.io.text_files.files;
 import at.feddis08.mmorpg.io.text_files.files.config_patterns.CheckConfigFile;
 import at.feddis08.mmorpg.io.text_files.files.config_patterns.CheckDiscordFile;
 import at.feddis08.mmorpg.io.text_files.files.config_patterns.CheckInventory_ConfigFile;
+import at.feddis08.mmorpg.io.text_files.files.config_patterns.CheckScriptsFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,5 +23,6 @@ public class Main {
         CheckDiscordFile.check();
         CheckInventory_ConfigFile.check();
         TradeInventory.start();
+        CheckScriptsFile.check();
     }
 }
