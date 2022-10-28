@@ -155,6 +155,8 @@ public final class MMORPG extends JavaPlugin {
             at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.config.server_log, ("[" + config.console_prefix + "]: [Log]: " + log));
     }
     public static void shutdown() throws IOException, InterruptedException {
+        MMORPG.consoleLog("Starting scripts by SERVER_STOP event...");
+        at.feddis08.mmorpg.logic.scripts.Main.script_SERVER_STOP_event();
         dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "Server is closing in 3 seconds ...");
         dcFunctions.send_message_in_channel(DISCORD.config.chat, "<@&1000897321745260594> Server is closing in 3 seconds ...");
         consoleLog("Shutdown... in 3 seconds.");

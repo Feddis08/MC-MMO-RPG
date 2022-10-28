@@ -12,7 +12,7 @@ public class Main {
     public static void start() throws IOException {
         MMORPG.debugLog("Start parsing scripts...");
         parse_scripts();
-        MMORPG.consoleLog("Starting scripts...");
+        MMORPG.consoleLog("Starting scripts by SERVER_START event...");
         script_SERVER_START_event();
 
     }
@@ -30,6 +30,16 @@ public class Main {
         while (index < Var.scripts.size()){
             ScriptFileObject scriptFileObject = Var.scripts.get(index);
             if (Objects.equals(scriptFileObject.start_event, "SERVER_START")){
+                scriptFileObject.start();
+            }
+            index = index + 1;
+        }
+    }
+    public static void script_SERVER_STOP_event(){
+        Integer index = 0;
+        while (index < Var.scripts.size()){
+            ScriptFileObject scriptFileObject = Var.scripts.get(index);
+            if (Objects.equals(scriptFileObject.start_event, "SERVER_STOP")){
                 scriptFileObject.start();
             }
             index = index + 1;

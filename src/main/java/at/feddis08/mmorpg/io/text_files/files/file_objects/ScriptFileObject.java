@@ -82,6 +82,26 @@ public class ScriptFileObject {
             if (Objects.equals(script.get(index).get(0), "<@v>")){
                 get_var_by_name(cmd.get(1));
             }
+            if (Objects.equals(script.get(index).get(0), "<if>")){
+                Boolean pass = false;
+                if (Objects.equals(cmd.get(1), "<_==_>")){
+                    if (Objects.equals(get_value(cmd.get(2)).type, "STRING")){
+                        if (Objects.equals(get_value(cmd.get(2)).value, get_value(cmd.get(3)).value)) pass = true;
+                    }else{
+                        if (Integer.parseInt(get_value(cmd.get(2)).value) == Integer.parseInt(get_value(cmd.get(3)).value)) pass = true;
+                    }
+                }
+                if (!(pass)) {
+                    Integer index2 = index;
+                    while (index2 < script.size()) {
+                        ArrayList<String> cmd2 = script.get(index2);
+                        if (Objects.equals(script.get(index2).get(0), "<if end>")) {
+                            index = index2;
+                        }
+                        index2 = index2 + 1;
+                    }
+                }
+            }
             if (Objects.equals(script.get(index).get(0), "rank.create_rank:")){
                 Rank.create_rank(get_value(cmd.get(1)).value);
             }
@@ -106,7 +126,7 @@ public class ScriptFileObject {
         while ((index + 1) <= lines.size()) {
             parse_ok = false;
             String line = lines.get(index);
-            String[] params = line.split("_<>_");
+            String[] params = line.split("__");
             if (Objects.equals(params[0], "#")) {
                 parse_ok = true;
             }
