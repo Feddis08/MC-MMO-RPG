@@ -6,6 +6,7 @@ import at.feddis08.mmorpg.io.text_files.files.file_objects.ScriptFileObject;
 import at.feddis08.mmorpg.io.text_files.files.file_objects.ScriptsFileObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Main {
@@ -13,7 +14,8 @@ public class Main {
         MMORPG.debugLog("Start parsing scripts...");
         parse_scripts();
         MMORPG.consoleLog("Starting scripts by SERVER_START event...");
-        script_SERVER_START_event();
+        ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
+        script_SERVER_START_event(varObjects);
 
     }
     public static void parse_scripts() throws IOException {
@@ -25,21 +27,34 @@ public class Main {
            index = index + 1;
        }
     }
-    public static void script_SERVER_START_event(){
+    public static void script_SERVER_START_event(ArrayList<VarObject> varObjects){
         Integer index = 0;
         while (index < Var.scripts.size()){
             ScriptFileObject scriptFileObject = Var.scripts.get(index);
             if (Objects.equals(scriptFileObject.start_event, "SERVER_START")){
+                scriptFileObject.varObjects = varObjects;
                 scriptFileObject.start();
             }
             index = index + 1;
         }
     }
-    public static void script_SERVER_STOP_event(){
+    public static void script_SERVER_STOP_event(ArrayList<VarObject> varObjects){
         Integer index = 0;
         while (index < Var.scripts.size()){
             ScriptFileObject scriptFileObject = Var.scripts.get(index);
             if (Objects.equals(scriptFileObject.start_event, "SERVER_STOP")){
+                scriptFileObject.varObjects = varObjects;
+                scriptFileObject.start();
+            }
+            index = index + 1;
+        }
+    }
+    public static void script_TICK_START_event(ArrayList<VarObject> varObjects){
+        Integer index = 0;
+        while (index < Var.scripts.size()){
+            ScriptFileObject scriptFileObject = Var.scripts.get(index);
+            if (Objects.equals(scriptFileObject.start_event, "TICK_START")){
+                scriptFileObject.varObjects = varObjects;
                 scriptFileObject.start();
             }
             index = index + 1;

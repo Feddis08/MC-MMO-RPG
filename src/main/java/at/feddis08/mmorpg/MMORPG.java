@@ -7,6 +7,7 @@ import at.feddis08.mmorpg.io.database.objects.RankObject;
 import at.feddis08.mmorpg.discord.DISCORD;
 import at.feddis08.mmorpg.io.text_files.files.Main;
 import at.feddis08.mmorpg.io.text_files.files.file_objects.ConfigFileObject;
+import at.feddis08.mmorpg.logic.scripts.VarObject;
 import at.feddis08.mmorpg.minecraft.listeners.Listeners;
 import at.feddis08.mmorpg.minecraft.tools.Methods;
 import at.feddis08.mmorpg.minecraft.tools.StartLoadWorld;
@@ -17,6 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public final class MMORPG extends JavaPlugin {
@@ -156,7 +158,8 @@ public final class MMORPG extends JavaPlugin {
     }
     public static void shutdown() throws IOException, InterruptedException {
         MMORPG.consoleLog("Starting scripts by SERVER_STOP event...");
-        at.feddis08.mmorpg.logic.scripts.Main.script_SERVER_STOP_event();
+        ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
+        at.feddis08.mmorpg.logic.scripts.Main.script_SERVER_STOP_event(varObjects);
         dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "Server is closing in 3 seconds ...");
         dcFunctions.send_message_in_channel(DISCORD.config.chat, "<@&1000897321745260594> Server is closing in 3 seconds ...");
         consoleLog("Shutdown... in 3 seconds.");

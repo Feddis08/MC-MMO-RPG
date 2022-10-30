@@ -3,17 +3,22 @@ package at.feddis08.mmorpg.io.text_files.files.file_objects;
 import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.commands.Rank;
 import at.feddis08.mmorpg.logic.scripts.VarObject;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ScriptFileObject {
+public class ScriptFileObject extends Thread {
 
     public ArrayList<ArrayList<String>> script = new ArrayList<>();
     public String name = "";
     public String start_event = "SERVER_START";
     public ArrayList<VarObject> varObjects = new ArrayList<>();
+    public Thread t = new Thread("script");
+
+    public void run(){
+        MMORPG.consoleLog("dd");
+        start();
+    }
 
     public void register_new_var(String name, String type){
         Integer index = 0;
@@ -91,6 +96,19 @@ public class ScriptFileObject {
                         if (Integer.parseInt(get_value(cmd.get(2)).value) == Integer.parseInt(get_value(cmd.get(3)).value)) pass = true;
                     }
                 }
+                if (Objects.equals(cmd.get(1), "<_<_>")){
+                    if (Integer.parseInt(get_value(cmd.get(2)).value) < Integer.parseInt(get_value(cmd.get(3)).value)) pass = true;
+                }
+                if (Objects.equals(cmd.get(1), "<_>_>")){
+                    if (Integer.parseInt(get_value(cmd.get(2)).value) > Integer.parseInt(get_value(cmd.get(3)).value)) pass = true;
+                }
+                if (Objects.equals(cmd.get(1), "<_!=_>")){
+                    if (Objects.equals(get_value(cmd.get(2)).type, "STRING")){
+                        if (!(Objects.equals(get_value(cmd.get(2)).value, get_value(cmd.get(3)).value))) pass = true;
+                    }else{
+                        if (!(Integer.parseInt(get_value(cmd.get(2)).value) == Integer.parseInt(get_value(cmd.get(3)).value))) pass = true;
+                    }
+                }
                 if (!(pass)) {
                     Integer index2 = index;
                     while (index2 < script.size()) {
@@ -117,6 +135,8 @@ public class ScriptFileObject {
             }
             index = index + 1;
         }
+        varObjects.clear();
+        t.stop();
     }
 
     public void parse_config_file(ArrayList<String> lines) {

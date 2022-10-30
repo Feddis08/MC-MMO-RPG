@@ -7,6 +7,8 @@ import at.feddis08.mmorpg.logic.game.Var;
 import at.feddis08.mmorpg.logic.game.trade.TradeTable;
 import at.feddis08.mmorpg.logic.game.trade.invObjects.Inventory;
 import at.feddis08.mmorpg.logic.game.trade.invObjects.Slot;
+import at.feddis08.mmorpg.logic.scripts.Main;
+import at.feddis08.mmorpg.logic.scripts.VarObject;
 import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -26,6 +28,9 @@ public class Clock {
     public static TradeTable tradeTable = null;
     
     public static void tick(ServerTickStartEvent event) throws SQLException {
+        ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
+        varObjects.add(new VarObject("tick_count", "INTEGER", String.valueOf(event.getTickNumber())));
+        Main.script_TICK_START_event(varObjects);
         if (clear_wheat_inv){
             
             Player_balanceObject player_balance = Functions.getPlayers_balance("player_id", inventory_who_clicked);
