@@ -3,6 +3,7 @@ package at.feddis08.mmorpg.minecraft.tools;
 import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.io.database.Functions;
 import at.feddis08.mmorpg.io.database.objects.PlayerObject;
+import at.feddis08.mmorpg.logic.game.Var;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -30,6 +31,11 @@ public class Methods {
     }
     public static void send_minecraft_message_by_id(String id, String message){
         Objects.requireNonNull(MMORPG.Server.getPlayer(UUID.fromString(id))).sendMessage(message);
+    }
+    public static void open_inv_on_minecraft_player(String player_id, String inv_display_name){
+        Objects.requireNonNull(MMORPG.Server.getPlayer(UUID.fromString(player_id))).closeInventory();
+        Objects.requireNonNull(MMORPG.Server.getPlayer(UUID.fromString(player_id))).openInventory(Var.get_inventory_by_display_name(inv_display_name).inv);
+        MMORPG.consoleLog(Var.inventories.size() + Var.get_inventory_by_display_name("trade_wheat").display_name);
     }
     public static void update_all_players_online_state() throws SQLException {
         ArrayList<PlayerObject> dbPlayers = Functions.getPlayers("online", "1");

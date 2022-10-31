@@ -7,6 +7,7 @@ import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import at.feddis08.mmorpg.logic.game.portal.checkMove;
 import at.feddis08.mmorpg.logic.scripts.Main;
 import at.feddis08.mmorpg.logic.scripts.VarObject;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -30,7 +31,8 @@ public class onEvent {
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
         varObjects.add(new VarObject("who_clicked_id", "STRING", event.getPlayer().getUniqueId().toString()));
         varObjects.add(new VarObject("clicked_entity_id", "STRING", event.getRightClicked().getUniqueId().toString()));
-        Main.script_PLAYER_CLICK_ENTITY_event(varObjects);
+        Main.vars_AFTER_PLAYER_CLICK_EVENT = varObjects;
+        Main.run_AFTER_PLAYER_CLICK_EVENT = true;
     }
     public static void onInventoryClick (InventoryClickEvent event) throws SQLException {
         CheckInventoryTrack.checkInvClicked(event);

@@ -5,6 +5,7 @@ import at.feddis08.mmorpg.commands.Rank;
 import at.feddis08.mmorpg.io.database.Functions;
 import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import at.feddis08.mmorpg.logic.scripts.VarObject;
+import at.feddis08.mmorpg.minecraft.tools.Methods;
 import org.checkerframework.checker.units.qual.A;
 
 import java.sql.SQLException;
@@ -65,7 +66,6 @@ public class ScriptFileObject extends Thread {
         return result;
     }
     public Boolean change_value_of_var(String name, String value){
-        MMORPG.consoleLog(name + " " + value);
         Integer index = 0;
         Boolean result = false;
         while (index < varObjects.size()){
@@ -121,8 +121,6 @@ public class ScriptFileObject extends Thread {
                     MMORPG.consoleLog("ERROR: function " + args.get(0) + " didn't returned any values!");
                     MMORPG.consoleLog(result.size() + " " + args.size() + " " + count_c);
                 }else {
-                    //Collections.reverse(result);
-                   // Collections.reverse(result);
                     while (index2 < count_c) {
                         if (cmd.get(index2 + 1).contains("<@v>")) {
                             change_value_of_var(cmd.get(index2 + 1).split("<@v>")[1], result.get(index2).value);
@@ -140,22 +138,22 @@ public class ScriptFileObject extends Thread {
                 Boolean pass = false;
                 if (Objects.equals(cmd.get(2), "<_==_>")){
                     if (Objects.equals(get_value(cmd.get(3)).get(0).type, "STRING")){
-                        if (Objects.equals(get_value(cmd.get(3)).get(0).value, get_value(cmd.get(3)).get(0).value)) pass = true;
+                        if (Objects.equals(get_value(cmd.get(3)).get(0).value, get_value(cmd.get(4)).get(0).value)) pass = true;
                     }else{
-                        if (Integer.parseInt(get_value(cmd.get(3)).get(0).value) == Integer.parseInt(get_value(cmd.get(3)).get(0).value)) pass = true;
+                        if (Integer.parseInt(get_value(cmd.get(3)).get(0).value) == Integer.parseInt(get_value(cmd.get(4)).get(0).value)) pass = true;
                     }
                 }
                 if (Objects.equals(cmd.get(2), "<_<_>")){
-                    if (Integer.parseInt(get_value(cmd.get(3)).get(0).value) < Integer.parseInt(get_value(cmd.get(3)).get(0).value)) pass = true;
+                    if (Integer.parseInt(get_value(cmd.get(3)).get(0).value) < Integer.parseInt(get_value(cmd.get(4)).get(0).value)) pass = true;
                 }
                 if (Objects.equals(cmd.get(2), "<_>_>")){
-                    if (Integer.parseInt(get_value(cmd.get(3)).get(0).value) > Integer.parseInt(get_value(cmd.get(3)).get(0).value)) pass = true;
+                    if (Integer.parseInt(get_value(cmd.get(3)).get(0).value) > Integer.parseInt(get_value(cmd.get(4)).get(0).value)) pass = true;
                 }
                 if (Objects.equals(cmd.get(2), "<_!=_>")){
-                    if (Objects.equals(get_value(cmd.get(2)).get(0).type, "STRING")){
-                        if (!(Objects.equals(get_value(cmd.get(3)).get(0).value, get_value(cmd.get(3)).get(0).value))) pass = true;
+                    if (Objects.equals(get_value(cmd.get(3)).get(0).type, "STRING")){
+                        if (!(Objects.equals(get_value(cmd.get(3)).get(0).value, get_value(cmd.get(4)).get(0).value))) pass = true;
                     }else{
-                        if (!(Integer.parseInt(get_value(cmd.get(3)).get(0).value) == Integer.parseInt(get_value(cmd.get(3)).get(0).value))) pass = true;
+                        if (!(Integer.parseInt(get_value(cmd.get(3)).get(0).value) == Integer.parseInt(get_value(cmd.get(4)).get(0).value))) pass = true;
                     }
                 }
                 if (!(pass)) {
@@ -194,19 +192,20 @@ public class ScriptFileObject extends Thread {
             String str = "[" + name + "]: " + get_value(args.get(1)).get(0).value;
             MMORPG.consoleLog(str);
         }
+        if (Objects.equals(args.get(0), "open_inv_on_minecraft_player:")){
+            Methods.open_inv_on_minecraft_player(get_value(args.get(1)).get(0).value, get_value(args.get(2)).get(0).value);
+        }
         if (Objects.equals(args.get(0), "test:")){
             result.add(new VarObject("", "STRING", "test"));
         }
         if (Objects.equals(args.get(0), "get_player_by_id:")){
             PlayerObject dbPlayer = Functions.getPlayer("id", get_value(args.get(1)).get(0).value);
-            MMORPG.consoleLog(args.get(1) + " " + get_value(args.get(1)).get(0).value);
             result.add(new VarObject("", "STRING", String.valueOf(dbPlayer.id.toString())));
             result.add(new VarObject("", "INTEGER", String.valueOf(dbPlayer.online)));
             result.add(new VarObject("", "STRING", dbPlayer.didStartup));
             result.add(new VarObject("", "STRING", dbPlayer.display_name));
             result.add(new VarObject("", "STRING", dbPlayer.player_name));
             result.add(new VarObject("", "STRING", dbPlayer.player_rank));
-            MMORPG.consoleLog(result.get(2).value + " " + result.get(1).value);
         }
         return result;
     }

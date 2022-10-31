@@ -31,6 +31,7 @@ public class Clock {
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
         varObjects.add(new VarObject("tick_count", "INTEGER", String.valueOf(event.getTickNumber())));
         Main.script_TICK_START_event(varObjects);
+        Main.check_all_after_events();
         if (clear_wheat_inv){
             
             Player_balanceObject player_balance = Functions.getPlayers_balance("player_id", inventory_who_clicked);

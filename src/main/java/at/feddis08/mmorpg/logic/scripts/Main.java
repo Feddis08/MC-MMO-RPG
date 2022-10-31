@@ -10,6 +10,16 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Main {
+
+    public static Boolean run_AFTER_PLAYER_CLICK_EVENT = false;
+    public static ArrayList<VarObject> vars_AFTER_PLAYER_CLICK_EVENT = new ArrayList<>();
+
+    public static void check_all_after_events(){
+        if (run_AFTER_PLAYER_CLICK_EVENT){
+            script_AFTER_PLAYER_CLICK_ENTITY_event(vars_AFTER_PLAYER_CLICK_EVENT);
+            run_AFTER_PLAYER_CLICK_EVENT = false;
+        }
+    }
     public static void start() throws IOException {
         MMORPG.debugLog("Start parsing scripts...");
         parse_scripts();
@@ -65,6 +75,17 @@ public class Main {
         while (index < Var.scripts.size()){
             ScriptFileObject scriptFileObject = Var.scripts.get(index);
             if (Objects.equals(scriptFileObject.start_event, "PLAYER_CLICK_ENTITY")){
+                scriptFileObject.varObjects = varObjects;
+                scriptFileObject.start();
+            }
+            index = index + 1;
+        }
+    }
+    public static void script_AFTER_PLAYER_CLICK_ENTITY_event(ArrayList<VarObject> varObjects){
+        Integer index = 0;
+        while (index < Var.scripts.size()){
+            ScriptFileObject scriptFileObject = Var.scripts.get(index);
+            if (Objects.equals(scriptFileObject.start_event, "AFTER_PLAYER_CLICK_ENTITY")){
                 scriptFileObject.varObjects = varObjects;
                 scriptFileObject.start();
             }
