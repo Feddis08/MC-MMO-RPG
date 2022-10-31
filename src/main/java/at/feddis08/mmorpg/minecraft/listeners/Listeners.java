@@ -7,6 +7,7 @@ import com.destroystokyo.paper.event.server.ServerTickStartEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.VillagerAcquireTradeEvent;
@@ -27,6 +28,10 @@ public class Listeners implements org.bukkit.event.Listener {
     @EventHandler
     public static void onPlayerDisconnect(PlayerQuitEvent event) throws SQLException {
         connectionEvents.onQuit(event);
+    }
+    @EventHandler
+    public static void onPlayerInteractEntity(PlayerInteractEntityEvent event) throws SQLException {
+        onEvent.onEntityClick(event);
     }
     @EventHandler
     public static void test(InventoryDragEvent event){

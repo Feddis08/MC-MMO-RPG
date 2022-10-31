@@ -7,6 +7,21 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class Functions {
+    public static void createPlayer_quest(Player_questObject playerObj) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sqlString = "'"
+                + playerObj.id
+                + "', '"
+                + playerObj.quest_name
+                + "', '"
+                + playerObj.progress
+                + "'";
+        String sql = "insert into players_quests "
+                + "(id, quest_name, progress)"
+                + "values (" + sqlString + ")";
+        stmt.executeUpdate(sql);
+        MMORPG.debugLog("Player quest created: " + playerObj.quest_name + ":" + playerObj.id + "!");
+    }
     public static void createDiscordPlayer(Discord_playerObject playerObj) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sqlString = "'"
@@ -301,7 +316,22 @@ public class Functions {
         stmt.executeUpdate(sql);
         MMORPG.debugLog("DataTabel created: " + dataObj.sender_id + "!");
     }
-    public static Discord_playerObject getDiscordPlayer(String column, String value) throws SQLException {
+    public static ArrayList<Player_questObject> getPlayerQuest(String column, String column2, String value, String value2) throws SQLException {
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from players_quests where " + column + " = " + "'" + value + "'";
+        ResultSet myRs = stmt.executeQuery(sql);
+        ArrayList<Player_questObject> dataObjs = new ArrayList<>();
+        while (myRs.next()) {
+            Player_questObject dataObj = new Player_questObject();
+            dataObj.id = myRs.getString("id");
+            dataObj.progress = myRs.getInt("progress");
+            dataObj.quest_name = myRs.getString("quest_name");
+            dataObjs.add(dataObj);
+        }
+        MMORPG.debugLog("DataBase read in players_quests for " + value + ":" + value2);
+        return dataObjs;
+    }
+    public static Discord_playerObject getDiscordPlayer( String column, String value) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sql = "select * from players_discord where " + column + " = " + "'" + value + "'";
         ResultSet myRs = stmt.executeQuery(sql);

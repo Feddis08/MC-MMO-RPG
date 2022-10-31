@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Objects;
+import java.util.UUID;
 
 public class Methods {
     public static String getTime(){
@@ -25,6 +27,9 @@ public class Methods {
             }
         }
         return result;
+    }
+    public static void send_minecraft_message_by_id(String id, String message){
+        Objects.requireNonNull(MMORPG.Server.getPlayer(UUID.fromString(id))).sendMessage(message);
     }
     public static void update_all_players_online_state() throws SQLException {
         ArrayList<PlayerObject> dbPlayers = Functions.getPlayers("online", "1");

@@ -60,4 +60,15 @@ public class Main {
             index = index + 1;
         }
     }
+    public static void script_PLAYER_CLICK_ENTITY_event(ArrayList<VarObject> varObjects){
+        Integer index = 0;
+        while (index < Var.scripts.size()){
+            ScriptFileObject scriptFileObject = Var.scripts.get(index);
+            if (Objects.equals(scriptFileObject.start_event, "PLAYER_CLICK_ENTITY")){
+                scriptFileObject.varObjects = varObjects;
+                scriptFileObject.start();
+            }
+            index = index + 1;
+        }
+    }
 }
