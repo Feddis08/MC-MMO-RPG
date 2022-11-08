@@ -27,7 +27,6 @@ import java.util.Objects;
 
 public class onEvent {
     public static void onEntityClick (PlayerInteractEntityEvent event) throws SQLException {
-        MMORPG.consoleLog(event.getRightClicked().getUniqueId().toString());
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
         varObjects.add(new VarObject("who_clicked_id", "STRING", event.getPlayer().getUniqueId().toString()));
         varObjects.add(new VarObject("clicked_entity_id", "STRING", event.getRightClicked().getUniqueId().toString()));

@@ -5,6 +5,8 @@ import at.feddis08.mmorpg.io.text_files.files.file_objects.TradeTable_Config_Fil
 import at.feddis08.mmorpg.logic.game.trade.invObjects.Inventory;
 import at.feddis08.mmorpg.logic.game.trade.invObjects.PlayerInvObject;
 import at.feddis08.mmorpg.logic.game.trade.invObjects.Slot;
+import at.feddis08.mmorpg.minecraft.tools.classes.Book;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -14,7 +16,18 @@ public class Var {
     public static ArrayList<Inventory> inventories = new ArrayList<>();
     public static ArrayList<TradeTable_Config_FileObject> tradeTables = new ArrayList<>();
     public static ArrayList<PlayerInvObject> playerInvObjects = new ArrayList<>();
+    public static ArrayList<Book> books = new ArrayList<Book>();
 
+    public static Book get_book_by_display_name(String display_name){
+        Integer index = 0;
+        Book result = null;
+        while (index < books.size()){
+            if (Objects.equals(books.get(index).display_name, display_name))
+                result = books.get(index);
+            index = index + 1;
+        }
+        return result;
+    }
     public static Inventory get_inventory_by_display_name(String display_name){
         Integer index = 0;
         Inventory result = null;
