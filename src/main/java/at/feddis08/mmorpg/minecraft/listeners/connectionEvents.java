@@ -8,12 +8,14 @@ import at.feddis08.mmorpg.io.database.*;
 import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import at.feddis08.mmorpg.io.database.objects.Player_balanceObject;
 import at.feddis08.mmorpg.io.database.objects.RankObject;
+import at.feddis08.mmorpg.io.database.objects.UserObject;
 import at.feddis08.mmorpg.minecraft.tools.Methods;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.checkerframework.checker.units.qual.Time;
 
 import java.sql.SQLException;
 import java.util.Objects;
@@ -34,6 +36,10 @@ public class connectionEvents {
             player_balanceObject.stock_market = 0;
             Functions.createPlayers_balance(player_balanceObject);
             AddPlayer.addPlayer(event);
+            UserObject userObject = new UserObject();
+            userObject.time_created = String.valueOf(System.currentTimeMillis());
+            userObject.id = player_balanceObject.player_id;
+            Functions.createUser(userObject);
             Boolean rightTeleported = player.teleport(new Location(player.getServer().getWorld("world"), 0, 100, 0));
             if (player.isOp()){
                 Rank.set_player_rank_from("operator", player.getUniqueId().toString());

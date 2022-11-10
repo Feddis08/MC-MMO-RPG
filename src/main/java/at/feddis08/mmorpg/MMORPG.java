@@ -12,7 +12,7 @@ import at.feddis08.mmorpg.minecraft.listeners.Listeners;
 import at.feddis08.mmorpg.minecraft.tools.Methods;
 import at.feddis08.mmorpg.minecraft.tools.StartLoadWorld;
 import at.feddis08.mmorpg.minecraft.tools.WorldAutoLoad;
-import at.feddis08.mmorpg.web.httpServer.Start;
+import at.feddis08.mmorpg.remote_interface.server.Start;
 import org.bukkit.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -26,7 +26,7 @@ public final class MMORPG extends JavaPlugin {
     public static ConfigFileObject config;
     public static String prefix = "MMO-RPG: ";
     public static boolean debugMode = true;
-    public static Integer current_dev_version = 12;
+    public static Integer current_dev_version = 13;
     public static boolean enable_discord_bot = false;
     public static Thread thread1 = new Object_Manager();
 
@@ -113,13 +113,6 @@ public final class MMORPG extends JavaPlugin {
         getCommand("removeWarp").setExecutor(new RemoveWarp());
         getCommand("discord").setExecutor(new Discord());
         try {
-            Start.startHttpServer();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        try {
             Methods.update_all_players_online_state();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -127,6 +120,13 @@ public final class MMORPG extends JavaPlugin {
         try {
             at.feddis08.mmorpg.logic.scripts.Main.start();
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            Start.main();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
         consoleLog("Server running ...");
@@ -160,6 +160,7 @@ public final class MMORPG extends JavaPlugin {
         MMORPG.consoleLog("Starting scripts by SERVER_STOP event...");
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
         at.feddis08.mmorpg.logic.scripts.Main.script_SERVER_STOP_event(varObjects);
+        at.feddis08.mmorpg.remote_interface.server.socket.Server.close();
         dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "Server is closing in 3 seconds ...");
         dcFunctions.send_message_in_channel(DISCORD.config.chat, "<@&1000897321745260594> Server is closing in 3 seconds ...");
         consoleLog("Shutdown... in 3 seconds.");
