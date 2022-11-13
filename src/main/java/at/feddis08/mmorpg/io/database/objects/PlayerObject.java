@@ -1,13 +1,19 @@
 package at.feddis08.mmorpg.io.database.objects;
 
 import at.feddis08.mmorpg.MMORPG;
+import at.feddis08.mmorpg.discord.DISCORD;
 import at.feddis08.mmorpg.io.database.Functions;
 import at.feddis08.mmorpg.io.database.Object_Manager;
+import at.feddis08.mmorpg.minecraft.listeners.onChat;
+import at.feddis08.mmorpg.minecraft.tools.Methods;
+import at.feddis08.mmorpg.remote_interface.server.socket.Server;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class PlayerObject {
     public String id = null;
@@ -34,6 +40,21 @@ public class PlayerObject {
         if (mailsize > 0){
             player.sendMessage(ChatColor.GOLD + "You have " + ChatColor.DARK_PURPLE + mailsize + ChatColor.GOLD + " unread mails!");
         }
+    }
+    public void send_chat_message(String message) throws SQLException, IOException {
+        RankObject dbRank = Functions.getRank("name", player_rank);
+        ChatColor color_prefix = onChat.getChatColor(dbRank.prefix_color);
+        ChatColor color_rank = onChat.getChatColor(dbRank.rank_color);
+        MMORPG.Server.broadcastMessage(ChatColor.GRAY + "[" + color_prefix + dbRank.prefix + ChatColor.GRAY + "][" + color_rank + display_name + ChatColor.GRAY + "]" + ChatColor.BLUE + ": "
+                + ChatColor.YELLOW + message + ChatColor.GRAY + " [" + Methods.getTime() + "]");
+
+        at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "[" +  dbRank.prefix +  "][" + display_name + "]" + ": "
+                + message + " [" + Methods.getTime() + "]");
+        at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.config.chat, "[" +  dbRank.prefix +  "][" + display_name + "]" + ": "
+                + message + " [" + Methods.getTime() + "]");
+        Server.broadcast_chat_message("[" +  dbRank.prefix +  "][" + display_name + "]" + ": "
+                + message + " [" + Methods.getTime() + "]");
+
     }
     public String getCurrent_world_id(){
         Object_Manager.addRequest("player", "get", id);

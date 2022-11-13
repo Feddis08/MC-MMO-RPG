@@ -23,6 +23,7 @@ public class Client extends Thread{
         this.clientSocket = clientSocket;
         this.output = new PrintWriter(clientSocket.getOutputStream(), true);
         this.input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+        this.clientSocket.setSoTimeout(120000);
         Player player = new Player(Server.clients.size());
         this.player = player;
         th.start();
@@ -53,6 +54,9 @@ public class Client extends Thread{
     public void sendMessage(String msg) throws IOException {
         output.println(msg);
     }
+    public void send_chat_message(String msg) throws IOException {
+        sendMessage("chat_message" + Start.spacing + msg);
+    }
     public void closeConnection() throws IOException {
         th.stop();
         output.close();
@@ -60,8 +64,15 @@ public class Client extends Thread{
         clientSocket.close();
     }
     public String listen() throws IOException {
+
         String str = null;
-        str = input.readLine();
+        if (clientSocket.isConnected()) {
+            try {
+            str = input.readLine();
+            }catch(Exception e){
+                closeConnection();
+            }
+        }
         return str;
     }
 }

@@ -2,6 +2,7 @@ package at.feddis08.mmorpg.remote_interface.server.main;
 
 import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.io.database.Functions;
+import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import at.feddis08.mmorpg.io.database.objects.UserObject;
 import at.feddis08.mmorpg.minecraft.tools.Methods;
 import at.feddis08.mmorpg.remote_interface.server.Start;
@@ -14,7 +15,6 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 public class GameLoop extends Thread {
-
     public void run(){
         while (true){
             try {
@@ -31,12 +31,14 @@ public class GameLoop extends Thread {
     }
 
     public static void loop() throws IOException, SQLException {
+        String spacing = Start.spacing;
         Integer index = 0;
+        try {
         while (index < Server.clients.size()) {
             Client client = Server.clients.get(index);
             Integer index2 = 0;
+            try {
             while (index2 < client.requests.size()) {
-                MMORPG.consoleLog(client.requests.get(index2));
                 String request = client.requests.get(index2);
                 String[] command = request.split(Start.spacing);
                 if (Objects.equals(command[0], "join_server_with_u&t")) {
@@ -83,10 +85,30 @@ public class GameLoop extends Thread {
                         }
                     }
                 }
+                if (Objects.equals(command[0], "get_own_user")) {
+                    if (client.player.logged_in){
+                        UserObject userObject = Functions.getUser("id", client.player.id);
+                        client.sendMessage("get_own_user" + spacing + userObject.id + spacing + userObject.first_name + spacing + userObject.last_name + spacing + userObject.time_created);
+                    }
+                }
+                if (Objects.equals(command[0], "send_chat_message")) {
+                    if (client.player.logged_in){
+                        PlayerObject dbPlayer = Functions.getPlayer("id", client.player.id);
+                        dbPlayer.send_chat_message(command[1]);
+                    }
+                }
                 index2 = index2 + 1;
+            }
+            } catch (Exception e) {
+                index2 = index2 + 1;
+                e.printStackTrace();
             }
             client.requests.clear();
             index = index + 1;
+        }
+        } catch (Exception e) {
+            index = index + 1;
+            e.printStackTrace();
         }
     }
 }

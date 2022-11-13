@@ -10,33 +10,23 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Objects;
 
 public class onChat {
-    public static void onChat(AsyncPlayerChatEvent event) throws SQLException {
+    public static void onChat(AsyncPlayerChatEvent event) throws SQLException, IOException {
+        event.setCancelled(true);
         String chatMessage = event.getMessage();
         Player player = event.getPlayer();
         PlayerObject dbPlayer = null;
         dbPlayer = Functions.getPlayer("id", player.getUniqueId().toString());
         if (!(Objects.equals(dbPlayer.didStartup, "true") || Objects.equals(dbPlayer.didStartup, "false") || Objects.equals(dbPlayer.didStartup, ""))){
-            event.setCancelled(true);
             player.kickPlayer("please rejoin");
         }
         if (Objects.equals(dbPlayer.didStartup, "true")){
             if (Rank.isPlayer_allowedTo(dbPlayer.id, "doChat") || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
-
-            RankObject dbRank = Functions.getRank("name", dbPlayer.player_rank);
-            ChatColor color_prefix = getChatColor(dbRank.prefix_color);
-            ChatColor color_rank = getChatColor(dbRank.rank_color);
-                    event.setFormat(ChatColor.GRAY + "[" + color_prefix + dbRank.prefix + ChatColor.GRAY + "][" + color_rank + dbPlayer.display_name + ChatColor.GRAY + "]" + ChatColor.BLUE + ": "
-                        + ChatColor.YELLOW + chatMessage + ChatColor.GRAY + " [" + Methods.getTime() + "]");
-
-                    at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "[" +  dbRank.prefix +  "][" + dbPlayer.display_name + "]" + ": "
-                            + chatMessage + " [" + Methods.getTime() + "]");
-                    at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.config.chat, "[" +  dbRank.prefix +  "][" + dbPlayer.display_name + "]" + ": "
-                            + chatMessage + " [" + Methods.getTime() + "]");
-
+                dbPlayer.send_chat_message(event.getMessage());
             }else{
                 player.sendMessage(ChatColor.RED + "You need the permission: 'doChat'!");
                 event.setCancelled(true);

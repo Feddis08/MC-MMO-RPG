@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Server extends Thread{
     public static Thread th = new Server();
@@ -19,6 +20,28 @@ public class Server extends Thread{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public static void broadcast_chat_message(String message) throws IOException {
+        Integer index = 0;
+        Client client;
+        while (index < Server.clients.size()) {
+            client = Server.clients.get(index);
+            client.send_chat_message(message);
+            index = index + 1;
+        }
+    }
+    public static Client get_client(String id) throws IOException {
+        Integer index = 0;
+        Client client;
+        Client result = null;
+        while (index < Server.clients.size()) {
+            client = Server.clients.get(index);
+            if (Objects.equals(client.player.id, id)) {
+               result = client;
+            }
+            index = index + 1;
+        }
+        return result;
     }
     public static void close() throws IOException {
         th.stop();

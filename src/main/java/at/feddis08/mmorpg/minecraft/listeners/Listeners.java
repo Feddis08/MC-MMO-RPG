@@ -17,6 +17,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.*;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class Listeners implements org.bukkit.event.Listener {
@@ -68,7 +69,7 @@ public class Listeners implements org.bukkit.event.Listener {
         onInvOpened.onInvOpened(event);
     }
     @EventHandler
-    public static void onChat(AsyncPlayerChatEvent event) throws SQLException {onChat.onChat(event);}
+    public static void onChat(AsyncPlayerChatEvent event) throws SQLException, IOException {onChat.onChat(event);}
     @EventHandler
     public static void onPlaced(BlockPlaceEvent event) throws SQLException {onEvent.onBlockPlaced(event);}
 }
