@@ -32,7 +32,6 @@ public class PlayerObject {
     public void init(Player player) throws SQLException {
         this.player = player;
         player.setResourcePack("https://www.dropbox.com/sh/f3ie51vsn6pi1wj/AAAsq6jQvAp3e-yF6DHmFF5Ja?dl=1");
-        player.sendMessage("ddd");
         checkMails();
     }
     public void checkMails() throws SQLException {

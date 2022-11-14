@@ -37,6 +37,7 @@ public class JDBC {
                 + "   hash VARCHAR(256),"
                 + "   first_name VARCHAR(40),"
                 + "   last_name VARCHAR(40),"
+                + "   data_json VARCHAR(8000),"
                 + "   id                VARCHAR(40))";
 
         Statement stmt = myConn.createStatement();

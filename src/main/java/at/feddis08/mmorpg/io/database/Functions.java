@@ -33,10 +33,12 @@ public class Functions {
                 + "', '"
                 + playerObj.hash
                 + "', '"
+                + playerObj.data_json
+                + "', '"
                 + playerObj.time_created
                 + "'";
         String sql = "insert into users "
-                + "(id, first_name, last_name, hash, time_created)"
+                + "(id, first_name, last_name, hash, data_json, time_created)"
                 + "values (" + sqlString + ")";
         stmt.executeUpdate(sql);
         MMORPG.debugLog("Created user: " + playerObj.first_name + ":" + playerObj.id + "!");
@@ -360,7 +362,9 @@ public class Functions {
             dataObj.first_name = myRs.getString("first_name");
             dataObj.last_name = myRs.getString("last_name");
             dataObj.hash = myRs.getString("hash");
+            dataObj.data_json = myRs.getString("data_json");
             dataObj.time_created = myRs.getString("time_created");
+            dataObj.update_json();
         }
         MMORPG.debugLog("DataBase read in users for " + dataObj.id);
         return dataObj;

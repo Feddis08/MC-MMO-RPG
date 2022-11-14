@@ -70,7 +70,7 @@ public class GameLoop extends Thread {
                 if (Objects.equals(command[0], "setup_account")) {
                     if (client.player.logged_in){
                         Boolean pass = true;
-                        if (!(command.length == 3)){
+                        if (!(command.length == 4)){
                             pass = false;
                         }
                         if (Objects.equals(command[1], "")){
@@ -79,6 +79,7 @@ public class GameLoop extends Thread {
                         if (pass){
                             Functions.update("users", "first_name", command[1], client.player.id, "id");
                             Functions.update("users", "last_name", command[2], client.player.id, "id");
+                            Functions.update("users", "data_json", command[3], client.player.id, "id");
                             client.sendMessage("setup_account_passed");
                         }else{
                             client.sendMessage("setup_account_not_passed");
@@ -88,7 +89,7 @@ public class GameLoop extends Thread {
                 if (Objects.equals(command[0], "get_own_user")) {
                     if (client.player.logged_in){
                         UserObject userObject = Functions.getUser("id", client.player.id);
-                        client.sendMessage("get_own_user" + spacing + userObject.id + spacing + userObject.first_name + spacing + userObject.last_name + spacing + userObject.time_created);
+                        client.sendMessage("get_own_user" + spacing + userObject.id + spacing + userObject.first_name + spacing + userObject.last_name + spacing + userObject.time_created + spacing + userObject.data_json);
                     }
                 }
                 if (Objects.equals(command[0], "send_chat_message")) {
