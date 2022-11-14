@@ -7,11 +7,13 @@ import at.feddis08.mmorpg.io.database.objects.Discord_playerObject;
 import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import at.feddis08.mmorpg.io.database.objects.RankObject;
 import at.feddis08.mmorpg.minecraft.tools.Methods;
+import at.feddis08.mmorpg.remote_interface.server.socket.Server;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -19,13 +21,6 @@ import java.util.UUID;
 
 public class MessageListeners {
     public static void create_message_listener(){
-        DISCORD.api.addMessageCreateListener(event -> {
-            if (String.valueOf(event.getChannel().getId()).equals(DISCORD.config.chat)){
-                if (!(event.getMessage().getAuthor().getId() == DISCORD.api.getYourself().getId())){
-                    MMORPG.Server.broadcastMessage(ChatColor.GRAY + "[" + ChatColor.BLUE + "DISCORD" + ChatColor.GRAY + "][" + ChatColor.GREEN + event.getMessage().getAuthor().getName() + ChatColor.GRAY + "]: " + ChatColor.YELLOW + event.getMessage().getContent() + ChatColor.GRAY + " [" + Methods.getTime() + "]");
-                }
-            }
-        });
         DISCORD.api.addMessageCreateListener(event -> {
             if (!(String.valueOf(event.getMessage().getChannel().getId()).equals(DISCORD.config.server_log))){
                 if (event.isPrivateMessage()){
@@ -93,6 +88,7 @@ public class MessageListeners {
                     try {
                         Discord_playerObject dbDiscord_playerObject = Functions.getDiscordPlayer("discord_id", String.valueOf(event.getMessage().getAuthor().getId()));
                         PlayerObject dbPlayer1 = Functions.getPlayer("id", dbDiscord_playerObject.id);
+                        RankObject dbRank = Functions.getRank("name", dbPlayer1.player_rank);
                         if (dbPlayer1.id == null) {
                             event.getMessage().delete();
                             event.getMessage().getAuthor().asUser().get().sendMessage("Please link your minecraft account and your discord account with: !link <in_game_name>");
@@ -112,6 +108,13 @@ public class MessageListeners {
                                                     "```"
                                     );
                                 }
+                                if (String.valueOf(event.getChannel().getId()).equals(DISCORD.config.chat)){
+                                    if (!(event.getMessage().getAuthor().getId() == DISCORD.api.getYourself().getId())){
+                                        Server.broadcast_chat_message("[" +  dbRank.prefix +  "][" + dbPlayer1.display_name + "]" + ": "
+                                                + event.getMessage().getContent() + " [" + Methods.getTime() + "]");
+                                        MMORPG.Server.broadcastMessage(ChatColor.GRAY + "[" + ChatColor.BLUE + "DISCORD" + ChatColor.GRAY + "][" + ChatColor.GREEN + event.getMessage().getAuthor().getName() + ChatColor.GRAY + "]: " + ChatColor.YELLOW + event.getMessage().getContent() + ChatColor.GRAY + " [" + Methods.getTime() + "]");
+                                    }
+                                }
                                 if (event.getMessageContent().equalsIgnoreCase("!showOnlineMinecraftPlayers")) {
                                     if (Rank.isPlayer_allowedTo(dbPlayer1.id, "doShowOnlineMinecraftPlayers") || Rank.isPlayer_allowedTo(dbPlayer1.id, "*")) {
                                         try {
@@ -120,7 +123,6 @@ public class MessageListeners {
                                             Integer index = 0;
                                             while (index < dbPlayers.size()) {
                                                 PlayerObject dbPlayer = dbPlayers.get(index);
-                                                RankObject dbRank = Functions.getRank("name", dbPlayer.player_rank);
                                                 result = result + "\n   [" + dbRank.prefix + "][" + dbPlayer.getDisplay_name() + "]";
                                                 index = index + 1;
                                             }
@@ -149,6 +151,8 @@ public class MessageListeners {
                             }
                         }
                     } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                 }
