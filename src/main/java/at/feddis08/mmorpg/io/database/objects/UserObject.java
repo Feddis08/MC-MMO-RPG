@@ -20,6 +20,7 @@ public class UserObject {
         jsonObject.put("login_message", "Hi, I am online!");
        jsonObject.put("email_address", "");
        jsonObject.put("last_online", "");
+       jsonObject.put("download_path", "");
        data_json = jsonObject.toString();
     }
     public void update_json(){

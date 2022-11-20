@@ -16,8 +16,8 @@ public class Client extends Thread{
     public Thread th = this;
     public ArrayList<String> requests = new ArrayList<>();
     public Player player;
-    public String current_path = "/";
-    public Boolean inGame = false;
+    public String channel_name = "";
+    public Boolean in_chat = false;
 
     public Client(Socket clientSocket) throws IOException {
         this.clientSocket = clientSocket;

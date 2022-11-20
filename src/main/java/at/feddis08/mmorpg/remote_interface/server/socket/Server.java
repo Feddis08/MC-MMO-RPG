@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Objects;
 
 public class Server extends Thread{
@@ -19,6 +20,19 @@ public class Server extends Thread{
             startServer();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+    public static void send_audio_to_channel_by_client(Client client, byte[] data) throws IOException {
+        Integer index = 0;
+        Client client2;
+        while (index < Server.clients.size()) {
+            client2 = Server.clients.get(index);
+            if (Objects.equals(client2.channel_name, client.channel_name)) {
+                if (client2.in_chat){
+                    client2.sendMessage("audio_output_stream" + Start.spacing + Base64.getEncoder().encodeToString(data) + Start.spacing + client.player.id);
+                }
+            }
+            index = index + 1;
         }
     }
     public static void broadcast_chat_message(String message) throws IOException {

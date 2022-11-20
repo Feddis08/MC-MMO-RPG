@@ -10,13 +10,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
+import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 public class Methods {
     public static String getTime(){
@@ -86,4 +84,22 @@ public class Methods {
         }
         return generatedPassword;
     }
+    public static String[] deserializeArray(final String data) {
+        try (final ByteArrayInputStream bias = new ByteArrayInputStream(Base64.getDecoder().decode(data));
+             final ObjectInputStream ois = new ObjectInputStream(bias)) {
+            return (String[]) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public static String serializeArray(final String[] data) {
+        try (final ByteArrayOutputStream boas = new ByteArrayOutputStream();
+             final ObjectOutputStream oos = new ObjectOutputStream(boas)) {
+            oos.writeObject(data);
+            return Base64.getEncoder().encodeToString(boas.toByteArray());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
