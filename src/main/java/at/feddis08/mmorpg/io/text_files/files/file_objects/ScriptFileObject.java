@@ -4,6 +4,7 @@ import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.commands.Rank;
 import at.feddis08.mmorpg.io.database.Functions;
 import at.feddis08.mmorpg.io.database.objects.PlayerObject;
+import at.feddis08.mmorpg.io.database.objects.Player_questObject;
 import at.feddis08.mmorpg.io.database.objects.RankObject;
 import at.feddis08.mmorpg.logic.game.Var;
 import at.feddis08.mmorpg.logic.scripts.VarObject;
@@ -301,6 +302,29 @@ public class ScriptFileObject extends Thread {
             BookMeta itemMeta = (BookMeta) Var.get_book_by_display_name(get_value(args.get(1)).get(0).value).book.getItemMeta();
             itemMeta.addPage(get_value(args.get(2)).get(0).value);
             Var.get_book_by_display_name(get_value(args.get(1)).get(0).value).book.setItemMeta(itemMeta);
+        }
+        if (Objects.equals(args.get(0), "get_quest:")){
+            ArrayList<Player_questObject> player_questObjects = Functions.getPlayerQuest (get_value(args.get(1)).get(0).value, get_value(args.get(2)).get(0).value, get_value(args.get(3)).get(0).value);
+            if (player_questObjects.size() > 0){
+                Player_questObject player_questObject = player_questObjects.get(0);
+                result.add(new VarObject("", "STRING", String.valueOf(player_questObject.id)));
+                result.add(new VarObject("", "STRING", String.valueOf(player_questObject.quest_name)));
+                result.add(new VarObject("", "INTEGER", String.valueOf(player_questObject.progress)));
+            }else{
+                result.add(new VarObject("", "STRING", String.valueOf("null")));
+                result.add(new VarObject("", "STRING", String.valueOf("null")));
+                result.add(new VarObject("", "INTEGER", String.valueOf(0)));
+            }
+        }
+        if (Objects.equals(args.get(0), "create_quest:")){
+            Player_questObject player_questObject = new Player_questObject();
+            player_questObject.id = get_value(args.get(1)).get(0).value;
+            player_questObject.quest_name = get_value(args.get(2)).get(0).value;
+            player_questObject.progress = Integer.parseInt(get_value(args.get(3)).get(0).value);
+            Functions.createPlayer_quest(player_questObject);
+        }
+        if (Objects.equals(args.get(0), "update_quest:")){
+            Functions.update("players_quests", get_value(args.get(1)).get(0).value, get_value(args.get(2)).get(0).value,get_value(args.get(3)).get(0).value, get_value(args.get(4)).get(0).value);
         }
         return result;
     }

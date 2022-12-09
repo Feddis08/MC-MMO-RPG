@@ -337,9 +337,9 @@ public class Functions {
         stmt.executeUpdate(sql);
         MMORPG.debugLog("DataTabel created: " + dataObj.sender_id + "!");
     }
-    public static ArrayList<Player_questObject> getPlayerQuest(String column, String column2, String value, String value2) throws SQLException {
+    public static ArrayList<Player_questObject> getPlayerQuest(String column, String value, String value2) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
-        String sql = "select * from players_quests where " + column + " = " + "'" + value + "'";
+        String sql = "select * from players_quests where " + column + " = " + "'" + value + "' and quest_name = '" + value2 + "'";
         ResultSet myRs = stmt.executeQuery(sql);
         ArrayList<Player_questObject> dataObjs = new ArrayList<>();
         while (myRs.next()) {
