@@ -23,9 +23,9 @@ public class Client extends Thread{
         this.clientSocket = clientSocket;
         this.output = new PrintWriter(clientSocket.getOutputStream(), true);
         this.input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        this.clientSocket.setSoTimeout(120000);
         Player player = new Player(Server.clients.size());
         this.player = player;
+        this.clientSocket.setKeepAlive(true);
         th.start();
         sendMessage("SPACING" + Start.spacing);
     }

@@ -12,6 +12,7 @@ import at.feddis08.mmorpg.minecraft.tools.classes.Book;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.meta.BookMeta;
 import org.checkerframework.checker.units.qual.A;
 
 import javax.swing.text.html.parser.Entity;
@@ -295,6 +296,11 @@ public class ScriptFileObject extends Thread {
         }
         if (Objects.equals(args.get(0), "minecraft.book.create:")){
             Var.books.add(new Book(get_value(args.get(1)).get(0).value, get_value(args.get(2)).get(0).value, get_value(args.get(2)).get(0).value));
+        }
+        if (Objects.equals(args.get(0), "minecraft.book.add_page:")){
+            BookMeta itemMeta = (BookMeta) Var.get_book_by_display_name(get_value(args.get(1)).get(0).value).book.getItemMeta();
+            itemMeta.addPage(get_value(args.get(2)).get(0).value);
+            Var.get_book_by_display_name(get_value(args.get(1)).get(0).value).book.setItemMeta(itemMeta);
         }
         return result;
     }
