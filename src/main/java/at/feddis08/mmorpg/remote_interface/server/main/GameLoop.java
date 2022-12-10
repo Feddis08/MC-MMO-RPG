@@ -136,6 +136,15 @@ public class GameLoop extends Thread {
                         dbPlayer.send_chat_message(command[1]);
                     }
                 }
+                if (Objects.equals(command[0], "reload_server")) {
+                    if (client.player.logged_in){
+                        PlayerObject dbPlayer = Functions.getPlayer("id", client.player.id);
+                        if (Rank.has_permission_from_rank(dbPlayer.player_rank, "do_reload_server") || Rank.has_permission_from_rank(dbPlayer.player_rank, "*")){
+                            MMORPG.consoleLog("Do reload by: " + dbPlayer.display_name + ":" + dbPlayer.id);
+                            MMORPG.Server.reload();
+                        }
+                    }
+                }
                 if (Objects.equals(command[0], "post_file")) {
                     if (client.player.logged_in){
                         PlayerObject dbPlayer = Functions.getPlayer("id", client.player.id);

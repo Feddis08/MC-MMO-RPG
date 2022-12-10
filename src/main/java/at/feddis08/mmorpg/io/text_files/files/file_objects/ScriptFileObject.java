@@ -49,7 +49,7 @@ public class ScriptFileObject extends Thread {
         }
         if (result){
             error = true;
-            MMORPG.consoleLog("[" + this.name + "]: ERROR: Var " + name + " is already defined!");
+            throw_error("[" + this.name + "]: ERROR: Var " + name + " is already defined!", null);
         }else{
             varObjects.add(new VarObject(name, type, ""));
         }
@@ -65,7 +65,7 @@ public class ScriptFileObject extends Thread {
         }
         if (result == null){
             error = true;
-            MMORPG.consoleLog("[" + this.name + "]: ERROR: Var " + name + " is not defined!");
+            throw_error("[" + this.name + "]: ERROR: Var " + name + " is not defined!", null);
         }
         return result;
     }
@@ -95,15 +95,21 @@ public class ScriptFileObject extends Thread {
         }
         return result;
     }
+    public void throw_error(String error, Integer line){
+        MMORPG.consoleLog(varObjects.toString());
+        varObjects.clear();
+        this.error = true;
+        String str = "[" + name + "]: " + error + "[in line]: " + line;
+        MMORPG.consoleLog(str);
+    }
     public void start(){
-        MMORPG.consoleLog("Enabling script: " + name);
         Integer index = 0;
         if (!error) {
+            MMORPG.consoleLog("Enabling script: " + name);
             while (index < script.size()) {
                 ArrayList<String> cmd = script.get(index);
                 if (error) {
-                    MMORPG.consoleLog("Script " + name + " stopped! Error at line: " + index);
-                    varObjects.clear();
+                    throw_error ("Script " + name + " stopped! Error at line: ", index);
                     index = script.size() - 1;
                     break;
                 }
@@ -141,7 +147,7 @@ public class ScriptFileObject extends Thread {
                     index2 = 0;
                     if (result.size() == 0) {
                         error = true;
-                        MMORPG.consoleLog("ERROR: function " + args.get(0) + " didn't returned any values!");
+                        throw_error("ERROR: function " + args.get(0) + " didn't returned any values!", index);
                         MMORPG.consoleLog(result.size() + " " + args.size() + " " + count_c);
                     } else {
                         while (index2 < count_c) {

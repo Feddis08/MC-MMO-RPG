@@ -41,8 +41,9 @@ public class Main {
         Integer index = 0;
         while (index < Var.scripts.size()){
             ScriptFileObject scriptFileObject = Var.scripts.get(index);
+            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
             if (Objects.equals(scriptFileObject.start_event, "SERVER_START")){
-                scriptFileObject.varObjects = varObjects;
+                scriptFileObject.varObjects = safe_varObjects;
                 scriptFileObject.start();
             }
             index = index + 1;
@@ -52,8 +53,9 @@ public class Main {
         Integer index = 0;
         while (index < Var.scripts.size()){
             ScriptFileObject scriptFileObject = Var.scripts.get(index);
+            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
             if (Objects.equals(scriptFileObject.start_event, "SERVER_STOP")){
-                scriptFileObject.varObjects = varObjects;
+                scriptFileObject.varObjects = safe_varObjects;
                 scriptFileObject.start();
             }
             index = index + 1;
@@ -63,8 +65,9 @@ public class Main {
         Integer index = 0;
         while (index < Var.scripts.size()){
             ScriptFileObject scriptFileObject = Var.scripts.get(index);
+            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
             if (Objects.equals(scriptFileObject.start_event, "TICK_START")){
-                scriptFileObject.varObjects = varObjects;
+                scriptFileObject.varObjects = safe_varObjects;
                 scriptFileObject.start();
             }
             index = index + 1;
@@ -74,8 +77,9 @@ public class Main {
         Integer index = 0;
         while (index < Var.scripts.size()){
             ScriptFileObject scriptFileObject = Var.scripts.get(index);
+            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
             if (Objects.equals(scriptFileObject.start_event, "PLAYER_CLICK_ENTITY")){
-                scriptFileObject.varObjects = varObjects;
+                scriptFileObject.varObjects = safe_varObjects;
                 scriptFileObject.start();
             }
             index = index + 1;
@@ -85,8 +89,9 @@ public class Main {
         Integer index = 0;
         while (index < Var.scripts.size()){
             ScriptFileObject scriptFileObject = Var.scripts.get(index);
+            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
             if (Objects.equals(scriptFileObject.start_event, "AFTER_PLAYER_CLICK_ENTITY")){
-                scriptFileObject.varObjects = varObjects;
+                scriptFileObject.varObjects = safe_varObjects;
                 scriptFileObject.start();
             }
             index = index + 1;

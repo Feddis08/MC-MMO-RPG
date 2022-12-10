@@ -86,7 +86,7 @@ public final class MMORPG extends JavaPlugin {
             StartLoadWorld.loadWorld("main");
             try {
                 WorldAutoLoad.checkAutoloadWorlds();
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
