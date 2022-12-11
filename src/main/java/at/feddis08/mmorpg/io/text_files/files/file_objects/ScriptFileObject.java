@@ -8,15 +8,16 @@ import at.feddis08.mmorpg.io.database.objects.Player_questObject;
 import at.feddis08.mmorpg.io.database.objects.RankObject;
 import at.feddis08.mmorpg.logic.game.Var;
 import at.feddis08.mmorpg.logic.scripts.VarObject;
+import at.feddis08.mmorpg.logic.scripts.Var_pool;
 import at.feddis08.mmorpg.minecraft.tools.Methods;
 import at.feddis08.mmorpg.minecraft.tools.classes.Book;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.meta.BookMeta;
 import org.checkerframework.checker.units.qual.A;
 
-import javax.swing.text.html.parser.Entity;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -140,7 +141,7 @@ public class ScriptFileObject extends Thread {
                     }
                     ArrayList<VarObject> result = new ArrayList<>();
                     try {
-                        result = execute_functions(args);
+                        result = execute_functions(args, index);
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
                     }
@@ -203,7 +204,7 @@ public class ScriptFileObject extends Thread {
                     }
                 }
                 try {
-                    execute_functions(cmd);
+                    execute_functions(cmd, index);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -213,7 +214,7 @@ public class ScriptFileObject extends Thread {
         varObjects.clear();
         t.stop();
     }
-    public ArrayList<VarObject> execute_functions(ArrayList<String> args) throws SQLException {
+    public ArrayList<VarObject> execute_functions(ArrayList<String> args, Integer index) throws SQLException {
         ArrayList<VarObject> result = new ArrayList<>();
         if (Objects.equals(args.get(0), "rank.create_rank:")){
             Rank.create_rank(get_value(args.get(1)).get(0).value);
@@ -331,6 +332,46 @@ public class ScriptFileObject extends Thread {
         }
         if (Objects.equals(args.get(0), "update_quest:")){
             Functions.update("players_quests", get_value(args.get(1)).get(0).value, get_value(args.get(2)).get(0).value,get_value(args.get(3)).get(0).value, get_value(args.get(4)).get(0).value);
+        }
+        if (Objects.equals(args.get(0), "minecraft.spawn_entity:")){
+            Entity entity = MMORPG.Server.getWorld(get_value(args.get(1)).get(0).value).spawnEntity(new Location(MMORPG.Server.getWorld(get_value(args.get(1)).get(0).value), Double.valueOf(get_value(args.get(2)).get(0).value), Double.valueOf(get_value(args.get(3)).get(0).value), Double.valueOf(get_value(args.get(4)).get(0).value)), EntityType.fromName(get_value(args.get(5)).get(0).value));
+            result.add(new VarObject("", "STRING", entity.getUniqueId().toString()));
+        }
+        if (Objects.equals(args.get(0), "minecraft.change_entity_speed:")){
+            //MMORPG.Server.getEntity(UUID.fromString(get_value(args.get(1)).get(0).value)).set
+        }
+        if (Objects.equals(args.get(0), "var_pool.create:")){
+            if (at.feddis08.mmorpg.logic.scripts.Var.get_var_pool_by_name(get_value(args.get(1)).get(0).value) == null){
+                Var_pool var_pool = new Var_pool();
+                var_pool.name = get_value(args.get(1)).get(0).value;
+                at.feddis08.mmorpg.logic.scripts.Var.var_pools.add(var_pool);
+            }else{
+                throw_error("ERROR: Var_pool " + get_value(args.get(1)).get(0).value +" already defined!", index);
+            }
+        }
+        if (Objects.equals(args.get(0), "var_pool.get:")){
+            if (at.feddis08.mmorpg.logic.scripts.Var.get_var_pool_by_name(get_value(args.get(1)).get(0).value) == null){
+                throw_error("ERROR: Var_pool " + get_value(args.get(1)).get(0).value +" is not defined!", index);
+            }else{
+                Var_pool var_pool = at.feddis08.mmorpg.logic.scripts.Var.get_var_pool_by_name(get_value(args.get(1)).get(0).value);
+                result.add(var_pool.get_var_by_name(get_value(args.get(2)).get(0).value));
+            }
+        }
+        if (Objects.equals(args.get(0), "var_pool.put:")){
+            if (at.feddis08.mmorpg.logic.scripts.Var.get_var_pool_by_name(get_value(args.get(1)).get(0).value) == null){
+                throw_error("ERROR: Var_pool " + get_value(args.get(1)).get(0).value +" is not defined!", index);
+            }else{
+                Var_pool var_pool = at.feddis08.mmorpg.logic.scripts.Var.get_var_pool_by_name(get_value(args.get(1)).get(0).value);
+                var_pool.varObjects.add(get_value(args.get(2)).get(0));
+            }
+        }
+        if (Objects.equals(args.get(0), "var_pool.change:")){
+            if (at.feddis08.mmorpg.logic.scripts.Var.get_var_pool_by_name(get_value(args.get(1)).get(0).value) == null){
+                throw_error("ERROR: Var_pool " + get_value(args.get(1)).get(0).value +" is not defined!", index);
+            }else{
+                Var_pool var_pool = at.feddis08.mmorpg.logic.scripts.Var.get_var_pool_by_name(get_value(args.get(1)).get(0).value);
+                var_pool.change_value_of_var(get_value(args.get(2)).get(0).value, get_value(args.get(3)).get(0).value);
+            }
         }
         return result;
     }
