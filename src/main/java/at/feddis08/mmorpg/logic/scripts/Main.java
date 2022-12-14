@@ -85,6 +85,18 @@ public class Main {
             index = index + 1;
         }
     }
+    public static void script_PLAYER_MINE_BLOCK_event(ArrayList<VarObject> varObjects){
+        Integer index = 0;
+        while (index < Var.scripts.size()){
+            ScriptFileObject scriptFileObject = Var.scripts.get(index);
+            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
+            if (Objects.equals(scriptFileObject.start_event, "PLAYER_MINE_BLOCK")){
+                scriptFileObject.varObjects = safe_varObjects;
+                scriptFileObject.start();
+            }
+            index = index + 1;
+        }
+    }
     public static void script_AFTER_PLAYER_CLICK_ENTITY_event(ArrayList<VarObject> varObjects){
         Integer index = 0;
         while (index < Var.scripts.size()){

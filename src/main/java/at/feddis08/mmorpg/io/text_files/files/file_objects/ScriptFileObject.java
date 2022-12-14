@@ -7,6 +7,8 @@ import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import at.feddis08.mmorpg.io.database.objects.Player_questObject;
 import at.feddis08.mmorpg.io.database.objects.RankObject;
 import at.feddis08.mmorpg.logic.game.Var;
+import at.feddis08.mmorpg.logic.game.ore_mine.Main;
+import at.feddis08.mmorpg.logic.game.ore_mine.Mine;
 import at.feddis08.mmorpg.logic.scripts.VarObject;
 import at.feddis08.mmorpg.logic.scripts.Var_pool;
 import at.feddis08.mmorpg.minecraft.tools.Methods;
@@ -320,6 +322,56 @@ public class ScriptFileObject extends Thread {
             }else{
                 result.add(new VarObject("", "STRING", String.valueOf("null")));
                 result.add(new VarObject("", "STRING", String.valueOf("null")));
+                result.add(new VarObject("", "INTEGER", String.valueOf(0)));
+            }
+        }
+        if (Objects.equals(args.get(0), "create_mine:")){
+            Mine mine = new Mine();
+            mine.name = get_value(args.get(1)).get(0).value;
+            mine.material_name = get_value(args.get(2)).get(0).value;
+            mine.world_name = get_value(args.get(3)).get(0).value;
+            mine.x = Integer.parseInt(get_value(args.get(4)).get(0).value);
+            mine.y = Integer.parseInt(get_value(args.get(5)).get(0).value);
+            mine.z = Integer.parseInt(get_value(args.get(6)).get(0).value);
+            Main.mines.add(mine);
+        }
+        if (Objects.equals(args.get(0), "get_mine_by_cords:")){
+            Mine mine = Main.get_mine_by_cords (get_value(args.get(1)).get(0).value, Integer.parseInt(get_value(args.get(2)).get(0).value), Integer.parseInt(get_value(args.get(3)).get(0).value), Integer.parseInt(get_value(args.get(4)).get(0).value));
+            if (!(mine == null)){
+                result.add(new VarObject("", "STRING", String.valueOf(mine.name)));
+                result.add(new VarObject("", "STRING", String.valueOf(mine.material_name)));
+                result.add(new VarObject("", "STRING", String.valueOf(mine.world_name)));
+                result.add(new VarObject("", "INTEGER", String.valueOf(mine.x)));
+                result.add(new VarObject("", "INTEGER", String.valueOf(mine.y)));
+                result.add(new VarObject("", "INTEGER", String.valueOf(mine.z)));
+            }else{
+                result.add(new VarObject("", "STRING", String.valueOf("null")));
+                result.add(new VarObject("", "STRING", String.valueOf("null")));
+                result.add(new VarObject("", "STRING", String.valueOf("null")));
+                result.add(new VarObject("", "INTEGER", String.valueOf(0)));
+                result.add(new VarObject("", "INTEGER", String.valueOf(0)));
+                result.add(new VarObject("", "INTEGER", String.valueOf(0)));
+            }
+        }
+        if (Objects.equals(args.get(0), "break_mine:")){
+            Mine mine = Main.get_mine_by_name (get_value(args.get(1)).get(0).value);
+            mine.break_block(get_value(args.get(2)).get(0).value);
+        }
+        if (Objects.equals(args.get(0), "get_mine_by_name:")){
+            Mine mine = Main.get_mine_by_name (get_value(args.get(1)).get(0).value);
+            if (!(mine == null)){
+                result.add(new VarObject("", "STRING", String.valueOf(mine.name)));
+                result.add(new VarObject("", "STRING", String.valueOf(mine.material_name)));
+                result.add(new VarObject("", "STRING", String.valueOf(mine.world_name)));
+                result.add(new VarObject("", "INTEGER", String.valueOf(mine.x)));
+                result.add(new VarObject("", "INTEGER", String.valueOf(mine.y)));
+                result.add(new VarObject("", "INTEGER", String.valueOf(mine.z)));
+            }else{
+                result.add(new VarObject("", "STRING", String.valueOf("null")));
+                result.add(new VarObject("", "STRING", String.valueOf("null")));
+                result.add(new VarObject("", "STRING", String.valueOf("null")));
+                result.add(new VarObject("", "INTEGER", String.valueOf(0)));
+                result.add(new VarObject("", "INTEGER", String.valueOf(0)));
                 result.add(new VarObject("", "INTEGER", String.valueOf(0)));
             }
         }
