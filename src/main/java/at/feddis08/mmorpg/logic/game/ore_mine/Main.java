@@ -10,6 +10,7 @@ public class Main {
         Integer index = 0;
         while (index < mines.size()){
             mines.get(index).check();
+            index += 1;
         }
     }
     public static Mine get_mine_by_name(String name){

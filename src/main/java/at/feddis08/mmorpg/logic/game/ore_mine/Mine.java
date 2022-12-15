@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Mine {
     public String world_name;
@@ -16,21 +17,30 @@ public class Mine {
     public Integer z;
     public String name;
     public String material_name;
-    public Integer cool_down_ticks;
-    public Integer passed_ticks;
+    public Integer cool_down_ticks = 0;
+    public Integer passed_ticks = 0;
 
     public void check(){
         check_time();
         check_world_block_status();
     }
     void check_time(){
-        if (passed_ticks == 0) passed_ticks += 1;
+        if (passed_ticks < cool_down_ticks) {
+            passed_ticks += 1;
+        }
+    }
+
+    void place_block(){
+        Block block = Objects.requireNonNull(MMORPG.Server.getWorld(world_name)).getBlockAt(x, y, z);
+        block.setType(Material.getMaterial(material_name));
     }
     void check_world_block_status(){
-        Block block = MMORPG.Server.getWorld(world_name).getBlockAt(x, y, z);
+        Block block = Objects.requireNonNull(MMORPG.Server.getWorld(world_name)).getBlockAt(x, y, z);
         if (!block.getType().name().equals(material_name)){
-            passed_ticks = 0;
-            block.setType(Material.getMaterial(material_name));
+            if (Objects.equals(passed_ticks, cool_down_ticks)){
+                passed_ticks = 0;
+                place_block();
+            }
         }
     }
     public void break_block(String player_id){

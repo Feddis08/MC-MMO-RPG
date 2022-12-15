@@ -333,6 +333,7 @@ public class ScriptFileObject extends Thread {
             mine.x = Integer.parseInt(get_value(args.get(4)).get(0).value);
             mine.y = Integer.parseInt(get_value(args.get(5)).get(0).value);
             mine.z = Integer.parseInt(get_value(args.get(6)).get(0).value);
+            mine.cool_down_ticks = Integer.parseInt(get_value(args.get(7)).get(0).value);
             Main.mines.add(mine);
         }
         if (Objects.equals(args.get(0), "get_mine_by_cords:")){
