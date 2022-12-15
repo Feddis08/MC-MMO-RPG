@@ -44,7 +44,7 @@ public class Gamemode implements CommandExecutor {
                                 player = sender.getServer().getPlayer(args[1]);
                                 dbPlayer = Functions.getPlayer("display_name", args[1]);
                             }
-                            changeBukkitPlayerGamemode(player.getUniqueId().toString(), args[1]);
+                            changeBukkitPlayerGamemode(player.getUniqueId().toString(), args[0]);
                             sender.sendMessage("Wrong usage: /gm 1/2/3");
                     }else{
                         sender.sendMessage(ChatColor.RED + "You need the permission: 'doGamemode'!");
@@ -56,7 +56,7 @@ public class Gamemode implements CommandExecutor {
         }return false;
     }
     public static void changeBukkitPlayerGamemode(String player_id, String gamemode) throws SQLException {
-        String[] args = new String[0];
+        String[] args = new String[1];
         args[0] = gamemode;
         Player player = null;
         player = MMORPG.Server.getPlayer(UUID.fromString(player_id));
@@ -81,7 +81,6 @@ public class Gamemode implements CommandExecutor {
         }
         if (args[0].equalsIgnoreCase("3")) {
             try {
-                MMORPG.consoleLog("ddd " + dbPlayer.id);
                 Functions.update("players", "gamemode", "3", dbPlayer.id, "id");
             } catch (SQLException e) {
                 e.printStackTrace();

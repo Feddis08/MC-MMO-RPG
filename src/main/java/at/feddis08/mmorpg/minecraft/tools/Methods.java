@@ -51,6 +51,7 @@ public class Methods {
         for(Player p : MMORPG.Server.getOnlinePlayers()) {
             PlayerObject dbPlayer = Functions.getPlayer("id" , p.getUniqueId().toString());
             Functions.update("players", "online", "1", dbPlayer.id, "id");
+            Functions.update("players", "gamemode", String.valueOf(p.getGameMode().getValue()), dbPlayer.id, "id");
             index = index + 1;
         }
     }

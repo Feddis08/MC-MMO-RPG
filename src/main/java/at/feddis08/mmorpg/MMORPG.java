@@ -142,6 +142,8 @@ public final class MMORPG extends JavaPlugin {
                 throw new RuntimeException(e);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
         }
     public static void debugLog(String log){
@@ -156,7 +158,9 @@ public final class MMORPG extends JavaPlugin {
         if (config.enable_discord_bot && discord_bot_active)
             at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.config.server_log, ("[" + config.console_prefix + "]: [Log]: " + log));
     }
-    public static void shutdown() throws IOException, InterruptedException {
+    public static void shutdown() throws IOException, InterruptedException, SQLException {
+        MMORPG.consoleLog("Saving players...");
+        Methods.update_all_players_online_state();
         MMORPG.consoleLog("Starting scripts by SERVER_STOP event...");
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
         at.feddis08.mmorpg.logic.scripts.Main.script_SERVER_STOP_event(varObjects);
