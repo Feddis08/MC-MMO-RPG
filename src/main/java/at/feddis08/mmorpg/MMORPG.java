@@ -159,6 +159,8 @@ public final class MMORPG extends JavaPlugin {
             at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.config.server_log, ("[" + config.console_prefix + "]: [Log]: " + log));
     }
     public static void shutdown() throws IOException, InterruptedException, SQLException {
+        MMORPG.consoleLog("Clearing spawners...");
+        at.feddis08.mmorpg.logic.game.mob_spawner.Main.clear_spawners();
         MMORPG.consoleLog("Saving players...");
         Methods.update_all_players_online_state();
         MMORPG.consoleLog("Starting scripts by SERVER_STOP event...");

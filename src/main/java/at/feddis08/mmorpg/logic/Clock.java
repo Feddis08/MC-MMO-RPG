@@ -29,6 +29,7 @@ public class Clock {
     
     public static void tick(ServerTickStartEvent event) throws SQLException {
         at.feddis08.mmorpg.logic.game.ore_mine.Main.check_mines_per_tick();
+        at.feddis08.mmorpg.logic.game.mob_spawner.Main.check_spawners_per_tick();
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
         varObjects.add(new VarObject("tick_count", "INTEGER", String.valueOf(event.getTickNumber())));
         Main.script_TICK_START_event(varObjects);

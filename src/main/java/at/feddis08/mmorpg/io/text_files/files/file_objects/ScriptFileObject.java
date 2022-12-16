@@ -7,6 +7,7 @@ import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import at.feddis08.mmorpg.io.database.objects.Player_questObject;
 import at.feddis08.mmorpg.io.database.objects.RankObject;
 import at.feddis08.mmorpg.logic.game.Var;
+import at.feddis08.mmorpg.logic.game.mob_spawner.Spawner;
 import at.feddis08.mmorpg.logic.game.ore_mine.Main;
 import at.feddis08.mmorpg.logic.game.ore_mine.Mine;
 import at.feddis08.mmorpg.logic.scripts.VarObject;
@@ -324,6 +325,24 @@ public class ScriptFileObject extends Thread {
                 result.add(new VarObject("", "STRING", String.valueOf("null")));
                 result.add(new VarObject("", "INTEGER", String.valueOf(0)));
             }
+        }
+        if (Objects.equals(args.get(0), "spawner.create:")){
+            Spawner spawner = new Spawner();
+            spawner.name = get_value(args.get(1)).get(0).value;
+            spawner.mob_type = get_value(args.get(2)).get(0).value;
+            spawner.world_name = get_value(args.get(3)).get(0).value;
+            spawner.max_mobs = Integer.parseInt(get_value(args.get(4)).get(0).value);
+            spawner.cool_down_ticks = Integer.parseInt(get_value(args.get(5)).get(0).value);
+            at.feddis08.mmorpg.logic.game.mob_spawner.Main.spawners.add(spawner);
+        }
+        if (Objects.equals(args.get(0), "spawner.add_location:")){
+            Spawner spawner = at.feddis08.mmorpg.logic.game.mob_spawner.Main.get_spawner_by_name(get_value(args.get(1)).get(0).value);
+            at.feddis08.mmorpg.minecraft.tools.classes.Location location = new at.feddis08.mmorpg.minecraft.tools.classes.Location();
+            location.x = Integer.parseInt(get_value(args.get(2)).get(0).value);
+            location.y = Integer.parseInt(get_value(args.get(3)).get(0).value);
+            location.z = Integer.parseInt(get_value(args.get(4)).get(0).value);
+            spawner.spawn_points.add(location);
+            MMORPG.consoleLog("dw " + spawner.spawn_points.size());
         }
         if (Objects.equals(args.get(0), "create_mine:")){
             Mine mine = new Mine();

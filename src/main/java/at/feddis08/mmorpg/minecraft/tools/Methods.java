@@ -40,6 +40,9 @@ public class Methods {
         Objects.requireNonNull(MMORPG.Server.getPlayer(UUID.fromString(player_id))).openInventory(Var.get_inventory_by_display_name(inv_display_name).inv);
     }
 
+    public static int getRandomInteger(int maximum, int minimum){
+        return ((int) (Math.random()*(maximum - minimum))) + minimum;
+    }
     public static void update_all_players_online_state() throws SQLException {
         ArrayList<PlayerObject> dbPlayers = Functions.getPlayers("online", "1");
         Integer index = 0;
