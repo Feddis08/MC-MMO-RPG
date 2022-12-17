@@ -379,10 +379,12 @@ public class ScriptFileObject extends Thread {
                 result.add(new VarObject("", "INTEGER", String.valueOf(mine.x)));
                 result.add(new VarObject("", "INTEGER", String.valueOf(mine.y)));
                 result.add(new VarObject("", "INTEGER", String.valueOf(mine.z)));
+                result.add(new VarObject("", "INTEGER", String.valueOf(mine.cool_down_ticks)));
             }else{
                 result.add(new VarObject("", "STRING", String.valueOf("null")));
                 result.add(new VarObject("", "STRING", String.valueOf("null")));
                 result.add(new VarObject("", "STRING", String.valueOf("null")));
+                result.add(new VarObject("", "INTEGER", String.valueOf(0)));
                 result.add(new VarObject("", "INTEGER", String.valueOf(0)));
                 result.add(new VarObject("", "INTEGER", String.valueOf(0)));
                 result.add(new VarObject("", "INTEGER", String.valueOf(0)));
@@ -401,10 +403,12 @@ public class ScriptFileObject extends Thread {
                 result.add(new VarObject("", "INTEGER", String.valueOf(mine.x)));
                 result.add(new VarObject("", "INTEGER", String.valueOf(mine.y)));
                 result.add(new VarObject("", "INTEGER", String.valueOf(mine.z)));
+                result.add(new VarObject("", "INTEGER", String.valueOf(mine.cool_down_ticks)));
             }else{
                 result.add(new VarObject("", "STRING", String.valueOf("null")));
                 result.add(new VarObject("", "STRING", String.valueOf("null")));
                 result.add(new VarObject("", "STRING", String.valueOf("null")));
+                result.add(new VarObject("", "INTEGER", String.valueOf(0)));
                 result.add(new VarObject("", "INTEGER", String.valueOf(0)));
                 result.add(new VarObject("", "INTEGER", String.valueOf(0)));
                 result.add(new VarObject("", "INTEGER", String.valueOf(0)));
