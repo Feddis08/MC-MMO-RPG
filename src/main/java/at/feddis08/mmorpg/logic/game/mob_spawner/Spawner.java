@@ -1,6 +1,7 @@
 package at.feddis08.mmorpg.logic.game.mob_spawner;
 
 import at.feddis08.mmorpg.MMORPG;
+import at.feddis08.mmorpg.logic.scripts.Main;
 import at.feddis08.mmorpg.logic.scripts.VarObject;
 import at.feddis08.mmorpg.minecraft.tools.Methods;
 import at.feddis08.mmorpg.minecraft.tools.classes.Location;
@@ -78,6 +79,6 @@ public class Spawner {
         if (!Objects.equals(passed_ticks, cool_down_ticks)){
             passed_ticks = 0;
         }
-        //Main.script_PLAYER_KILL_MOB_FROM_SPAWNER_event(varObjects);
+        Main.script_PLAYER_KILL_MOB_FROM_SPAWNER_event(varObjects);
     }
 }

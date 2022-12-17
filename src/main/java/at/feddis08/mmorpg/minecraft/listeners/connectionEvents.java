@@ -9,6 +9,8 @@ import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import at.feddis08.mmorpg.io.database.objects.Player_balanceObject;
 import at.feddis08.mmorpg.io.database.objects.RankObject;
 import at.feddis08.mmorpg.io.database.objects.UserObject;
+import at.feddis08.mmorpg.logic.scripts.Main;
+import at.feddis08.mmorpg.logic.scripts.VarObject;
 import at.feddis08.mmorpg.minecraft.tools.Methods;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -18,6 +20,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.checkerframework.checker.units.qual.Time;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class connectionEvents {
@@ -63,6 +66,8 @@ public class connectionEvents {
             dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "[" + dbRank.prefix + "][" + dbPlayer.display_name + "] joined the server!");
             dcFunctions.send_message_in_channel(DISCORD.config.chat, "[" + dbRank.prefix + "][" + dbPlayer.display_name + "] joined the server!");
             player.sendMessage("Hi, " + dbPlayer.display_name + " your current level is: " + dbPlayer.stage);
+            Main.vars_AFTER_PLAYER_JOINED.add(new VarObject("player_id", "STRING", dbPlayer.id));
+            Main.run_AFTER_PLAYER_JOINED = true;
         }
     }
     public static void onQuit(PlayerQuitEvent event) throws SQLException {

@@ -342,7 +342,22 @@ public class ScriptFileObject extends Thread {
             location.y = Integer.parseInt(get_value(args.get(3)).get(0).value);
             location.z = Integer.parseInt(get_value(args.get(4)).get(0).value);
             spawner.spawn_points.add(location);
-            MMORPG.consoleLog("dw " + spawner.spawn_points.size());
+        }
+        if (Objects.equals(args.get(0), "spawner.get_by_name:")){
+            Spawner spawner = at.feddis08.mmorpg.logic.game.mob_spawner.Main.get_spawner_by_name (get_value(args.get(1)).get(0).value);
+            if (!(spawner == null)){
+                result.add(new VarObject("", "STRING", String.valueOf(spawner.name)));
+                result.add(new VarObject("", "STRING", String.valueOf(spawner.mob_type)));
+                result.add(new VarObject("", "STRING", String.valueOf(spawner.world_name)));
+                result.add(new VarObject("", "INTEGER", String.valueOf(spawner.max_mobs)));
+                result.add(new VarObject("", "INTEGER", String.valueOf(spawner.cool_down_ticks)));
+            }else{
+                result.add(new VarObject("", "STRING", String.valueOf("null")));
+                result.add(new VarObject("", "STRING", String.valueOf("null")));
+                result.add(new VarObject("", "STRING", String.valueOf("null")));
+                result.add(new VarObject("", "INTEGER", String.valueOf(0)));
+                result.add(new VarObject("", "INTEGER", String.valueOf(0)));
+            }
         }
         if (Objects.equals(args.get(0), "create_mine:")){
             Mine mine = new Mine();

@@ -11,6 +11,8 @@ import java.util.Objects;
 
 public class Main {
 
+    public static Boolean run_AFTER_PLAYER_JOINED = false;
+    public static ArrayList<VarObject> vars_AFTER_PLAYER_JOINED = new ArrayList<>();
     public static Boolean run_AFTER_PLAYER_CLICK_EVENT = false;
     public static ArrayList<VarObject> vars_AFTER_PLAYER_CLICK_EVENT = new ArrayList<>();
 
@@ -18,6 +20,10 @@ public class Main {
         if (run_AFTER_PLAYER_CLICK_EVENT){
             script_AFTER_PLAYER_CLICK_ENTITY_event(vars_AFTER_PLAYER_CLICK_EVENT);
             run_AFTER_PLAYER_CLICK_EVENT = false;
+        }
+        if (run_AFTER_PLAYER_JOINED){
+            script_PLAYER_JOINED_event(vars_AFTER_PLAYER_JOINED);
+            run_AFTER_PLAYER_JOINED = false;
         }
     }
     public static void start() throws IOException {
@@ -79,6 +85,42 @@ public class Main {
             ScriptFileObject scriptFileObject = Var.scripts.get(index);
             ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
             if (Objects.equals(scriptFileObject.start_event, "PLAYER_CLICK_ENTITY")){
+                scriptFileObject.varObjects = safe_varObjects;
+                scriptFileObject.start();
+            }
+            index = index + 1;
+        }
+    }
+    public static void script_PLAYER_KILL_MOB_FROM_SPAWNER_event(ArrayList<VarObject> varObjects){
+        Integer index = 0;
+        while (index < Var.scripts.size()){
+            ScriptFileObject scriptFileObject = Var.scripts.get(index);
+            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
+            if (Objects.equals(scriptFileObject.start_event, "PLAYER_KILL_MOB_FROM_SPAWNER")){
+                scriptFileObject.varObjects = safe_varObjects;
+                scriptFileObject.start();
+            }
+            index = index + 1;
+        }
+    }
+    public static void script_PLAYER_TELEPORTED_BY_PORTAL_event(ArrayList<VarObject> varObjects){
+        Integer index = 0;
+        while (index < Var.scripts.size()){
+            ScriptFileObject scriptFileObject = Var.scripts.get(index);
+            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
+            if (Objects.equals(scriptFileObject.start_event, "PLAYER_TELEPORTED_BY_PORTAL")){
+                scriptFileObject.varObjects = safe_varObjects;
+                scriptFileObject.start();
+            }
+            index = index + 1;
+        }
+    }
+    public static void script_PLAYER_JOINED_event(ArrayList<VarObject> varObjects){
+        Integer index = 0;
+        while (index < Var.scripts.size()){
+            ScriptFileObject scriptFileObject = Var.scripts.get(index);
+            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
+            if (Objects.equals(scriptFileObject.start_event, "PLAYER_JOINED")){
                 scriptFileObject.varObjects = safe_varObjects;
                 scriptFileObject.start();
             }

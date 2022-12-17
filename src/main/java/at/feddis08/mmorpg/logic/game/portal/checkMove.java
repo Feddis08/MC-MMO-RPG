@@ -4,6 +4,8 @@ import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.io.database.Functions;
 import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import at.feddis08.mmorpg.io.database.objects.PortalTrackObject;
+import at.feddis08.mmorpg.logic.scripts.Main;
+import at.feddis08.mmorpg.logic.scripts.VarObject;
 import at.feddis08.mmorpg.minecraft.tools.Methods;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -39,6 +41,10 @@ public class checkMove {
                     Functions.updateWhereAnd("players_in_worlds", "x", String.valueOf(player.getLocation().getBlockX()), dbPlayer.id, "id", dbPlayer.current_world_id, "world_id");
                     Functions.updateWhereAnd("players_in_worlds", "y", String.valueOf(player.getLocation().getBlockY()), dbPlayer.id, "id", dbPlayer.current_world_id, "world_id");
                     Functions.updateWhereAnd("players_in_worlds", "z", String.valueOf(player.getLocation().getBlockZ()), dbPlayer.id, "id", dbPlayer.current_world_id, "world_id");
+                    ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
+                    varObjects.add(new VarObject("player_id", "STRING", dbPlayer.id));
+                    varObjects.add(new VarObject("portal_id", "STRING", dbPortalTrack.id));
+                    Main.script_PLAYER_TELEPORTED_BY_PORTAL_event(varObjects);
                 }
             }
             index = index + 1;
