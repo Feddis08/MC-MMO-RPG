@@ -237,7 +237,7 @@ public class ScriptFileObject extends Thread {
         if (Objects.equals(args.get(0), "rank.set_prefix_color:")){
             Rank.set_prefix_color(get_value(args.get(1)).get(0).value, get_value(args.get(2)).get(0).value);
         }
-        if (Objects.equals(args.get(0), "rank.add_rule:")){
+        if (Objects.equals(args.get(0), "rank.get:")){
             RankObject dbRank = Rank.get_rank_from_player(get_value(args.get(1)).get(0).value);
             result.add(new VarObject("", "STRING", dbRank.id));
             result.add(new VarObject("", "STRING", dbRank.name));

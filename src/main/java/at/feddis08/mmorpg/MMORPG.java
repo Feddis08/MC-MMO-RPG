@@ -71,10 +71,6 @@ public final class MMORPG extends JavaPlugin {
             Rank.create_rank("default");
             Rank.set_prefix("default", "Player");
             Rank.add_rule("default", "doChat");
-            Rank.add_rule("default", "doMail");
-            Rank.add_rule("default", "doWarp");
-            Rank.add_rule("default", "doDiscord");
-            Rank.add_rule("default", "doSetPlayerInfoScoreboard");
         }
         RankObject dbRank2 = null;
         try {
