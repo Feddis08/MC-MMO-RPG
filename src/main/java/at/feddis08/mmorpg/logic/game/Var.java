@@ -1,5 +1,6 @@
 package at.feddis08.mmorpg.logic.game;
 
+import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.io.text_files.files.file_objects.Inventory_ConfigFileObject;
 import at.feddis08.mmorpg.io.text_files.files.file_objects.TradeTable_Config_FileObject;
 import at.feddis08.mmorpg.logic.game.trade.invObjects.Inventory;

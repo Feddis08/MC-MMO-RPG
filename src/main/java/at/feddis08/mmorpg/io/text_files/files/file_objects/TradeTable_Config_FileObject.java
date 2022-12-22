@@ -102,7 +102,7 @@ public class TradeTable_Config_FileObject {
             }
             index = index + 1;
             if (!(parse_ok))
-                MMORPG.consoleLog("ERROR: Could not parse config file. Load default value. Error at line: " + String.valueOf(index));
+                MMORPG.consoleLog("ERROR: Could not parse trade_table file. Load default value. Error at line: " + String.valueOf(index));
 
         }
     }

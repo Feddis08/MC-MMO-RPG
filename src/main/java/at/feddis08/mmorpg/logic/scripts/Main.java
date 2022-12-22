@@ -2,8 +2,10 @@ package at.feddis08.mmorpg.logic.scripts;
 
 import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.io.text_files.files.ReadFile;
+import at.feddis08.mmorpg.io.text_files.files.config_patterns.CheckScriptsFile;
 import at.feddis08.mmorpg.io.text_files.files.file_objects.ScriptFileObject;
 import at.feddis08.mmorpg.io.text_files.files.file_objects.ScriptsFileObject;
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +17,17 @@ public class Main {
     public static ArrayList<VarObject> vars_AFTER_PLAYER_JOINED = new ArrayList<>();
     public static Boolean run_AFTER_PLAYER_CLICK_EVENT = false;
     public static ArrayList<VarObject> vars_AFTER_PLAYER_CLICK_EVENT = new ArrayList<>();
+
+    public static void reload_all() throws IOException {
+        run_AFTER_PLAYER_JOINED = false;
+        run_AFTER_PLAYER_CLICK_EVENT = false;
+        vars_AFTER_PLAYER_JOINED = new ArrayList<>();
+        vars_AFTER_PLAYER_CLICK_EVENT = new ArrayList<>();
+        Var.scripts = new ArrayList<>();
+        Var.var_pools = new ArrayList<>();
+        CheckScriptsFile.check();
+        start();
+    }
 
     public static void check_all_after_events(){
         if (run_AFTER_PLAYER_CLICK_EVENT){
@@ -42,6 +55,30 @@ public class Main {
            Var.scripts.add(scriptFileObject);
            index = index + 1;
        }
+    }
+    public static void script_PLAYER_BOUGHT_AT_SHOP_event(ArrayList<VarObject> varObjects){
+        Integer index = 0;
+        while (index < Var.scripts.size()){
+            ScriptFileObject scriptFileObject = Var.scripts.get(index);
+            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
+            if (Objects.equals(scriptFileObject.start_event, "PLAYER_BOUGHT_AT_SHOP")){
+                scriptFileObject.varObjects = safe_varObjects;
+                scriptFileObject.start();
+            }
+            index = index + 1;
+        }
+    }
+    public static void script_PLAYER_SOLD_AT_SHOP_event(ArrayList<VarObject> varObjects){
+        Integer index = 0;
+        while (index < Var.scripts.size()){
+            ScriptFileObject scriptFileObject = Var.scripts.get(index);
+            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
+            if (Objects.equals(scriptFileObject.start_event, "PLAYER_SOLD_AT_SHOP")){
+                scriptFileObject.varObjects = safe_varObjects;
+                scriptFileObject.start();
+            }
+            index = index + 1;
+        }
     }
     public static void script_SERVER_START_event(ArrayList<VarObject> varObjects){
         Integer index = 0;

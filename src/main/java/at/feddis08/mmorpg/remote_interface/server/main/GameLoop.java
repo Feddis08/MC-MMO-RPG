@@ -5,6 +5,7 @@ import at.feddis08.mmorpg.commands.Rank;
 import at.feddis08.mmorpg.io.database.Functions;
 import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import at.feddis08.mmorpg.io.database.objects.UserObject;
+import at.feddis08.mmorpg.logic.scripts.Main;
 import at.feddis08.mmorpg.minecraft.tools.Methods;
 import at.feddis08.mmorpg.remote_interface.server.Start;
 import at.feddis08.mmorpg.remote_interface.server.socket.Client;
@@ -134,6 +135,15 @@ public class GameLoop extends Thread {
                     if (client.player.logged_in){
                         PlayerObject dbPlayer = Functions.getPlayer("id", client.player.id);
                         dbPlayer.send_chat_message(command[1]);
+                    }
+                }
+                if (Objects.equals(command[0], "reload_scripts")) {
+                    if (client.player.logged_in){
+                        PlayerObject dbPlayer = Functions.getPlayer("id", client.player.id);
+                        if (Rank.has_permission_from_rank(dbPlayer.player_rank, "do_reload_scripts") || Rank.has_permission_from_rank(dbPlayer.player_rank, "*")){
+                            MMORPG.consoleLog("Do reload for all scripts by: " + dbPlayer.display_name + ":" + dbPlayer.id);
+                            Main.reload_all();
+                        }
                     }
                 }
                 if (Objects.equals(command[0], "reload_server")) {

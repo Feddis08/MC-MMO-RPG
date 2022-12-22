@@ -303,6 +303,7 @@ public class ScriptFileObject extends Thread {
             Methods.send_minecraft_message_by_id(get_value(args.get(1)).get(0).value, get_value(args.get(2)).get(0).value);
         }
         if (Objects.equals(args.get(0), "minecraft.book.open:")){
+            MMORPG.Server.getPlayer(UUID.fromString(get_value(args.get(1)).get(0).value)).closeInventory();
             MMORPG.Server.getPlayer(UUID.fromString(get_value(args.get(1)).get(0).value)).openBook(Var.get_book_by_display_name(get_value(args.get(2)).get(0).value).book);
         }
         if (Objects.equals(args.get(0), "minecraft.book.create:")){

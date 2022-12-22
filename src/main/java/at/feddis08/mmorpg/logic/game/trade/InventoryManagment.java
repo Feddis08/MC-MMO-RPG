@@ -1,5 +1,6 @@
 package at.feddis08.mmorpg.logic.game.trade;
 
+import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.io.database.Functions;
 import at.feddis08.mmorpg.io.database.objects.InventoryTrackObject;
 import at.feddis08.mmorpg.io.database.objects.Player_balanceObject;
@@ -7,12 +8,16 @@ import at.feddis08.mmorpg.io.text_files.files.file_objects.TradeTable_Config_Fil
 import at.feddis08.mmorpg.logic.Clock;
 import at.feddis08.mmorpg.logic.game.CheckInventoryTrack;
 import at.feddis08.mmorpg.logic.game.Var;
+import at.feddis08.mmorpg.logic.scripts.Main;
+import at.feddis08.mmorpg.logic.scripts.VarObject;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class InventoryManagment {
@@ -30,9 +35,8 @@ public class InventoryManagment {
             String z = String.valueOf(location.getBlock().getZ());
             inventoryTrackObject = CheckInventoryTrack.get(world_id, x, y, z);
         }
-        if (!(inventoryTrackObject == null)){
-
-            TradeTable_Config_FileObject tradeTable_config_fileObject =  Var.get_TradeTable_Config_FileObject_by_inventory_display_name(inventoryTrackObject.type);
+        if (!(inventoryTrackObject == null || event.getClickedInventory() == event.getWhoClicked().getInventory())){
+            TradeTable_Config_FileObject tradeTable_config_fileObject = Var.get_TradeTable_Config_FileObject_by_inventory_display_name(inventoryTrackObject.type);
 
             if (!(tradeTable_config_fileObject == null)) {
                 Integer index = 0;
@@ -41,12 +45,20 @@ public class InventoryManagment {
 
                     TradeTable tradeTable = tradeTable_config_fileObject.tradeTables.get(index);
                     if (event.getSlot() == tradeTable.sell_index) {
-                        if (event.getCursor().getType().name().equals(tradeTable.sell_item)) {
+                        if (event.getCursor().getType().name().equals(tradeTable.sell_item) && event.getCursor().getAmount() >= tradeTable.sell_amount) {
                             Clock.clear_wheat_inv = true;
                             Clock.inventory_who_clicked = event.getWhoClicked().getUniqueId().toString();
                             Clock.tradeTable = tradeTable;
                             Clock.inventory_type = inventoryTrackObject.type;
                             Var.get_inventory_by_display_name(inventoryTrackObject.type).inv.setItem(tradeTable.sell_index, new ItemStack(Material.AIR));
+                            event.getCursor().setAmount(event.getCursor().getAmount() - tradeTable.sell_amount + 1);
+                            ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
+                            varObjects.add(new VarObject("player_id", "STRING", event.getWhoClicked().getUniqueId().toString()));
+                            varObjects.add(new VarObject("shop_name", "STRING", tradeTable_config_fileObject.inventory_display_name));
+                            varObjects.add(new VarObject("material_name", "STRING", tradeTable.sell_item));
+                            varObjects.add(new VarObject("profit", "INTEGER", String.valueOf(tradeTable.sell_price * tradeTable.sell_amount)));
+                            varObjects.add(new VarObject("amount", "INTEGER", String.valueOf(tradeTable.sell_amount)));
+                            Main.script_PLAYER_SOLD_AT_SHOP_event(varObjects);
                         } else {
                             event.setCancelled(true);
                         }
@@ -55,9 +67,17 @@ public class InventoryManagment {
                     if (event.getSlot() == tradeTable.buy_index) {
                         event.setCancelled(true);
                         Player_balanceObject player_balance = Functions.getPlayers_balance("player_id", event.getWhoClicked().getUniqueId().toString());
-                        if (player_balance.pocket >= tradeTable.buy_price) {
-                            Functions.update("players_balance", "pocket", String.valueOf(player_balance.pocket - tradeTable.buy_price), player_balance.player_id, "player_id");
+                        if (player_balance.pocket >= tradeTable.buy_price * tradeTable.buy_amount) {
+                            ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
+                            varObjects.add(new VarObject("player_id", "STRING", player_balance.player_id));
+                            varObjects.add(new VarObject("shop_name", "STRING", tradeTable_config_fileObject.inventory_display_name));
+                            varObjects.add(new VarObject("material_name", "STRING", tradeTable.buy_item));
+                            varObjects.add(new VarObject("cost", "INTEGER", String.valueOf(tradeTable.buy_price * tradeTable.buy_amount)));
+                            varObjects.add(new VarObject("amount", "INTEGER", String.valueOf(tradeTable.buy_amount)));
+                            Main.script_PLAYER_BOUGHT_AT_SHOP_event(varObjects);
+                            Functions.update("players_balance", "pocket", String.valueOf(player_balance.pocket - tradeTable.buy_price * tradeTable.buy_amount), player_balance.player_id, "player_id");
                             event.getWhoClicked().getInventory().addItem(new ItemStack(Material.getMaterial(tradeTable.buy_item), tradeTable.buy_amount));
+                            MMORPG.Server.getPlayer(Functions.getPlayer("id", player_balance.player_id).player_name).sendMessage(ChatColor.GREEN + "You bought " + ChatColor.YELLOW + tradeTable.buy_item + ChatColor.GREEN + ". Now you have " + ChatColor.YELLOW + (player_balance.pocket - tradeTable.buy_amount * tradeTable.buy_price) + ChatColor.GREEN + " coins in your pocket!");
                         }
                         didSomething = true;
                     }

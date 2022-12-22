@@ -35,11 +35,11 @@ public class Clock {
         Main.script_TICK_START_event(varObjects);
         Main.check_all_after_events();
         if (clear_wheat_inv){
-            
-            Player_balanceObject player_balance = Functions.getPlayers_balance("player_id", inventory_who_clicked);
-            Functions.update("players_balance", "pocket", String.valueOf(player_balance.pocket + (tradeTable.sell_price * Objects.requireNonNull(Var.get_inventory_by_display_name(inventory_type).inv.getItem(tradeTable.sell_index)).getAmount())), player_balance.player_id, "player_id");
-            player_balance = Functions.getPlayers_balance("player_id", inventory_who_clicked);
+
             Inventory inventory = Var.get_inventory_by_display_name(inventory_type);
+            Player_balanceObject player_balance = Functions.getPlayers_balance("player_id", inventory_who_clicked);
+            Functions.update("players_balance", "pocket", String.valueOf(player_balance.pocket + (tradeTable.sell_price * tradeTable.sell_amount)), player_balance.player_id, "player_id");
+            player_balance = Functions.getPlayers_balance("player_id", inventory_who_clicked);
             Slot slot = Var.get_inventory_slot_by_index(inventory, tradeTable.sell_index);
             ItemStack item = new ItemStack(Material.getMaterial(slot.item_material));
             ItemMeta meta = item.getItemMeta();
@@ -56,7 +56,7 @@ public class Clock {
             item.setItemMeta(meta);
             Var.get_inventory_by_display_name(inventory_type).inv.setItem(tradeTable.sell_index, item);
 
-            MMORPG.Server.getPlayer(Functions.getPlayer("id", player_balance.player_id).player_name).sendMessage(ChatColor.GREEN + "You sold " + ChatColor.YELLOW + "WHEAT" + ChatColor.GREEN + ". Now you have " + ChatColor.YELLOW + player_balance.pocket + ChatColor.GREEN + " coins in your pocket!");
+            MMORPG.Server.getPlayer(Functions.getPlayer("id", player_balance.player_id).player_name).sendMessage(ChatColor.GREEN + "You sold " + ChatColor.YELLOW + tradeTable.buy_item + ChatColor.GREEN + ". Now you have " + ChatColor.YELLOW + player_balance.pocket + ChatColor.GREEN + " coins in your pocket!");
             clear_wheat_inv = false;
             inventory_who_clicked = "";
             tradeTable = null;
