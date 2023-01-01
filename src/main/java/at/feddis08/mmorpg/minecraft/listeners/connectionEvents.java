@@ -33,15 +33,10 @@ public class connectionEvents {
         event.setJoinMessage("");
         player.sendMessage("Hi, and welcome to our MMO-RPG minecraft-server: " + player.getName());
         if (Objects.equals(dbPlayer.id, null)) {
-            Player_balanceObject player_balanceObject = new Player_balanceObject();
-            player_balanceObject.player_id = player.getUniqueId().toString();
-            player_balanceObject.pocket = 0;
-            player_balanceObject.stock_market = 0;
-            Functions.createPlayers_balance(player_balanceObject);
             AddPlayer.addPlayer(event);
             UserObject userObject = new UserObject();
             userObject.time_created = String.valueOf(System.currentTimeMillis());
-            userObject.id = player_balanceObject.player_id;
+            userObject.id = player.getUniqueId().toString();
             Functions.createUser(userObject);
             Boolean rightTeleported = player.teleport(new Location(player.getServer().getWorld("world"), 0, 100, 0));
             if (player.isOp()){
@@ -53,11 +48,19 @@ public class connectionEvents {
         }else{
             Functions.update("players", "online", "1", dbPlayer.id, "id");
         }
+        Player_balanceObject player_balanceObject = Functions.getPlayers_balance("player_id", player.getUniqueId().toString());
+        if (player_balanceObject.player_id == null){
+            player_balanceObject.player_id = player.getUniqueId().toString();
+            player_balanceObject.pocket = 0;
+            player_balanceObject.stock_market = 0;
+            Functions.createPlayers_balance(player_balanceObject);
+        }
         if(Objects.equals(dbPlayer.didStartup, "false")){
-            player.sendMessage("Hi, if you are new here, you have to run" + ChatColor.GOLD + " /startup " + ChatColor.GRAY + "in the chat!");
+            player.sendMessage("Hi, you have to run" + ChatColor.GOLD + " /startup " + ChatColor.GRAY + "in the chat!");
             MMORPG.consoleLog("New player: " + player.getName() + " logged in!");
         }else if(Objects.equals(dbPlayer.didStartup, "true")){
             dbPlayer.init(player);
+            player.setDisplayName(dbPlayer.display_name);
             MMORPG.consoleLog("Player " + dbPlayer.display_name + " joined!");
             RankObject dbRank = Functions.getRank("name", dbPlayer.player_rank);
             String str = ChatColor.GRAY + "[" + onChat.getChatColor(dbRank.prefix_color) + dbRank.prefix + ChatColor.GRAY + "][" + onChat.getChatColor(dbRank.rank_color) + dbPlayer.display_name + ChatColor.GRAY + "]" + ChatColor.BLUE + ": "
@@ -65,7 +68,7 @@ public class connectionEvents {
             MMORPG.Server.broadcastMessage(str);
             dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "[" + dbRank.prefix + "][" + dbPlayer.display_name + "] joined the server!");
             dcFunctions.send_message_in_channel(DISCORD.config.chat, "[" + dbRank.prefix + "][" + dbPlayer.display_name + "] joined the server!");
-            player.sendMessage("Hi, " + dbPlayer.display_name + " your current level is: " + dbPlayer.stage);
+            player.sendMessage(ChatColor.GRAY + "Hi, " + ChatColor.WHITE + dbPlayer.display_name + ChatColor.GRAY + " you have: " + ChatColor.GOLD + player_balanceObject.pocket + ChatColor.GRAY + " in your pocket.");
             Main.vars_AFTER_PLAYER_JOINED.add(new VarObject("player_id", "STRING", dbPlayer.id));
             Main.run_AFTER_PLAYER_JOINED = true;
         }

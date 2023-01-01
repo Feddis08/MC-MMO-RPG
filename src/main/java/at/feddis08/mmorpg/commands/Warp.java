@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Warp implements CommandExecutor {
     @Override
@@ -29,17 +30,7 @@ public class Warp implements CommandExecutor {
                         try {
                             if (Rank.isPlayer_allowedTo(dbPlayer.id, "doWarp") || Rank.isPlayer_allowedTo(dbPlayer.id, "*")) {
                                 WarpObject dbWarpObject = Functions.getWarp("id", args[0]);
-                                if (Objects.equals(dbWarpObject.id, args[0])){
-                                    Player player = sender.getServer().getPlayer(sender.getName());
-                                    Functions.updateWhereAnd("players_in_worlds", "x", String.valueOf(player.getLocation().getBlockX()), dbPlayer.id, "id", dbPlayer.current_world_id, "world_id");
-                                    Functions.updateWhereAnd("players_in_worlds", "y", String.valueOf(player.getLocation().getBlockY()), dbPlayer.id, "id", dbPlayer.current_world_id, "world_id");
-                                    Functions.updateWhereAnd("players_in_worlds", "z", String.valueOf(player.getLocation().getBlockZ()), dbPlayer.id, "id", dbPlayer.current_world_id, "world_id");
-                                    Functions.update("players", "current_world_id", dbWarpObject.world_name, dbPlayer.id, "id");
-                                    player.teleport(new Location(MMORPG.Server.getWorld(dbWarpObject.world_name), Double.parseDouble(String.valueOf(dbWarpObject.x)), Double.parseDouble(String.valueOf(dbWarpObject.y)), Double.parseDouble(String.valueOf(dbWarpObject.z))));
-                                    Functions.updateWhereAnd("players_in_worlds", "x", String.valueOf(player.getLocation().getBlockX()), dbPlayer.id, "id", dbPlayer.current_world_id, "world_id");
-                                    Functions.updateWhereAnd("players_in_worlds", "y", String.valueOf(player.getLocation().getBlockY()), dbPlayer.id, "id", dbPlayer.current_world_id, "world_id");
-                                    Functions.updateWhereAnd("players_in_worlds", "z", String.valueOf(player.getLocation().getBlockZ()), dbPlayer.id, "id", dbPlayer.current_world_id, "world_id");
-                                    MMORPG.consoleLog(dbPlayer.display_name + " warped to " + dbWarpObject.id);
+                                if (warp_player(dbPlayer.id, args[0])){
                                     sender.sendMessage(ChatColor.GREEN + "Done");
                                 }else{
                                     sender.sendMessage(ChatColor.RED + "Warp does not exist!");
@@ -60,4 +51,23 @@ public class Warp implements CommandExecutor {
         return false;
     }
 
+    public static Boolean warp_player(String player_id, String warp_id) throws SQLException {
+        Boolean warped = false;
+        WarpObject dbWarpObject = Functions.getWarp("id", warp_id);
+        if (Objects.equals(dbWarpObject.id, warp_id)){
+            Player player = MMORPG.Server.getPlayer(UUID.fromString(player_id));
+            PlayerObject dbPlayer = (PlayerObject) Functions.getPlayer("id", MMORPG.Server.getPlayer(player.getName()).getUniqueId().toString());
+            Functions.updateWhereAnd("players_in_worlds", "x", String.valueOf(player.getLocation().getBlockX()), dbPlayer.id, "id", dbPlayer.current_world_id, "world_id");
+            Functions.updateWhereAnd("players_in_worlds", "y", String.valueOf(player.getLocation().getBlockY()), dbPlayer.id, "id", dbPlayer.current_world_id, "world_id");
+            Functions.updateWhereAnd("players_in_worlds", "z", String.valueOf(player.getLocation().getBlockZ()), dbPlayer.id, "id", dbPlayer.current_world_id, "world_id");
+            Functions.update("players", "current_world_id", dbWarpObject.world_name, dbPlayer.id, "id");
+            player.teleport(new Location(MMORPG.Server.getWorld(dbWarpObject.world_name), Double.parseDouble(String.valueOf(dbWarpObject.x)), Double.parseDouble(String.valueOf(dbWarpObject.y)), Double.parseDouble(String.valueOf(dbWarpObject.z))));
+            Functions.updateWhereAnd("players_in_worlds", "x", String.valueOf(player.getLocation().getBlockX()), dbPlayer.id, "id", dbPlayer.current_world_id, "world_id");
+            Functions.updateWhereAnd("players_in_worlds", "y", String.valueOf(player.getLocation().getBlockY()), dbPlayer.id, "id", dbPlayer.current_world_id, "world_id");
+            Functions.updateWhereAnd("players_in_worlds", "z", String.valueOf(player.getLocation().getBlockZ()), dbPlayer.id, "id", dbPlayer.current_world_id, "world_id");
+            MMORPG.consoleLog(dbPlayer.display_name + " warped to " + dbWarpObject.id);
+            warped = true;
+        }
+        return warped;
+    }
 }

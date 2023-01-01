@@ -10,8 +10,12 @@ import at.feddis08.mmorpg.logic.scripts.VarObject;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -20,7 +24,6 @@ import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
-import javax.swing.text.html.parser.Entity;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -44,6 +47,21 @@ public class onEvent {
     }
     public static void onPlayerMove(PlayerMoveEvent event) throws SQLException {
         checkMove.check(event);
+    }
+    public static void damage(EntityDamageEvent ev){
+        if (ev.getEntity() instanceof Player){
+            Player player = (Player) ev.getEntity();
+            if (player.getHealth() - ev.getFinalDamage() <= 0){
+                ev.setCancelled(true);
+                ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
+                varObjects.add(new VarObject("player_id", "STRING", player.getUniqueId().toString()));
+                varObjects.add(new VarObject("death_cause", "STRING", ev.getCause().toString()));
+                varObjects.add(new VarObject("final_damage", "INTEGER", String.valueOf(ev.getFinalDamage())));
+                varObjects.add(new VarObject("player_health", "INTEGER", String.valueOf(player.getHealth())));
+                Main.script_PLAYER_DEATH_event(varObjects);
+                player.setHealth(player.getMaxHealth());
+            }
+        }
     }
     public static void onBlockPlaced(BlockPlaceEvent event) throws SQLException {
         PlayerObject dbPlayer = Functions.getPlayer("id", event.getPlayer().getUniqueId().toString());

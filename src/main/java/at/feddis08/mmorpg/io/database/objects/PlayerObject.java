@@ -10,6 +10,7 @@ import at.feddis08.mmorpg.remote_interface.server.socket.Server;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.profile.PlayerProfile;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -33,12 +34,21 @@ public class PlayerObject {
         this.player = player;
         player.setResourcePack("https://www.dropbox.com/sh/f3ie51vsn6pi1wj/AAAsq6jQvAp3e-yF6DHmFF5Ja?dl=1");
         checkMails();
+
     }
     public void checkMails() throws SQLException {
         Integer mailsize =  Functions.getMails("receiver_id", id, "opened", "false").size();
         if (mailsize > 0){
             player.sendMessage(ChatColor.GOLD + "You have " + ChatColor.DARK_PURPLE + mailsize + ChatColor.GOLD + " unread mails!");
         }
+        PlayerProfile gameProfile = player.getPlayerProfile();
+        player.setCustomName(display_name);
+        player.setDisplayName(display_name);
+        player.setPlayerListName(display_name);
+        player.setCustomNameVisible(true);
+        //getConfig().set(player.getName(),display_name);
+
+// Send the packet object to every online player on the server
     }
     public void send_chat_message(String message) throws SQLException, IOException {
         RankObject dbRank = Functions.getRank("name", player_rank);

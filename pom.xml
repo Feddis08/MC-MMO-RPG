@@ -116,7 +116,7 @@
         <dependency>
             <groupId>org.javacord</groupId>
             <artifactId>javacord</artifactId>
-            <version>3.5.0</version>
+            <version>3.7.0</version>
             <type>pom</type>
         </dependency>
         <dependency>
@@ -128,12 +128,12 @@
         <dependency>
             <groupId>ch.qos.reload4j</groupId>
             <artifactId>reload4j</artifactId>
-            <version>1.2.22</version>
+            <version>1.2.24</version>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20180130</version>
+            <version>20220924</version>
         </dependency>
 
     </dependencies>

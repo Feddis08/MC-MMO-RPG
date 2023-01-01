@@ -1,7 +1,9 @@
 package at.feddis08.mmorpg.io.text_files.files.file_objects;
 
 import at.feddis08.mmorpg.MMORPG;
+import at.feddis08.mmorpg.commands.Gamemode;
 import at.feddis08.mmorpg.commands.Rank;
+import at.feddis08.mmorpg.commands.Warp;
 import at.feddis08.mmorpg.io.database.Functions;
 import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import at.feddis08.mmorpg.io.database.objects.Player_questObject;
@@ -10,17 +12,21 @@ import at.feddis08.mmorpg.logic.game.Var;
 import at.feddis08.mmorpg.logic.game.mob_spawner.Spawner;
 import at.feddis08.mmorpg.logic.game.ore_mine.Main;
 import at.feddis08.mmorpg.logic.game.ore_mine.Mine;
+import at.feddis08.mmorpg.logic.scripts.ArrayObject;
 import at.feddis08.mmorpg.logic.scripts.VarObject;
 import at.feddis08.mmorpg.logic.scripts.Var_pool;
 import at.feddis08.mmorpg.minecraft.tools.Methods;
 import at.feddis08.mmorpg.minecraft.tools.classes.Book;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.checkerframework.checker.units.qual.A;
 
+import javax.swing.plaf.basic.BasicOptionPaneUI;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +43,7 @@ public class ScriptFileObject extends Thread {
     public Boolean error = false;
     public Boolean show_enabling_message = true;
     public String author = "";
+    public Integer current_line = 0;
     public void run(){
         MMORPG.consoleLog("dd");
         start();
@@ -53,10 +60,18 @@ public class ScriptFileObject extends Thread {
         }
         if (result){
             error = true;
-            throw_error("[" + this.name + "]: ERROR: Var " + name + " is already defined!", null);
+            throw_error("[" + this.name + "]: ERROR: Var " + name + " is already defined!", current_line);
         }else{
-            varObjects.add(new VarObject(name, type, ""));
+            if (type == "ARRAY"){
+                varObjects.add(new ArrayObject(name, new ArrayList<VarObject>()));
+            }else{
+                varObjects.add(new VarObject(name, type, ""));
+            }
         }
+    }
+    public void add_value_to_array(String array_name, String str){
+        ArrayObject arrayObject = (ArrayObject) get_var_by_name(array_name);
+        arrayObject.varList.add(get_value(str).get(0));
     }
     public VarObject get_var_by_name(String name){
         Integer index = 0;
@@ -69,12 +84,16 @@ public class ScriptFileObject extends Thread {
         }
         if (result == null){
             error = true;
-            throw_error("[" + this.name + "]: ERROR: Var " + name + " is not defined!", null);
+            throw_error("[" + this.name + "]: ERROR: Var " + name + " is not defined!", current_line);
         }
         return result;
     }
     public ArrayList<VarObject> get_value(String arg){
         ArrayList<VarObject> result = new ArrayList<>();
+        if (arg.contains("<@va>")){
+            ArrayObject arrayObject = (ArrayObject) get_var_by_name(arg.split("<@va>")[1]);
+            result.add(arrayObject.varList.get(Integer.parseInt (get_value(arg.split("]")[1]).get(0).value)));
+        }
         if (arg.contains("<@v>")){
             result.add(get_var_by_name(arg.split("<@v>")[1]));
         }
@@ -83,19 +102,24 @@ public class ScriptFileObject extends Thread {
         }
         return result;
     }
-    public Boolean change_value_of_var(String name, String value){
+    public Boolean change_value_of_var(String name, String value, Integer i){
         Integer index = 0;
         Boolean result = false;
         while (index < varObjects.size()){
             if (Objects.equals(varObjects.get(index).name, name)){
                 result = true;
-                varObjects.get(index).value = value;
+                if (Objects.equals(varObjects.get(index).type, "ARRAY")){
+                    ArrayObject arrayObject = (ArrayObject) varObjects.get(index);
+                    arrayObject.varList.get(i).value = String.valueOf(i);
+                }else{
+                    varObjects.get(index).value = value;
+                }
             }
             index = index + 1;
         }
         if (!(result)){
             error = true;
-            MMORPG.consoleLog("[" + this.name + "]: ERROR: Var " + name + " is not defined!");
+            throw_error("Var " + name + " is not defined!", current_line);
         }
         return result;
     }
@@ -108,20 +132,35 @@ public class ScriptFileObject extends Thread {
     }
     public void start(){
         Integer index = 0;
+        current_line = 0;
         if (!error) {
             MMORPG.consoleLog("Enabling script: " + name);
             while (index < script.size()) {
+                current_line =+ 1;
                 ArrayList<String> cmd = script.get(index);
                 if (error) {
                     throw_error ("Script " + name + " stopped! Error at line: ", index);
                     index = script.size() - 1;
                     break;
                 }
+                if (Objects.equals(script.get(index).get(0), "<*va>")) {
+                    register_new_var(cmd.get(1), cmd.get(2));
+                }
+                if (Objects.equals(script.get(index).get(0), "<+va>")) {
+                    add_value_to_array(cmd.get(1), cmd.get(2));
+                }
+                if (Objects.equals(script.get(index).get(0), "<!va>")) {
+                    ArrayObject arrayObject = (ArrayObject) get_var_by_name(cmd.get(1));
+                    arrayObject.varList.clear();
+                }
                 if (Objects.equals(script.get(index).get(0), "<*v>")) {
                     register_new_var(cmd.get(1), cmd.get(2));
                 }
                 if (Objects.equals(script.get(index).get(0), "<=v>")) {
-                    change_value_of_var(cmd.get(1), get_value(cmd.get(2)).get(0).value);
+                    change_value_of_var(cmd.get(1), get_value(cmd.get(2)).get(0).value, 0);
+                }
+                if (Objects.equals(script.get(index).get(0), "<=va>")) {
+                    change_value_of_var(cmd.get(1), get_value(cmd.get(2)).get(0).value, Integer.parseInt(get_value(cmd.get(3)).get(0).value));
                 }
                 if (Objects.equals(script.get(index).get(0), "<=v,f>")) {
                     ArrayList<String> args = new ArrayList<>();
@@ -151,12 +190,12 @@ public class ScriptFileObject extends Thread {
                     index2 = 0;
                     if (result.size() == 0) {
                         error = true;
-                        throw_error("ERROR: function " + args.get(0) + " didn't returned any values!", index);
+                        throw_error("ERROR: function " + args.get(0) + " didn't returned any values!", current_line);
                         MMORPG.consoleLog(result.size() + " " + args.size() + " " + count_c);
                     } else {
                         while (index2 < count_c) {
                             if (cmd.get(index2 + 1).contains("<@v>")) {
-                                change_value_of_var(cmd.get(index2 + 1).split("<@v>")[1], result.get(index2).value);
+                                change_value_of_var(cmd.get(index2 + 1).split("<@v>")[1], result.get(index2).value, 0);
                             }
                             index2 = index2 + 1;
                         }
@@ -422,6 +461,12 @@ public class ScriptFileObject extends Thread {
             player_questObject.progress = Integer.parseInt(get_value(args.get(3)).get(0).value);
             Functions.createPlayer_quest(player_questObject);
         }
+        if (Objects.equals(args.get(0), "minecraft.change_gamemode_of_player:")){
+            Gamemode.changeBukkitPlayerGamemode(get_value(args.get(1)).get(0).value, get_value(args.get(2)).get(0).value);
+        }
+        if (Objects.equals(args.get(0), "warp_player:")){
+            Boolean warped = Warp.warp_player(get_value(args.get(1)).get(0).value, get_value(args.get(2)).get(0).value);
+        }
         if (Objects.equals(args.get(0), "update_quest:")){
             Functions.update("players_quests", get_value(args.get(1)).get(0).value, get_value(args.get(2)).get(0).value,get_value(args.get(3)).get(0).value, get_value(args.get(4)).get(0).value);
         }
@@ -431,6 +476,9 @@ public class ScriptFileObject extends Thread {
         }
         if (Objects.equals(args.get(0), "minecraft.change_entity_speed:")){
             //MMORPG.Server.getEntity(UUID.fromString(get_value(args.get(1)).get(0).value)).set
+        }
+        if (Objects.equals(args.get(0), "minecraft.give_player_itemstack:")){
+            MMORPG.Server.getPlayer(UUID.fromString(get_value(args.get(1)).get(0).value)).getInventory().addItem(new ItemStack(Material.valueOf(get_value(args.get(2)).get(0).value), Integer.parseInt(get_value(args.get(3)).get(0).value)));
         }
         if (Objects.equals(args.get(0), "var_pool.create:")){
             if (at.feddis08.mmorpg.logic.scripts.Var.get_var_pool_by_name(get_value(args.get(1)).get(0).value) == null){
@@ -443,7 +491,7 @@ public class ScriptFileObject extends Thread {
         }
         if (Objects.equals(args.get(0), "var_pool.get:")){
             if (at.feddis08.mmorpg.logic.scripts.Var.get_var_pool_by_name(get_value(args.get(1)).get(0).value) == null){
-                throw_error("ERROR: Var_pool " + get_value(args.get(1)).get(0).value +" is not defined!", index);
+                throw_error("ERROR: Var_pool " + get_value(args.get(1)).get(0).value +" is not defined!", current_line);
             }else{
                 Var_pool var_pool = at.feddis08.mmorpg.logic.scripts.Var.get_var_pool_by_name(get_value(args.get(1)).get(0).value);
                 result.add(var_pool.get_var_by_name(get_value(args.get(2)).get(0).value));
@@ -451,7 +499,7 @@ public class ScriptFileObject extends Thread {
         }
         if (Objects.equals(args.get(0), "var_pool.put:")){
             if (at.feddis08.mmorpg.logic.scripts.Var.get_var_pool_by_name(get_value(args.get(1)).get(0).value) == null){
-                throw_error("ERROR: Var_pool " + get_value(args.get(1)).get(0).value +" is not defined!", index);
+                throw_error("ERROR: Var_pool " + get_value(args.get(1)).get(0).value +" is not defined!", current_line);
             }else{
                 Var_pool var_pool = at.feddis08.mmorpg.logic.scripts.Var.get_var_pool_by_name(get_value(args.get(1)).get(0).value);
                 var_pool.varObjects.add(get_value(args.get(2)).get(0));
@@ -459,7 +507,7 @@ public class ScriptFileObject extends Thread {
         }
         if (Objects.equals(args.get(0), "var_pool.change:")){
             if (at.feddis08.mmorpg.logic.scripts.Var.get_var_pool_by_name(get_value(args.get(1)).get(0).value) == null){
-                throw_error("ERROR: Var_pool " + get_value(args.get(1)).get(0).value +" is not defined!", index);
+                throw_error("ERROR: Var_pool " + get_value(args.get(1)).get(0).value +" is not defined!", current_line);
             }else{
                 Var_pool var_pool = at.feddis08.mmorpg.logic.scripts.Var.get_var_pool_by_name(get_value(args.get(1)).get(0).value);
                 var_pool.change_value_of_var(get_value(args.get(2)).get(0).value, get_value(args.get(3)).get(0).value);
@@ -470,7 +518,7 @@ public class ScriptFileObject extends Thread {
 
 
     public void parse_config_file(ArrayList<String> lines) {
-        MMORPG.debugLog("Parsing Scripts file ...");
+        MMORPG.debugLog("Parsing Script file ...");
         Integer index = 0;
         Boolean parse_ok = false;
         while ((index + 1) <= lines.size()) {

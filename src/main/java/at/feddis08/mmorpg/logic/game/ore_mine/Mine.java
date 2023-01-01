@@ -5,7 +5,9 @@ import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.logic.scripts.Main;
 import at.feddis08.mmorpg.logic.scripts.VarObject;
 import org.bukkit.Material;
+import org.bukkit.TreeType;
 import org.bukkit.block.Block;
+import org.bukkit.material.Tree;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -32,14 +34,22 @@ public class Mine {
 
     void place_block(){
         Block block = Objects.requireNonNull(MMORPG.Server.getWorld(world_name)).getBlockAt(x, y, z);
-        block.setType(Material.getMaterial(material_name));
+        if (Objects.equals(material_name.split(":")[0], "TREE")){
+            MMORPG.Server.getWorld(world_name).generateTree(block.getLocation(), TreeType.valueOf(material_name.split(":")[1]));
+        }else{
+            block.setType(Material.getMaterial(material_name));
+        }
     }
-    void check_world_block_status(){
+    void check_world_block_status() {
         Block block = Objects.requireNonNull(MMORPG.Server.getWorld(world_name)).getBlockAt(x, y, z);
-        if (!block.getType().name().equals(material_name)){
-            if (Objects.equals(passed_ticks, cool_down_ticks)){
-                passed_ticks = 0;
-                place_block();
+        if (Objects.equals(material_name.split(":")[0], "TREE")) {
+            MMORPG.Server.getWorld(world_name).generateTree(block.getLocation(), TreeType.valueOf(material_name.split(":")[1]));
+        } else {
+            if (!block.getType().name().equals(material_name)) {
+                if (Objects.equals(passed_ticks, cool_down_ticks)) {
+                    passed_ticks = 0;
+                    place_block();
+                }
             }
         }
     }

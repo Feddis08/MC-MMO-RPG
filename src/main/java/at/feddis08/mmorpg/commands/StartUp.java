@@ -6,6 +6,7 @@ import at.feddis08.mmorpg.minecraft.tools.Methods;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.util.Objects;
@@ -37,7 +38,9 @@ public class StartUp implements CommandExecutor {
                         } catch (SQLException e) {
                             e.printStackTrace();
                         }
-                        sender.sendMessage("You are now " + DisplayName
+
+                        Player p = (Player) sender;
+                        p.kickPlayer("You are now " + DisplayName
                                     + ". You can change the player_name/password by redoing the startup. Write  /reset  to start!");
                             return true;
                         }

@@ -17,7 +17,9 @@ public class DISCORD {
     public static void start_bot(){
         api = new DiscordApiBuilder()
                 .setToken(MMORPG.config.discord_bot_token)
-                .login().join();
+                .setAllIntents()
+                .login()
+                .join();
         MessageListeners.create_message_listener();
 
     }
