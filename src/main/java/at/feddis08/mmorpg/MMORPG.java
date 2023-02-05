@@ -13,7 +13,9 @@ import at.feddis08.mmorpg.minecraft.tools.Methods;
 import at.feddis08.mmorpg.minecraft.tools.StartLoadWorld;
 import at.feddis08.mmorpg.minecraft.tools.WorldAutoLoad;
 import at.feddis08.mmorpg.remote_interface.server.Start;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.bukkit.*;
+import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -33,7 +35,7 @@ public final class MMORPG extends JavaPlugin {
 
     public static boolean discord_bot_active = false;
 
-    public static Server Server;
+    public static org.bukkit.Server Server;
 
     @Override
     public void onEnable() {
@@ -108,6 +110,7 @@ public final class MMORPG extends JavaPlugin {
         getCommand("warp").setExecutor(new Warp());
         getCommand("removeWarp").setExecutor(new RemoveWarp());
         getCommand("discord").setExecutor(new Discord());
+        getCommand("server").setExecutor(new at.feddis08.mmorpg.commands.Server());
         try {
             Methods.update_all_players_online_state();
         } catch (SQLException e) {
@@ -126,8 +129,10 @@ public final class MMORPG extends JavaPlugin {
             throw new RuntimeException(e);
         }
         consoleLog("Server running ...");
-        dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "Server started and is running ...");
-        dcFunctions.send_message_in_channel(DISCORD.config.chat, "<@&1000897321745260594> Server started and is running ...");
+        if (discord_bot_active){
+            dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "Server started and is running ...");
+            dcFunctions.send_message_in_channel(DISCORD.config.chat, "<@&1000897321745260594> Server started and is running ...");
+        }
     }
         @Override
     public void onDisable() {

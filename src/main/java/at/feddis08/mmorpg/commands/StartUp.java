@@ -1,5 +1,6 @@
 package at.feddis08.mmorpg.commands;
 
+import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.io.database.*;
 import at.feddis08.mmorpg.io.database.objects.PlayerObject;
 import at.feddis08.mmorpg.minecraft.tools.Methods;

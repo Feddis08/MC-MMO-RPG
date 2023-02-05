@@ -1,10 +1,21 @@
 package at.feddis08.mmorpg.io.database;
+import at.feddis08.mmorpg.minecraft.tools.Methods;
+import com.google.gson.Gson;
 import at.feddis08.mmorpg.MMORPG;
 import at.feddis08.mmorpg.io.database.objects.*;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import org.bukkit.entity.Player;
+import org.checkerframework.checker.units.qual.A;
 import org.javacord.api.DiscordApi;
 
+import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Queue;
 
 public class Functions {
     public static void createPlayer_quest(Player_questObject playerObj) throws SQLException {
@@ -857,5 +868,254 @@ public class Functions {
             MMORPG.debugLog("Deleted table data!");
         }catch (Exception e){}
     }
+    public static String save_database_to_JSON() throws SQLException, JsonProcessingException {
+        MMORPG.consoleLog("Start saving database...");
+        Save save = new Save();
+        MMORPG.consoleLog("Downloading of database...");
+        save.mails = getAllMails();
+        save.portalTracks = getAllPortalTracks();
+
+        Statement stmt = JDBC.myConn.createStatement();
+        String sql = "select * from players;";
+        MMORPG.debugLog(sql);
+        ResultSet myRs = stmt.executeQuery(sql);
+        save.players = new ArrayList<>();
+        while (myRs.next()) {
+            PlayerObject dataObj = new PlayerObject();
+            dataObj.stage = myRs.getInt("stage");
+            dataObj.id = myRs.getString("id");
+            dataObj.job = myRs.getString("job");
+            dataObj.online = myRs.getString("online");
+            dataObj.player_rank = myRs.getString("player_rank");
+            dataObj.display_name = myRs.getString("display_name");
+            dataObj.player_name = myRs.getString("player_name");
+            dataObj.current_world_id = myRs.getString("current_world_id");
+            dataObj.gamemode = myRs.getInt("gamemode");
+            dataObj.didStartup = myRs.getString("didStartup");
+            save.players.add(dataObj);
+        }
+        sql = "select * from ranks;";
+        MMORPG.debugLog(sql);
+        myRs = stmt.executeQuery(sql);
+        save.ranks = new ArrayList<>();
+        while (myRs.next()) {
+            RankObject dataObj = new RankObject();
+            dataObj.name = myRs.getString("name");
+            dataObj.prefix = myRs.getString("prefix");
+            dataObj.prefix_color = myRs.getString("prefix_color");
+            dataObj.rank_color = myRs.getString("rank_color");
+            dataObj.id = myRs.getString("id");
+            dataObj.parent = myRs.getString("parent");
+            dataObj.rank_level = myRs.getInt("rank_level");
+            save.ranks.add(dataObj);
+        }
+        sql = "select * from users;";
+        MMORPG.debugLog(sql);
+        myRs = stmt.executeQuery(sql);
+        save.users = new ArrayList<>();
+        while (myRs.next()) {
+            UserObject dataObj = new UserObject();
+            dataObj.id = myRs.getString("id");
+            dataObj.first_name = myRs.getString("first_name");
+            dataObj.last_name = myRs.getString("last_name");
+            dataObj.hash = myRs.getString("hash");
+            dataObj.data_json = myRs.getString("data_json");
+            dataObj.time_created = myRs.getString("time_created");
+            dataObj.update_json();
+            save.users.add(dataObj);
+        }
+        sql = "select * from players_quests;";
+        MMORPG.debugLog(sql);
+        myRs = stmt.executeQuery(sql);
+        save.quests = new ArrayList<>();
+        while (myRs.next()) {
+            Player_questObject dataObj = new Player_questObject();
+            dataObj.id = myRs.getString("id");
+            dataObj.progress = myRs.getInt("progress");
+            dataObj.quest_name = myRs.getString("quest_name");
+            save.quests.add(dataObj);
+        }
+        sql = "select * from players_balance;";
+        MMORPG.debugLog(sql);
+        myRs = stmt.executeQuery(sql);
+        save.players_balances = new ArrayList<>();
+        while (myRs.next()) {
+            Player_balanceObject dataObj = new Player_balanceObject();
+            dataObj.player_id = myRs.getString("player_id");
+            dataObj.pocket = myRs.getInt("pocket");
+            dataObj.stock_market = myRs.getInt("stock_market");
+            save.players_balances.add(dataObj);
+        }
+        sql = "select * from warps;";
+        MMORPG.debugLog(sql);
+        myRs = stmt.executeQuery(sql);
+        save.warps = new ArrayList<>();
+        while (myRs.next()) {
+            WarpObject dataObj = new WarpObject();
+            dataObj.id = myRs.getString("id");
+            dataObj.world_name = myRs.getString("world_name");
+            dataObj.x = myRs.getInt("x");
+            dataObj.y = myRs.getInt("y");
+            dataObj.z = myRs.getInt("z");
+            save.warps.add(dataObj);
+        }
+        sql = "select * from players_discord;";
+        MMORPG.debugLog(sql);
+        myRs = stmt.executeQuery(sql);
+        save.discord_players = new ArrayList<>();
+        while (myRs.next()) {
+            Discord_playerObject dataObj = new Discord_playerObject();
+            dataObj.id = myRs.getString("id");
+            dataObj.discord_id = myRs.getString("discord_id");
+            dataObj.online = myRs.getInt("online");
+            dataObj.display_name = myRs.getString("display_name");
+            save.discord_players.add(dataObj);
+        }
+        sql = "select * from players_in_worlds;";
+        MMORPG.debugLog(sql);
+        myRs = stmt.executeQuery(sql);
+        save.playerInWorlds = new ArrayList<>();
+        while (myRs.next()) {
+            PlayerInWorlds dataObj = new PlayerInWorlds();
+            dataObj.world_id = myRs.getString("world_id");
+            dataObj.id = myRs.getString("id");
+            dataObj.x = myRs.getInt("x");
+            dataObj.y = myRs.getInt("y");
+            dataObj.z = myRs.getInt("z");
+            save.playerInWorlds.add(dataObj);
+        }
+        sql = "select * from worlds;";
+        MMORPG.debugLog(sql);
+        myRs = stmt.executeQuery(sql);
+        save.worlds = new ArrayList<>();
+        while (myRs.next()) {
+            WorldObject dataObj = new WorldObject();
+            dataObj.name = myRs.getString("name");
+            dataObj.type = myRs.getString("type");
+            dataObj.id = myRs.getString("id");
+            dataObj.autoload = myRs.getString("autoload");
+            dataObj.loaded = myRs.getString("loaded");
+            dataObj.players_on = myRs.getInt("players_on");
+            save.worlds.add(dataObj);
+        }
+        sql = "select * from ranks_permissions;";
+        MMORPG.debugLog(sql);
+        myRs = stmt.executeQuery(sql);
+        save.ranks_permissions= new ArrayList<>();
+        while (myRs.next()) {
+            Rank_permissionObject dataObj = new Rank_permissionObject();
+            dataObj.permission = myRs.getString("permission");
+            dataObj.id = myRs.getString("id");
+            save.ranks_permissions.add(dataObj);
+        }
+        sql = "select * from inventory_tracks;";
+        MMORPG.debugLog(sql);
+        myRs = stmt.executeQuery(sql);
+        save.inventoryTracks = new ArrayList<>();
+        while (myRs.next()) {
+            InventoryTrackObject dataObj = new InventoryTrackObject();
+            dataObj.world_id = myRs.getString("world_id");
+            dataObj.type = myRs.getString("type");
+            dataObj.id = myRs.getInt("id");
+            dataObj.x = myRs.getInt("x");
+            dataObj.y = myRs.getInt("y");
+            dataObj.z = myRs.getInt("z");
+            save.inventoryTracks.add(dataObj);
+        }
+        MMORPG.consoleLog("Download done...");
+        String serializedObject = "";
+
+        // serialize the object
+        int time = (int) System.currentTimeMillis();
+        try {
+            MMORPG.consoleLog("Saving data to file...");
+            Gson gson = new Gson();
+            serializedObject = gson.toJson(save);
+            File f = new File("MMORPG/save_" + time + ".log");
+            f.createNewFile();
+            FileWriter myWriter = new FileWriter("MMORPG/save_" + time + ".log");
+            myWriter.write(serializedObject);
+            myWriter.close();
+            MMORPG.consoleLog("Wrote to disk done...");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        File f = new File("MMORPG/save_" + time + ".log");
+        MMORPG.consoleLog("Database saved to file. " + f.getPath());
+        return ("MMORPG/save_" + time + ".log");
+        //MMORPG.consoleLog(serializedObject + "  " + save);
+    }
+
+    public static void restore_database_from_save(String save_json) throws SQLException {
+        Gson gson = new Gson();
+        Save save = gson.fromJson(save_json, Save.class);
+        int index = 0;
+        while (index < save.players.size()){
+            createPlayer(save.players.get(index));
+            index += 1;
+        }
+        index = 0;
+        while (index < save.users.size()){
+            createUser(save.users.get(index));
+            index += 1;
+        }
+        index = 0;
+        while (index < save.ranks.size()){
+            createRank(save.ranks.get(index));
+            index += 1;
+        }
+        index = 0;
+        while (index < save.ranks_permissions.size()){
+            createRank_permision(save.ranks_permissions.get(index));
+            index += 1;
+        }
+        index = 0;
+        while (index < save.playerInWorlds.size()){
+            createPlayerInWorlds(save.playerInWorlds.get(index));
+            index += 1;
+        }
+        index = 0;
+        while (index < save.players_balances.size()){
+            createPlayers_balance(save.players_balances.get(index));
+            index += 1;
+        }
+        index = 0;
+        while (index < save.discord_players.size()){
+            createDiscordPlayer(save.discord_players.get(index));
+            index += 1;
+        }
+        index = 0;
+        while (index < save.mails.size()){
+            createMail(save.mails.get(index));
+            index += 1;
+        }
+        index = 0;
+        while (index < save.inventoryTracks.size()){
+            createInventoryTrack(save.inventoryTracks.get(index));
+            index += 1;
+        }
+        index = 0;
+        while (index < save.worlds.size()){
+            createWorld(save.worlds.get(index));
+            index += 1;
+        }
+        index = 0;
+        while (index < save.warps.size()){
+            createWarp(save.warps.get(index));
+            index += 1;
+        }
+        index = 0;
+        while (index < save.quests.size()){
+            createPlayer_quest(save.quests.get(index));
+            index += 1;
+        }
+        index = 0;
+        while (index < save.portalTracks.size()){
+            createPortalTrack(save.portalTracks.get(index));
+            index += 1;
+        }
+
+    }
+
 }
 

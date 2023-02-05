@@ -10,26 +10,29 @@ public class JDBC {
             myConn = DriverManager.getConnection("jdbc:mysql://" + ip+  ":" + port + "/" + db, user, pw);
             MMORPG.debugLog("Connection succeed!");
             MMORPG.debugLog("Checking all Tables and create if needed ...");
-            createDataTable();
-            createPlayerTable();
-            createRanksTable();
-            createWorldsTable();
-            createPlayers_in_worldsTable();
-            createRanks_permissionsTable();
-            createMailsTable();
-            createBlock_break_countTable();
-            createPlayers_stats_table();
-            createInventoryTracksTable();
-            createPlayers_balanceTable();
-            createPortalTracksTable();
-            createWarpsTable();
-            createDiscordPlayerTable();
-            createPlayerQuestTable();
-            createUsersTable();
+            check_tables();
         }catch (Exception e){
             MMORPG.debugLog("Connection to DataBase failed!");
             e.printStackTrace();
         }
+    }
+    public static void check_tables() throws SQLException {
+        createDataTable();
+        createPlayerTable();
+        createRanksTable();
+        createWorldsTable();
+        createPlayers_in_worldsTable();
+        createRanks_permissionsTable();
+        createMailsTable();
+        createBlock_break_countTable();
+        createPlayers_stats_table();
+        createInventoryTracksTable();
+        createPlayers_balanceTable();
+        createPortalTracksTable();
+        createWarpsTable();
+        createDiscordPlayerTable();
+        createPlayerQuestTable();
+        createUsersTable();
     }
     public static void createUsersTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "users"

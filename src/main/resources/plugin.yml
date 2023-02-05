@@ -21,3 +21,4 @@ commands:
   warp:
   removeWarp:
   discord:
+  server:
