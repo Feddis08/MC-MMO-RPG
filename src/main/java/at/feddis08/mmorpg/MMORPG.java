@@ -128,6 +128,23 @@ public final class MMORPG extends JavaPlugin {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        try {
+
+            Thread t = new Thread("web"){
+                @Override
+                public void run() {
+                    try {
+                        at.feddis08.mmorpg.remote_interface.web_service.Main.start();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            };
+            t.start();
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         consoleLog("Server running ...");
         if (discord_bot_active){
             dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "Server started and is running ...");
@@ -143,7 +160,7 @@ public final class MMORPG extends JavaPlugin {
                 throw new RuntimeException(e);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
@@ -159,24 +176,26 @@ public final class MMORPG extends JavaPlugin {
         if (config.enable_discord_bot && discord_bot_active)
             at.feddis08.mmorpg.discord.dcFunctions.send_message_in_channel(DISCORD.config.server_log, ("[" + config.console_prefix + "]: [Log]: " + log));
     }
-    public static void shutdown() throws IOException, InterruptedException, SQLException {
-        MMORPG.consoleLog("Clearing spawners...");
-        at.feddis08.mmorpg.logic.game.mob_spawner.Main.clear_spawners();
-        MMORPG.consoleLog("Saving players...");
-        Methods.update_all_players_online_state();
-        MMORPG.consoleLog("Starting scripts by SERVER_STOP event...");
-        ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
-        at.feddis08.mmorpg.logic.scripts.Main.script_SERVER_STOP_event(varObjects);
-        at.feddis08.mmorpg.remote_interface.server.socket.Server.close();
+    public static void shutdown() throws Exception {
         dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "Server is closing in 3 seconds ...");
         dcFunctions.send_message_in_channel(DISCORD.config.chat, "<@&1000897321745260594> Server is closing in 3 seconds ...");
         consoleLog("Shutdown... in 3 seconds.");
         consoleLog("3 ...");
         Thread.sleep(1000);
         consoleLog("2 ...");
+        MMORPG.consoleLog("Clearing spawners...");
+        at.feddis08.mmorpg.logic.game.mob_spawner.Main.clear_spawners();
+        MMORPG.consoleLog("Saving players...");
+        Methods.update_all_players_online_state();
         Thread.sleep(1000);
         consoleLog("1 ...");
         Thread.sleep(1000);
+        MMORPG.consoleLog("Starting scripts by SERVER_STOP event...");
+        ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
+        at.feddis08.mmorpg.logic.scripts.Main.script_SERVER_STOP_event(varObjects);
+        at.feddis08.mmorpg.remote_interface.server.socket.Server.close();
+        MMORPG.consoleLog("Closing WebService...");
+        at.feddis08.mmorpg.remote_interface.web_service.Main.stop();
         debugLog("Disconnecting systems...");
         if (config.enable_discord_bot){
             DISCORD.api.disconnect();
