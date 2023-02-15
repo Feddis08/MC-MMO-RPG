@@ -17,10 +17,15 @@ public class UserObject {
 
     public void create_json(){
        jsonObject.put("send_message_on_login", "false");
-        jsonObject.put("login_message", "Hi, I am online!");
+       jsonObject.put("login_message", "Hi, I am online!");
        jsonObject.put("email_address", "");
        jsonObject.put("last_online", "");
        jsonObject.put("download_path", "");
+       jsonObject.put("logged_in", "false");
+       jsonObject.put("auth_token", "");
+       jsonObject.put("auth_token_date_created", "");
+       jsonObject.put("ip-address", "");
+       jsonObject.put("last_login", "");
        data_json = jsonObject.toString();
     }
     public void update_json(){
