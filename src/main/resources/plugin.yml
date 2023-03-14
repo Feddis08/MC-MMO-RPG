@@ -1,6 +1,6 @@
 name: MMO-RPG
 version: '${project.version}'
-main: at.feddis08.mmorpg.MMORPG
+main: at.feddis08.bukkit.MMORPG
 api-version: 1.19
 load: POSTWORLD
 authors: [ Feddis08 ]

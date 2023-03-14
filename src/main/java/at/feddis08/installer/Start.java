@@ -1,7 +1,5 @@
 package at.feddis08.installer;
 
-import at.feddis08.mmorpg.io.url_files.File;
-
 import java.io.IOException;
 import java.util.Scanner;
 

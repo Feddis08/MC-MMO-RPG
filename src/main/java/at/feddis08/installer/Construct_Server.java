@@ -13,6 +13,6 @@ public class Construct_Server {
         if (!Files.exists(Paths.get(path))) {
             pathAsFile.mkdir();
         }
-        at.feddis08.mmorpg.io.url_files.File.get_from_url("https://api.papermc.io/v2/projects/paper/versions/1.19/builds/81/downloads/paper-1.19-81.jar", "paper_1.19.jar", path);
+        at.feddis08.tools.io.url_files.File.get_from_url("https://api.papermc.io/v2/projects/paper/versions/1.19/builds/81/downloads/paper-1.19-81.jar", "paper_1.19.jar", path);
     }
 }
