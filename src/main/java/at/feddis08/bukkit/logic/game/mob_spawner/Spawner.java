@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 
+import static at.feddis08.bukkit.logic.scripts.Main.script_start_by_event_name;
+
 public class Spawner {
     public String world_name;
     public String name;
@@ -78,6 +80,6 @@ public class Spawner {
         if (!Objects.equals(passed_ticks, cool_down_ticks)){
             passed_ticks = 0;
         }
-        Main.script_PLAYER_KILL_MOB_FROM_SPAWNER_event(varObjects);
+        script_start_by_event_name ("PLAYER_KILL_MOB_FROM_SPAWNER", varObjects);
     }
 }

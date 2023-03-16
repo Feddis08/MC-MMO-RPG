@@ -1,9 +1,6 @@
 package at.feddis08.tools.io.text_files.files;
 
-import at.feddis08.tools.io.text_files.files.config_patterns.CheckConfigFile;
-import at.feddis08.tools.io.text_files.files.config_patterns.CheckDiscordFile;
-import at.feddis08.tools.io.text_files.files.config_patterns.CheckInventory_ConfigFile;
-import at.feddis08.tools.io.text_files.files.config_patterns.CheckScriptsFile;
+import at.feddis08.tools.io.text_files.files.config_patterns.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,5 +21,6 @@ public class Main {
         CheckInventory_ConfigFile.check();
         TradeInventory.start();
         CheckScriptsFile.check();
+        CheckClusterFile.check();
     }
 }

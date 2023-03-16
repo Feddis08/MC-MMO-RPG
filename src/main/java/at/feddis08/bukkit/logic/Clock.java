@@ -19,6 +19,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static at.feddis08.bukkit.logic.scripts.Main.script_start_by_event_name;
+
 public class Clock {
 
     public static Boolean clear_wheat_inv = false;
@@ -31,7 +33,7 @@ public class Clock {
         at.feddis08.bukkit.logic.game.mob_spawner.Main.check_spawners_per_tick();
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
         varObjects.add(new VarObject("tick_count", "INTEGER", String.valueOf(event.getTickNumber())));
-        Main.script_TICK_START_event(varObjects);
+        script_start_by_event_name ("TICK_START", varObjects);
         Main.check_all_after_events();
         if (clear_wheat_inv){
 

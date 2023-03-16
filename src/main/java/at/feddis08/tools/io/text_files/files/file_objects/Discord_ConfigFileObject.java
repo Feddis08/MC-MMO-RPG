@@ -52,7 +52,7 @@ public class Discord_ConfigFileObject {
             }
         index = index + 1;
         if (!(parse_ok))
-            Boot.consoleLog("ERROR: Could not parse config file. Load default value. Error at line: " + String.valueOf(index));
+            Boot.consoleLog("ERROR: Could not parse discord file. Load default value. Error at line: " + String.valueOf(index));
 
         }
     }

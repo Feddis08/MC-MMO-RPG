@@ -31,7 +31,7 @@ public class Inventory_ConfigFileObject {
                     parse_ok = true;
                 }else{
                     parse_ok = true;
-                    Boot.consoleLog("ERROR: Could not parse config file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
+                    Boot.consoleLog("ERROR: Could not parse inv_config file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
                 }
             }
             if (Objects.equals(params[0], "add_trade:")) {
@@ -40,12 +40,12 @@ public class Inventory_ConfigFileObject {
                     parse_ok = true;
                 }else{
                     parse_ok = true;
-                    Boot.consoleLog("ERROR: Could not parse config file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
+                    Boot.consoleLog("ERROR: Could not parse inv_config file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
                 }
             }
             index = index + 1;
             if (!(parse_ok))
-                Boot.consoleLog("ERROR: Could not parse config file. Load default value. Error at line: " + String.valueOf(index));
+                Boot.consoleLog("ERROR: Could not parse inv_config file. Load default value. Error at line: " + String.valueOf(index));
 
         }
     }

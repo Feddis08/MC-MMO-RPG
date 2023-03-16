@@ -29,11 +29,11 @@ public class Main {
 
     public static void check_all_after_events(){
         if (run_AFTER_PLAYER_CLICK_EVENT){
-            script_AFTER_PLAYER_CLICK_ENTITY_event(vars_AFTER_PLAYER_CLICK_EVENT);
+            script_start_by_event_name ("AFTER_PLAYER_CLICK_ENTITY", vars_AFTER_PLAYER_CLICK_EVENT);
             run_AFTER_PLAYER_CLICK_EVENT = false;
         }
         if (run_AFTER_PLAYER_JOINED){
-            script_PLAYER_JOINED_event(vars_AFTER_PLAYER_JOINED);
+            script_start_by_event_name ("PLAYER_JOINED", vars_AFTER_PLAYER_JOINED);
             run_AFTER_PLAYER_JOINED = false;
         }
     }
@@ -42,15 +42,13 @@ public class Main {
         parse_scripts();
         Boot.consoleLog("Starting scripts by SERVER_START event...");
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
-        script_SERVER_START_event(varObjects);
+        script_start_by_event_name ("SERVER_START", varObjects);
 
     }
     public static void parse_scripts() throws IOException {
        Integer index = 0;
        while (index < Var.config.scripts.size()){
-           Boot.consoleLog("wwwwwwwwwwwwwwwwwwwwddddddddddddddddddddwwww");
            ScriptFileObject scriptFileObject = new ScriptFileObject();
-           Boot.consoleLog("wwwwwww");
            scriptFileObject.parse_config_file(ReadFile.getFile(Var.path + Var.config.scripts.get(index)));
            Var.scripts.add(scriptFileObject);
            index = index + 1;
@@ -80,12 +78,12 @@ public class Main {
             index = index + 1;
         }
     }
-    public static void script_SERVER_START_event(ArrayList<VarObject> varObjects){
+    public static void script_start_by_event_name(String event_name, ArrayList<VarObject> varObjects){
         Integer index = 0;
         while (index < Var.scripts.size()){
             ScriptFileObject scriptFileObject = Var.scripts.get(index);
             ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
-            if (Objects.equals(scriptFileObject.start_event, "SERVER_START")){
+            if (Objects.equals(scriptFileObject.start_event, event_name)){
                 scriptFileObject.varObjects = safe_varObjects;
                 scriptFileObject.start();
             }

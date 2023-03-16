@@ -20,6 +20,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static at.feddis08.bukkit.logic.scripts.Main.script_start_by_event_name;
+
 public class onEvent {
     public static void onEntityClick (PlayerInteractEntityEvent event) throws SQLException {
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
@@ -50,7 +52,7 @@ public class onEvent {
                 varObjects.add(new VarObject("death_cause", "STRING", ev.getCause().toString()));
                 varObjects.add(new VarObject("final_damage", "INTEGER", String.valueOf(ev.getFinalDamage())));
                 varObjects.add(new VarObject("player_health", "INTEGER", String.valueOf(player.getHealth())));
-                Main.script_PLAYER_DEATH_event(varObjects);
+                script_start_by_event_name ("PLAYER_DEATH", varObjects);
                 player.setHealth(player.getMaxHealth());
             }
         }

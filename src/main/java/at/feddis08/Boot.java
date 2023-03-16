@@ -6,6 +6,7 @@ import at.feddis08.tools.io.database.Functions;
 import at.feddis08.tools.io.database.JDBC;
 import at.feddis08.tools.io.database.objects.RankObject;
 import at.feddis08.tools.io.text_files.files.Main;
+import at.feddis08.tools.io.text_files.files.file_objects.ClusterFileObject;
 import at.feddis08.tools.io.text_files.files.file_objects.ConfigFileObject;
 import at.feddis08.tools.remote_interface.server.Start;
 
@@ -18,9 +19,8 @@ public class Boot {
 
 
     public static ConfigFileObject config;
+    public static ClusterFileObject cluster_config;
     public static String prefix = "MMO-RPG: ";
-    public static boolean debugMode = true;
-    public static boolean enable_discord_bot = false;
     public static boolean discord_bot_active = false;
     public static Logger logger;
     public static boolean is_bungee = false;
@@ -33,6 +33,7 @@ public class Boot {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        consoleLog("Starting all systems...");
         if (config.enable_discord_bot) {
             discord_bot_active = true;
             DISCORD.start_bot();
@@ -40,7 +41,7 @@ public class Boot {
         }else{
             debugLog("Discord_bot disabled");
         }
-        consoleLog("Starting...");
+        if (config.is_in_network) discord_bot_active = false;
         if (config.enable_debug_log){
             consoleLog("DebugMode enabled...");
         }else{
@@ -77,31 +78,31 @@ public class Boot {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        try {
-            Start.main();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-
-            Thread t = new Thread("web"){
-                @Override
-                public void run() {
-                    try {
-                        at.feddis08.tools.remote_interface.web_service.Main.start();
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
+        if (config.is_in_network == false){
+            try {
+                Start.main();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                    Thread t = new Thread("web"){
+                    @Override
+                    public void run() {
+                        try {
+                            at.feddis08.tools.remote_interface.web_service.Main.start();
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
                     }
-                }
-            };
-            t.start();
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+                };
+                t.start();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
-        consoleLog("Server running ...");
+        consoleLog("All Systems started. Server running ...");
     }
 
     public static void debugLog(String log){

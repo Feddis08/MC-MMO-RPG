@@ -29,7 +29,7 @@ public class CheckScriptsFile {
             myWriter.write(System.lineSeparator());
             myWriter.write("# add: <file_name>");
             myWriter.write(System.lineSeparator());
-            myWriter.write("add: basic_scripts.txt");
+            myWriter.write("#add: basic_scripts.txt");
             myWriter.write(System.lineSeparator());
             myWriter.close();
         }

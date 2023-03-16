@@ -13,6 +13,10 @@ public class ConfigFileObject {
     public String database_password = "database_password";
     public Boolean enable_discord_bot = false;
     public String discord_bot_token = "";
+    public boolean is_in_network = false;
+    public int network_port = 25564;
+    public String network_master_ip = "localhost";
+    public String node_token = "1234567890";
 
     public void parse_config_file(ArrayList<String> lines){
         System.out.println("Parsing config file ...");
@@ -42,6 +46,28 @@ public class ConfigFileObject {
                     enable_debug_log = false;
                     parse_ok = true;
                 }
+            }
+            if (Objects.equals(params[0], "is_in_network:")){
+                if (Objects.equals(params[1], "true")){
+                    is_in_network = true;
+                    parse_ok = true;
+                }
+                if (Objects.equals(params[1], "false")){
+                    is_in_network = false;
+                    parse_ok = true;
+                }
+            }
+            if (Objects.equals(params[0], "network_port:")){
+                network_port = Integer.parseInt(params[1]);
+                parse_ok = true;
+            }
+            if (Objects.equals(params[0], "network_master_ip:")){
+                network_master_ip = params[1];
+                parse_ok = true;
+            }
+            if (Objects.equals(params[0], "node_token:")){
+                node_token = params[1];
+                parse_ok = true;
             }
             if (Objects.equals(params[0], "database_ip:")){
                 database_ip = params[1];

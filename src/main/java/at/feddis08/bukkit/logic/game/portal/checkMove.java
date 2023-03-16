@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static at.feddis08.bukkit.logic.scripts.Main.script_start_by_event_name;
+
 public class checkMove {
 
     public static void check (PlayerMoveEvent event) throws SQLException {
@@ -43,7 +45,7 @@ public class checkMove {
                     ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
                     varObjects.add(new VarObject("player_id", "STRING", dbPlayer.id));
                     varObjects.add(new VarObject("portal_id", "STRING", dbPortalTrack.id));
-                    Main.script_PLAYER_TELEPORTED_BY_PORTAL_event(varObjects);
+                    script_start_by_event_name ("PLAYER_TELEPORTED_BY_PORTAL", varObjects);
                 }
             }
             index = index + 1;

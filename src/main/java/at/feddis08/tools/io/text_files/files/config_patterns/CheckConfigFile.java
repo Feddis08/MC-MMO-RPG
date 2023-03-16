@@ -25,6 +25,18 @@ public class CheckConfigFile {
             myWriter.write(System.lineSeparator());
             myWriter.write("enable_debug_log: true");
             myWriter.write(System.lineSeparator());
+            myWriter.write("# ---General cluster settings---");
+            myWriter.write(System.lineSeparator());
+            myWriter.write("is_in_network: false");
+            myWriter.write(System.lineSeparator());
+            myWriter.write("network_port: 25564");
+            myWriter.write(System.lineSeparator());
+            myWriter.write("node_token: 1234567890");
+            myWriter.write(System.lineSeparator());
+            myWriter.write("network_master_ip: localhost");
+            myWriter.write(System.lineSeparator());
+            myWriter.write("node_token: 1234567890");
+            myWriter.write(System.lineSeparator());
             myWriter.write("# ---database settings---");
             myWriter.write(System.lineSeparator());
             myWriter.write("database_ip: localhost");
