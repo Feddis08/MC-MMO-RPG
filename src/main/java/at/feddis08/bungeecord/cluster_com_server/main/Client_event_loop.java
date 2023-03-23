@@ -1,9 +1,8 @@
 package at.feddis08.bungeecord.cluster_com_server.main;
 
 import at.feddis08.Boot;
-import at.feddis08.bungeecord.cluster_com_server.socket.Client;
+import at.feddis08.bungeecord.cluster_com_server.socket.Server_node_client;
 import at.feddis08.bungeecord.cluster_com_server.socket.Server;
-import jdk.security.jarsigner.JarSigner;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -12,44 +11,56 @@ import java.util.Objects;
 
 public class Client_event_loop extends Thread {
     public void run(){
-        Boot.consoleLog("e2ewgrdwd");
         while (true){
             try {
                 loop();
             } catch (IOException | SQLException e) {
                 e.printStackTrace();
             }
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            //Thread.sleep(1);
         }
     }
 
     public static void loop() throws IOException, SQLException {
         Integer index = 0;
         try {
-        while (index < Server.clients.size()) {
-            Client client = Server.clients.get(index);
+        while (index < Server.servernodeclients.size()) {
+            Server_node_client servernodeclient = Server.servernodeclients.get(index);
             Integer index2 = 0;
             try {
-            while (index2 < client.event_requests.size()) {
-                JSONObject request = client.event_requests.get(index2);
+            while (index2 < servernodeclient.event_requests.size()) {
+                JSONObject request = servernodeclient.event_requests.get(index2);
                 String message_id = request.getString("id");
                 String event_name = request.getString("event_name");
                 if (Objects.equals(event_name, "ping")){
 
                 }
-                if (Objects.equals(event_name, "init-connection")){
+                if (Objects.equals(event_name, "init-connection") && servernodeclient.authenticated == false){
                     for (String token : Boot.cluster_config.nodes_tokens){
                         if (Objects.equals(token, request.getString("token"))){
-                            client.authenticated = true;
+                            servernodeclient.authenticated = true;
+                            servernodeclient.server_data = new Server_client_data();
+                            servernodeclient.server_data.name = request.getString("server_name");
+                            servernodeclient.server_data.token = request.getString("token");
                             JSONObject json = new JSONObject();
                             json.put("status", "ok");
-                            client.send_response(json, request);
+                            servernodeclient.send_response(json, request);
                         }
                     }
+                }
+                if (Objects.equals(event_name, "script-event-triggered") && servernodeclient.authenticated){
+                    for (Server_node_client servernodeclient2 : Server.servernodeclients){
+                        if (servernodeclient2.id != servernodeclient.id && servernodeclient2.authenticated){
+                            JSONObject json = new JSONObject();
+                            json.put("server_name", servernodeclient.server_data.name);
+                            json.put("server_token", servernodeclient.server_data.token);
+                            json.put("status", "ok");
+                            servernodeclient2.send_event(json, "script-event-triggered");
+                        }
+                    }
+                    JSONObject json = new JSONObject();
+                    json.put("status", "ok");
+                    servernodeclient.send_response (json, request);
                 }
 
                 index2 = index2 + 1;
@@ -58,7 +69,7 @@ public class Client_event_loop extends Thread {
                 index2 = index2 + 1;
                 e.printStackTrace();
             }
-            client.event_requests.clear();
+            servernodeclient.event_requests.clear();
             index = index + 1;
         }
         } catch (Exception e) {

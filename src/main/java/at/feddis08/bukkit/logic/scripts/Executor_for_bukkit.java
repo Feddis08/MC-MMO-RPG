@@ -25,12 +25,13 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 public class Executor_for_bukkit {
-    public static ArrayList<VarObject> execute_functions(ArrayList<String> args, Integer index) throws SQLException {
+    public static ArrayList<VarObject> execute_functions(ArrayList<String> args, Integer index) throws SQLException, IOException, InterruptedException {
         ArrayList<VarObject> result = new ArrayList<>();
         if (Objects.equals(args.get(0), "open_inv_on_minecraft_player:")){
             Methods.open_inv_on_minecraft_player(ScriptFileObject.get_value(args.get(1)).get(0).value, ScriptFileObject.get_value(args.get(2)).get(0).value);

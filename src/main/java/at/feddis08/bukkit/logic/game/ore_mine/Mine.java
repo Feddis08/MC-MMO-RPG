@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.TreeType;
 import org.bukkit.block.Block;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -52,11 +53,11 @@ public class Mine {
             }
         }
     }
-    public void break_block(String player_id){
+    public void break_block(String player_id) throws IOException, InterruptedException {
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
         varObjects.add(new VarObject("player_id", "STRING", player_id));
         varObjects.add(new VarObject("mine_name", "STRING", name));
         passed_ticks = 0;
-        Main.script_PLAYER_MINE_BLOCK_event(varObjects);
+        Main.script_start_by_event_name("PLAYER_MINE_BLOCK", varObjects);
     }
 }

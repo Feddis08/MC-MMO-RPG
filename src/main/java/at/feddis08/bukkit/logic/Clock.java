@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,7 @@ public class Clock {
     public static String inventory_type = "";
     public static TradeTable tradeTable = null;
     
-    public static void tick(ServerTickStartEvent event) throws SQLException {
+    public static void tick(ServerTickStartEvent event) throws SQLException, IOException, InterruptedException {
         at.feddis08.bukkit.logic.game.ore_mine.Main.check_mines_per_tick();
         at.feddis08.bukkit.logic.game.mob_spawner.Main.check_spawners_per_tick();
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();

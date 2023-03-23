@@ -1,12 +1,18 @@
 package at.feddis08.bukkit.logic.scripts;
 
 import at.feddis08.Boot;
+import at.feddis08.bukkit.cluster_com_client.Start_cluster_client;
+import at.feddis08.bukkit.cluster_com_client.socket.Node_client;
+import at.feddis08.bukkit.minecraft.tools.Methods;
+import at.feddis08.bungeecord.cluster_com_server.socket.Server_node_client;
 import at.feddis08.tools.io.text_files.files.ReadFile;
 import at.feddis08.tools.io.text_files.files.config_patterns.CheckScriptsFile;
 import at.feddis08.tools.io.text_files.files.file_objects.ScriptFileObject;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Main {
@@ -16,7 +22,7 @@ public class Main {
     public static Boolean run_AFTER_PLAYER_CLICK_EVENT = false;
     public static ArrayList<VarObject> vars_AFTER_PLAYER_CLICK_EVENT = new ArrayList<>();
 
-    public static void reload_all() throws IOException {
+    public static void reload_all() throws IOException, InterruptedException {
         run_AFTER_PLAYER_JOINED = false;
         run_AFTER_PLAYER_CLICK_EVENT = false;
         vars_AFTER_PLAYER_JOINED = new ArrayList<>();
@@ -27,7 +33,7 @@ public class Main {
         start();
     }
 
-    public static void check_all_after_events(){
+    public static void check_all_after_events() throws IOException, InterruptedException {
         if (run_AFTER_PLAYER_CLICK_EVENT){
             script_start_by_event_name ("AFTER_PLAYER_CLICK_ENTITY", vars_AFTER_PLAYER_CLICK_EVENT);
             run_AFTER_PLAYER_CLICK_EVENT = false;
@@ -37,7 +43,7 @@ public class Main {
             run_AFTER_PLAYER_JOINED = false;
         }
     }
-    public static void start() throws IOException {
+    public static void start() throws IOException, InterruptedException {
         Boot.debugLog("Start parsing scripts...");
         parse_scripts();
         Boot.consoleLog("Starting scripts by SERVER_START event...");
@@ -78,120 +84,35 @@ public class Main {
             index = index + 1;
         }
     }
-    public static void script_start_by_event_name(String event_name, ArrayList<VarObject> varObjects){
+    public static void script_start_by_event_name(String event_name, ArrayList<VarObject> varObjects) throws IOException, InterruptedException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("script_event_name", event_name);
+        jsonObject.put("varObjects", varObjects.toArray());
+        if (!Boot.is_bungee) {
+            Start_cluster_client.nodeclient.send_event(jsonObject, "script-event-triggered");
+            jsonObject = Start_cluster_client.nodeclient.wait_for_response(jsonObject);
+        }else{
+            jsonObject.put("status", "ok");
+        }
+        if (Objects.equals(jsonObject.getString("status"), "ok")){
         Integer index = 0;
-        while (index < Var.scripts.size()){
-            ScriptFileObject scriptFileObject = Var.scripts.get(index);
-            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
-            if (Objects.equals(scriptFileObject.start_event, event_name)){
-                scriptFileObject.varObjects = safe_varObjects;
-                scriptFileObject.start();
+            while (index < Var.scripts.size()){
+                ScriptFileObject scriptFileObject = Var.scripts.get(index);
+                ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
+                if (Objects.equals(scriptFileObject.start_event, event_name)){
+                    scriptFileObject.varObjects = safe_varObjects;
+                    scriptFileObject.start();
+                }
+                index = index + 1;
             }
-            index = index + 1;
         }
     }
-    public static void script_SERVER_STOP_event(ArrayList<VarObject> varObjects){
+    public static void script_start_by_event_name_and_from_other_source(String event_name, ArrayList<VarObject> varObjects) throws IOException {
         Integer index = 0;
         while (index < Var.scripts.size()){
             ScriptFileObject scriptFileObject = Var.scripts.get(index);
             ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
-            if (Objects.equals(scriptFileObject.start_event, "SERVER_STOP")){
-                scriptFileObject.varObjects = safe_varObjects;
-                scriptFileObject.start();
-            }
-            index = index + 1;
-        }
-    }
-    public static void script_TICK_START_event(ArrayList<VarObject> varObjects){
-        Integer index = 0;
-        while (index < Var.scripts.size()){
-            ScriptFileObject scriptFileObject = Var.scripts.get(index);
-            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
-            if (Objects.equals(scriptFileObject.start_event, "TICK_START")){
-                scriptFileObject.varObjects = safe_varObjects;
-                scriptFileObject.start();
-            }
-            index = index + 1;
-        }
-    }
-    public static void script_PLAYER_CLICK_ENTITY_event(ArrayList<VarObject> varObjects){
-        Integer index = 0;
-        while (index < Var.scripts.size()){
-            ScriptFileObject scriptFileObject = Var.scripts.get(index);
-            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
-            if (Objects.equals(scriptFileObject.start_event, "PLAYER_CLICK_ENTITY")){
-                scriptFileObject.varObjects = safe_varObjects;
-                scriptFileObject.start();
-            }
-            index = index + 1;
-        }
-    }
-    public static void script_PLAYER_KILL_MOB_FROM_SPAWNER_event(ArrayList<VarObject> varObjects){
-        Integer index = 0;
-        while (index < Var.scripts.size()){
-            ScriptFileObject scriptFileObject = Var.scripts.get(index);
-            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
-            if (Objects.equals(scriptFileObject.start_event, "PLAYER_KILL_MOB_FROM_SPAWNER")){
-                scriptFileObject.varObjects = safe_varObjects;
-                scriptFileObject.start();
-            }
-            index = index + 1;
-        }
-    }
-    public static void script_PLAYER_TELEPORTED_BY_PORTAL_event(ArrayList<VarObject> varObjects){
-        Integer index = 0;
-        while (index < Var.scripts.size()){
-            ScriptFileObject scriptFileObject = Var.scripts.get(index);
-            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
-            if (Objects.equals(scriptFileObject.start_event, "PLAYER_TELEPORTED_BY_PORTAL")){
-                scriptFileObject.varObjects = safe_varObjects;
-                scriptFileObject.start();
-            }
-            index = index + 1;
-        }
-    }
-    public static void script_PLAYER_JOINED_event(ArrayList<VarObject> varObjects){
-        Integer index = 0;
-        while (index < Var.scripts.size()){
-            ScriptFileObject scriptFileObject = Var.scripts.get(index);
-            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
-            if (Objects.equals(scriptFileObject.start_event, "PLAYER_JOINED")){
-                scriptFileObject.varObjects = safe_varObjects;
-                scriptFileObject.start();
-            }
-            index = index + 1;
-        }
-    }
-    public static void script_PLAYER_MINE_BLOCK_event(ArrayList<VarObject> varObjects){
-        Integer index = 0;
-        while (index < Var.scripts.size()){
-            ScriptFileObject scriptFileObject = Var.scripts.get(index);
-            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
-            if (Objects.equals(scriptFileObject.start_event, "PLAYER_MINE_BLOCK")){
-                scriptFileObject.varObjects = safe_varObjects;
-                scriptFileObject.start();
-            }
-            index = index + 1;
-        }
-    }
-    public static void script_PLAYER_DEATH_event(ArrayList<VarObject> varObjects){
-        Integer index = 0;
-        while (index < Var.scripts.size()){
-            ScriptFileObject scriptFileObject = Var.scripts.get(index);
-            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
-            if (Objects.equals(scriptFileObject.start_event, "PLAYER_DEATH")){
-                scriptFileObject.varObjects = safe_varObjects;
-                scriptFileObject.start();
-            }
-            index = index + 1;
-        }
-    }
-    public static void script_AFTER_PLAYER_CLICK_ENTITY_event(ArrayList<VarObject> varObjects){
-        Integer index = 0;
-        while (index < Var.scripts.size()){
-            ScriptFileObject scriptFileObject = Var.scripts.get(index);
-            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
-            if (Objects.equals(scriptFileObject.start_event, "AFTER_PLAYER_CLICK_ENTITY")){
+            if (Objects.equals(scriptFileObject.start_event, event_name) && scriptFileObject.listen_to_others_events){
                 scriptFileObject.varObjects = safe_varObjects;
                 scriptFileObject.start();
             }

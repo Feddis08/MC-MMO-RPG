@@ -4,6 +4,9 @@ import at.feddis08.tools.io.database.objects.Discord_playerObject;
 import at.feddis08.tools.io.text_files.files.file_objects.Discord_ConfigFileObject;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.entity.message.MessageFlag;
+import org.javacord.api.interaction.SlashCommand;
+import org.javacord.api.interaction.SlashCommandInteraction;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -22,6 +25,16 @@ public class DISCORD {
                 .join();
         MessageListeners.create_message_listener();
 
+        SlashCommand.with("ping", "A simple ping pong command!").createGlobal(api).join();
+
+        api.addSlashCommandCreateListener(event -> {
+            SlashCommandInteraction slashCommandInteraction = event.getSlashCommandInteraction();
+            if (slashCommandInteraction.getCommandName().equals("ping")) {
+                slashCommandInteraction.createImmediateResponder()
+                        .setContent("Pong!")
+                        .respond();
+            }
+        });
     }
     public static Discord_playerObject get_discordPlayer_by_discord_id(String discord_id){
         Integer index = 0;
@@ -44,4 +57,5 @@ public class DISCORD {
             index = index + 1;
         }
     }
+
 }

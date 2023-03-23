@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Server extends Thread{
     public static Thread th = new Server();
     public static ServerSocket serverSocket;
-    public static ArrayList<Client> clients = new ArrayList<>();
+    public static ArrayList<Server_node_client> servernodeclients = new ArrayList<>();
 
     public void run(){
         try {
@@ -22,14 +22,14 @@ public class Server extends Thread{
             e.printStackTrace();
         }
     }
-    public static Client get_client(String id) throws IOException {
+    public static Server_node_client get_client(String id) throws IOException {
         Integer index = 0;
-        Client client;
-        Client result = null;
-        while (index < Server.clients.size()) {
-            client = Server.clients.get(index);
-            if (Objects.equals(client.id, id)) {
-               result = client;
+        Server_node_client servernodeclient;
+        Server_node_client result = null;
+        while (index < Server.servernodeclients.size()) {
+            servernodeclient = Server.servernodeclients.get(index);
+            if (Objects.equals(servernodeclient.id, id)) {
+               result = servernodeclient;
             }
             index = index + 1;
         }
@@ -38,13 +38,13 @@ public class Server extends Thread{
     public static void close() throws IOException {
         th.stop();
         Integer index = 0;
-        while (index < Server.clients.size()) {
-            Client client = Server.clients.get(index);
-            client.closeConnection();
+        while (index < Server.servernodeclients.size()) {
+            Server_node_client servernodeclient = Server.servernodeclients.get(index);
+            servernodeclient.closeConnection();
             index = index + 1;
         }
         serverSocket.close();
-        clients.clear();
+        servernodeclients.clear();
     }
     public static void startServer() throws IOException {
         serverSocket = new ServerSocket(Start_cluster_server.port);
@@ -52,8 +52,8 @@ public class Server extends Thread{
         try {
             while (true){
                 Socket c = serverSocket.accept();
-                Client client = new Client(c);
-                clients.add(client);
+                Server_node_client servernodeclient = new Server_node_client(c);
+                servernodeclients.add(servernodeclient);
             }
 
         } catch (Exception e) {

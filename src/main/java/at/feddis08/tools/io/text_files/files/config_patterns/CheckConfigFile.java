@@ -25,6 +25,8 @@ public class CheckConfigFile {
             myWriter.write(System.lineSeparator());
             myWriter.write("enable_debug_log: true");
             myWriter.write(System.lineSeparator());
+            myWriter.write("server_name: Server1");
+            myWriter.write(System.lineSeparator());
             myWriter.write("# ---General cluster settings---");
             myWriter.write(System.lineSeparator());
             myWriter.write("is_in_network: false");

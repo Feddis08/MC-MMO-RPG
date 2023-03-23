@@ -8,6 +8,7 @@ import at.feddis08.bukkit.minecraft.tools.classes.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
@@ -73,7 +74,7 @@ public class Spawner {
             clear_spawner();
         }
     }
-    public void kill_mob(String player_id){
+    public void kill_mob(String player_id) throws IOException, InterruptedException {
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
         varObjects.add(new VarObject("player_id", "STRING", player_id));
         varObjects.add(new VarObject("spawner_name", "STRING", name));

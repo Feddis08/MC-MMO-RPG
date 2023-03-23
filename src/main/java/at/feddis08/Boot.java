@@ -73,11 +73,6 @@ public class Boot {
             Rank_api.set_prefix("operator", "Operator");
             Rank_api.set_prefix_color("operator", "red");
         }
-        try {
-            at.feddis08.bukkit.logic.scripts.Main.start();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
         if (config.is_in_network == false){
             try {
                 Start.main();

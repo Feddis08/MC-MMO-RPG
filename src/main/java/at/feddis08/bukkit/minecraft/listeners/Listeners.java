@@ -30,7 +30,7 @@ public class Listeners implements org.bukkit.event.Listener {
         onEvent.onEntityClick(event);
     }
     @EventHandler
-    public static void onDamage(EntityDamageEvent event) {
+    public static void onDamage(EntityDamageEvent event) throws IOException, InterruptedException {
         onEvent.damage(event);
     }
     @EventHandler
@@ -42,15 +42,15 @@ public class Listeners implements org.bukkit.event.Listener {
         onDeath.onDeath(event);
     }
     @EventHandler
-    public static void onPlayerMove(PlayerMoveEvent event) throws SQLException {
+    public static void onPlayerMove(PlayerMoveEvent event) throws SQLException, IOException, InterruptedException {
         onEvent.onPlayerMove(event);
     }
     @EventHandler
-    public static void onBlockBreak(BlockBreakEvent event) throws SQLException {
+    public static void onBlockBreak(BlockBreakEvent event) throws SQLException, IOException, InterruptedException {
         onBlockEvents.onBlockBreak(event);
     }
     @EventHandler
-    public static void onTickEvent(ServerTickStartEvent event) throws SQLException {Clock.tick(event);}
+    public static void onTickEvent(ServerTickStartEvent event) throws SQLException, IOException, InterruptedException {Clock.tick(event);}
     @EventHandler
     public static void onPlayerInteractEvent(PlayerInteractEvent event){
         onPlayerInteract.playerInteract(event);

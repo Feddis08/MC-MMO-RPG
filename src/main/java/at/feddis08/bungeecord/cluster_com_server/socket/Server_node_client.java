@@ -2,6 +2,7 @@ package at.feddis08.bungeecord.cluster_com_server.socket;
 
 
 import at.feddis08.Boot;
+import at.feddis08.bungeecord.cluster_com_server.main.Server_client_data;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -12,7 +13,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Client extends Thread{
+public class Server_node_client extends Thread{
     public Socket clientSocket;
     public BufferedReader input;
     public PrintWriter output;
@@ -20,9 +21,10 @@ public class Client extends Thread{
     public ArrayList<JSONObject> event_requests = new ArrayList<>();
     public ArrayList<JSONObject> response_requests = new ArrayList<>();
     public int id;
+    public Server_client_data server_data;
     public boolean authenticated = false;
 
-    public Client(Socket clientSocket) throws IOException {
+    public Server_node_client(Socket clientSocket) throws IOException {
         this.clientSocket = clientSocket;
         this.output = new PrintWriter(clientSocket.getOutputStream(), true);
         this.input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -58,19 +60,22 @@ public class Client extends Thread{
         msg.put("event_name", event_name);
         output.println(msg);
     }
-    public JSONObject wait_for_response(JSONObject msg_to_wait) {
-       int index = 0;
-       JSONObject response = null;
-       while (response == null) {
-           if (response_requests.size() != 0 ) {
-               JSONObject jsonObject = new JSONObject(this.response_requests.get(index));
-               if (Objects.equals(jsonObject.getString("id"), msg_to_wait.getString("id"))) {
-                   response = jsonObject;
-                   this.response_requests.remove(index);
-               }
-           }
-       }
-       return response;
+    public JSONObject wait_for_response(JSONObject msg_to_wait) throws InterruptedException {
+        int index = 0;
+        JSONObject response = null;
+        while (response == null) {
+            if (response_requests.size() > 0 ) {
+                Thread.sleep(100);
+                JSONObject jsonObject = this.response_requests.get(index);
+                Boot.consoleLog(jsonObject.toString());
+                Boot.consoleLog(msg_to_wait.toString());
+                if (Objects.equals(jsonObject.getString("id"), msg_to_wait.getString("id"))) {
+                    response = jsonObject;
+                    this.response_requests.remove(index);
+                }
+            }
+        }
+        return response;
     }
     public void closeConnection() throws IOException {
         th.stop();
