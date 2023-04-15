@@ -21,5 +21,12 @@ public class BUNGEE extends Plugin {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        try {
+            at.feddis08.bukkit.logic.scripts.Main.start();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

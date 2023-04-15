@@ -3,7 +3,7 @@ You can use this project to create and manage a minecraft rpg game. It is capabl
   permission system,
   mail system,
   discord implementation for managing the server over discord,
-  a special client to manage and interact with the server and players,
+  a special servernodeclient to manage and interact with the server and players,
   mining system with an easy template for creating these,
   mob spawners with respawn times,
   an unique designed script language for programming the rpg/server,

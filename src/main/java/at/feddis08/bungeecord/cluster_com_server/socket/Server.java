@@ -24,12 +24,12 @@ public class Server extends Thread{
     }
     public static Client get_client(String id) throws IOException {
         Integer index = 0;
-        Client client;
+        Client servernodeclient;
         Client result = null;
         while (index < Server.clients.size()) {
-            client = Server.clients.get(index);
-            if (Objects.equals(client.id, id)) {
-               result = client;
+            servernodeclient = Server.clients.get(index);
+            if (Objects.equals(servernodeclient.id, id)) {
+               result = servernodeclient;
             }
             index = index + 1;
         }
@@ -39,8 +39,8 @@ public class Server extends Thread{
         th.stop();
         Integer index = 0;
         while (index < Server.clients.size()) {
-            Client client = Server.clients.get(index);
-            client.closeConnection();
+            Client servernodeclient = Server.clients.get(index);
+            servernodeclient.closeConnection();
             index = index + 1;
         }
         serverSocket.close();
@@ -52,8 +52,8 @@ public class Server extends Thread{
         try {
             while (true){
                 Socket c = serverSocket.accept();
-                Client client = new Client(c);
-                clients.add(client);
+                Client servernodeclient = new Client(c);
+                clients.add(servernodeclient);
             }
 
         } catch (Exception e) {

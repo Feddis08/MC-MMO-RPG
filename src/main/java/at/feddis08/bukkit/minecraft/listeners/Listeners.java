@@ -49,11 +49,23 @@ public class Listeners implements org.bukkit.event.Listener {
     }
     @EventHandler
     public static void onPlayerMove(PlayerMoveEvent event) throws SQLException {
-        onEvent.onPlayerMove(event);
+        try {
+            onEvent.onPlayerMove(event);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
     @EventHandler
     public static void onBlockBreak(BlockBreakEvent event) throws SQLException {
-        onBlockEvents.onBlockBreak(event);
+        try {
+            onBlockEvents.onBlockBreak(event);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
     @EventHandler
     public static void onTickEvent(ServerTickStartEvent event) throws SQLException {

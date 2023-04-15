@@ -1,32 +1,12 @@
 package at.feddis08.tools.io.text_files.files.file_objects;
 
 import at.feddis08.Boot;
-import at.feddis08.bukkit.MMORPG;
-import at.feddis08.bukkit.commands.Gamemode;
-import at.feddis08.bukkit.commands.Rank;
-import at.feddis08.bukkit.commands.Warp;
 import at.feddis08.bukkit.logic.scripts.*;
-import at.feddis08.tools.io.database.Functions;
-import at.feddis08.tools.io.database.objects.PlayerObject;
-import at.feddis08.tools.io.database.objects.Player_questObject;
-import at.feddis08.tools.io.database.objects.RankObject;
-import at.feddis08.bukkit.logic.game.Var;
-import at.feddis08.bukkit.logic.game.mob_spawner.Spawner;
-import at.feddis08.bukkit.logic.game.ore_mine.Main;
-import at.feddis08.bukkit.logic.game.ore_mine.Mine;
-import at.feddis08.bukkit.minecraft.tools.Methods;
-import at.feddis08.bukkit.minecraft.tools.classes.Book;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.UUID;
 
 import static at.feddis08.bukkit.logic.scripts.Executor.execute_functions;
 
@@ -41,6 +21,7 @@ public class ScriptFileObject extends Thread {
     public Boolean show_enabling_message = true;
     public String author = "";
     public static Integer current_line = 0;
+    public boolean listen_to_others_events = false;
     public void run(){
         Boot.consoleLog("dd");
         start();
@@ -186,6 +167,10 @@ public class ScriptFileObject extends Thread {
                         }
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
                     }
                     index2 = 0;
                     if (result.size() == 0) {
@@ -252,6 +237,10 @@ public class ScriptFileObject extends Thread {
                     }
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
                 index = index + 1;
             }
@@ -281,7 +270,16 @@ public class ScriptFileObject extends Thread {
                     parse_ok = true;
                 }else{
                     parse_ok = true;
-                    Boot.consoleLog("ERROR: Could not parse config file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
+                    Boot.consoleLog("ERROR: Could not parse script file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
+                }
+            }
+            if (Objects.equals(params[0], "<LISTEN_TO_OTHERS_EVENTS>")) {
+                if (params.length == 1){
+                    listen_to_others_events = true;
+                    parse_ok = true;
+                }else{
+                    parse_ok = true;
+                    Boot.consoleLog("ERROR: Could not parse script file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
                 }
             }
             if (Objects.equals(params[0], "<SHOW_ENABLING_MESSAGE>")) {
@@ -290,7 +288,7 @@ public class ScriptFileObject extends Thread {
                     parse_ok = true;
                 }else{
                     parse_ok = true;
-                    Boot.consoleLog("ERROR: Could not parse config file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
+                    Boot.consoleLog("ERROR: Could not parse script file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
                 }
             }
             if (Objects.equals(params[0], "<SCRIPT_NAME>")) {
@@ -299,7 +297,7 @@ public class ScriptFileObject extends Thread {
                     parse_ok = true;
                 }else{
                     parse_ok = true;
-                    Boot.consoleLog("ERROR: Could not parse config file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
+                        Boot.consoleLog("ERROR: Could not parse script file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
                 }
             }
             if (Objects.equals(params[0], "<START_EVENT>")) {
@@ -308,7 +306,7 @@ public class ScriptFileObject extends Thread {
                     parse_ok = true;
                 }else{
                     parse_ok = true;
-                    Boot.consoleLog("ERROR: Could not parse config file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
+                        Boot.consoleLog("ERROR: Could not parse script file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
                 }
             }
             if (Objects.equals(params[0], "<$>")) {
@@ -323,7 +321,7 @@ public class ScriptFileObject extends Thread {
             }
             index = index + 1;
             if (!(parse_ok))
-                Boot.consoleLog("ERROR: Could not parse config file. Load default value. Error at line: " + String.valueOf(index));
+                Boot.consoleLog("ERROR: Could not parse script file. Missing argument. Load default value. Error at line: " + String.valueOf(index + 1));
 
         }
         Boot.consoleLog("[" + name +"]: By " + author + ", parsed and loaded!");

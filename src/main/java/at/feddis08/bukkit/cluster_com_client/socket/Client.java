@@ -1,13 +1,11 @@
 package at.feddis08.bukkit.cluster_com_client.socket;
 
-import javax.sound.sampled.*;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Objects;
 
 import at.feddis08.Boot;
-import at.feddis08.bukkit.MMORPG;
 import org.json.JSONObject;
 
 public class Client extends Thread{

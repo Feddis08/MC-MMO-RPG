@@ -20,7 +20,7 @@ import static at.feddis08.bukkit.logic.scripts.Main.script_start_by_event_name;
 
 public class checkMove {
 
-    public static void check (PlayerMoveEvent event) throws SQLException {
+    public static void check (PlayerMoveEvent event) throws SQLException, IOException, InterruptedException {
         ArrayList<PortalTrackObject> dataObjs = Functions.getAllPortalTracks();
         Integer x1 = event.getTo().getBlockX();
         Integer y1 = event.getTo().getBlockY();

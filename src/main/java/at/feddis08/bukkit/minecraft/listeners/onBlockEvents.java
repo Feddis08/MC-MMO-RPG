@@ -10,11 +10,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 
 public class onBlockEvents{
-    public static void onBlockBreak(BlockBreakEvent event) throws SQLException {
+    public static void onBlockBreak(BlockBreakEvent event) throws SQLException, IOException, InterruptedException {
         Player player = event.getPlayer();
         PlayerObject dbPlayer = Functions.getPlayer("id", player.getUniqueId().toString());
         Mine mine = Main.get_mine_by_cords(event.getBlock().getWorld().getName(), event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ());

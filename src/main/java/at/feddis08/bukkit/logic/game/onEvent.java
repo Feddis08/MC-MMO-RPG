@@ -40,7 +40,7 @@ public class onEvent {
     public static void onInventoryDrag(InventoryDragEvent event){
         CheckInventoryTrack.checkInvDrag(event);
     }
-    public static void onPlayerMove(PlayerMoveEvent event) throws SQLException {
+    public static void onPlayerMove(PlayerMoveEvent event) throws SQLException, IOException, InterruptedException {
         checkMove.check(event);
     }
     public static void damage(EntityDamageEvent ev) throws IOException, InterruptedException {
