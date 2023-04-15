@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -45,7 +46,13 @@ public class checkMove {
                     ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
                     varObjects.add(new VarObject("player_id", "STRING", dbPlayer.id));
                     varObjects.add(new VarObject("portal_id", "STRING", dbPortalTrack.id));
-                    script_start_by_event_name ("PLAYER_TELEPORTED_BY_PORTAL", varObjects);
+                    try {
+                        script_start_by_event_name ("PLAYER_TELEPORTED_BY_PORTAL", varObjects);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
             index = index + 1;

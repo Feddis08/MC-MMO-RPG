@@ -39,7 +39,19 @@ public class Client_event_loop extends Thread {
                 String message_id = request.getString("id");
                 String event_name = request.getString("event_name");
                 if (Objects.equals(event_name, "ping")){
-
+                    if (client.authenticated){
+                        JSONObject json = new JSONObject();
+                        json.put("status", "ok");
+                        client.send_event(json, "ping");
+                    }
+                }
+                if (Objects.equals(event_name, "script_event_triggered")){
+                    if (client.authenticated){
+                        JSONObject json = new JSONObject();
+                        json.put("status", "ok");
+                        json.put("event_start", true);
+                        client.send_response(json, request);
+                    }
                 }
                 if (Objects.equals(event_name, "init-connection")){
                     for (String token : Boot.cluster_config.nodes_tokens){

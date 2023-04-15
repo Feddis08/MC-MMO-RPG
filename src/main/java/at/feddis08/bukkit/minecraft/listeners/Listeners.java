@@ -31,7 +31,13 @@ public class Listeners implements org.bukkit.event.Listener {
     }
     @EventHandler
     public static void onDamage(EntityDamageEvent event) {
-        onEvent.damage(event);
+        try {
+            onEvent.damage(event);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
     @EventHandler
     public static void test(InventoryDragEvent event){
@@ -50,7 +56,15 @@ public class Listeners implements org.bukkit.event.Listener {
         onBlockEvents.onBlockBreak(event);
     }
     @EventHandler
-    public static void onTickEvent(ServerTickStartEvent event) throws SQLException {Clock.tick(event);}
+    public static void onTickEvent(ServerTickStartEvent event) throws SQLException {
+        try {
+            Clock.tick(event);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
     @EventHandler
     public static void onPlayerInteractEvent(PlayerInteractEvent event){
         onPlayerInteract.playerInteract(event);

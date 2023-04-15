@@ -77,6 +77,8 @@ public class Boot {
             at.feddis08.bukkit.logic.scripts.Main.start();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
         if (config.is_in_network == false){
             try {

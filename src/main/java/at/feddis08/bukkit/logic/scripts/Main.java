@@ -1,9 +1,12 @@
 package at.feddis08.bukkit.logic.scripts;
 
 import at.feddis08.Boot;
+import at.feddis08.bukkit.cluster_com_client.Start_cluster_client;
 import at.feddis08.tools.io.text_files.files.ReadFile;
 import at.feddis08.tools.io.text_files.files.config_patterns.CheckScriptsFile;
 import at.feddis08.tools.io.text_files.files.file_objects.ScriptFileObject;
+import com.google.gson.Gson;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,10 +27,14 @@ public class Main {
         Var.scripts = new ArrayList<>();
         Var.var_pools = new ArrayList<>();
         CheckScriptsFile.check();
-        start();
+        try {
+            start();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static void check_all_after_events(){
+    public static void check_all_after_events() throws IOException, InterruptedException {
         if (run_AFTER_PLAYER_CLICK_EVENT){
             script_start_by_event_name ("AFTER_PLAYER_CLICK_ENTITY", vars_AFTER_PLAYER_CLICK_EVENT);
             run_AFTER_PLAYER_CLICK_EVENT = false;
@@ -37,7 +44,7 @@ public class Main {
             run_AFTER_PLAYER_JOINED = false;
         }
     }
-    public static void start() throws IOException {
+    public static void start() throws IOException, InterruptedException {
         Boot.debugLog("Start parsing scripts...");
         parse_scripts();
         Boot.consoleLog("Starting scripts by SERVER_START event...");
@@ -78,16 +85,41 @@ public class Main {
             index = index + 1;
         }
     }
-    public static void script_start_by_event_name(String event_name, ArrayList<VarObject> varObjects){
+    public static void script_start_by_event_name(String event_name, ArrayList<VarObject> varObjects) throws InterruptedException, IOException {
         Integer index = 0;
-        while (index < Var.scripts.size()){
-            ScriptFileObject scriptFileObject = Var.scripts.get(index);
-            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
-            if (Objects.equals(scriptFileObject.start_event, event_name)){
-                scriptFileObject.varObjects = safe_varObjects;
-                scriptFileObject.start();
+        if (Boot.is_bungee){
+
+        }else if(Start_cluster_client.client != null){
+            if (Objects.equals(event_name, "TICK_START")){
+                while (index < Var.scripts.size()){
+                    ScriptFileObject scriptFileObject = Var.scripts.get(index);
+                    ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
+                    if (Objects.equals(scriptFileObject.start_event, event_name)){
+                        scriptFileObject.varObjects = safe_varObjects;
+                        scriptFileObject.start();
+                    }
+                    index = index + 1;
+                }
+            }else{
+                JSONObject json = new JSONObject();
+                Gson gson = new Gson();
+                gson.toJson(varObjects);
+                json.put("script_event_trigger_name", event_name);
+                json.put("varObjects", gson.toString());
+                Start_cluster_client.client.send_event(json, "script_event_triggered");
+                json = Start_cluster_client.client.wait_for_response(json);
+                if (Objects.equals(json.getString("status"), "ok") && json.getBoolean("event_start")){
+                    while (index < Var.scripts.size()){
+                        ScriptFileObject scriptFileObject = Var.scripts.get(index);
+                        ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
+                        if (Objects.equals(scriptFileObject.start_event, event_name)){
+                            scriptFileObject.varObjects = safe_varObjects;
+                            scriptFileObject.start();
+                        }
+                        index = index + 1;
+                    }
+                }
             }
-            index = index + 1;
         }
     }
     public static void script_SERVER_STOP_event(ArrayList<VarObject> varObjects){

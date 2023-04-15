@@ -8,6 +8,7 @@ import at.feddis08.bukkit.minecraft.tools.classes.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
@@ -80,6 +81,12 @@ public class Spawner {
         if (!Objects.equals(passed_ticks, cool_down_ticks)){
             passed_ticks = 0;
         }
-        script_start_by_event_name ("PLAYER_KILL_MOB_FROM_SPAWNER", varObjects);
+        try {
+            script_start_by_event_name ("PLAYER_KILL_MOB_FROM_SPAWNER", varObjects);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

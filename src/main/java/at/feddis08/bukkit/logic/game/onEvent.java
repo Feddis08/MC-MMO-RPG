@@ -16,6 +16,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -42,7 +43,7 @@ public class onEvent {
     public static void onPlayerMove(PlayerMoveEvent event) throws SQLException {
         checkMove.check(event);
     }
-    public static void damage(EntityDamageEvent ev){
+    public static void damage(EntityDamageEvent ev) throws IOException, InterruptedException {
         if (ev.getEntity() instanceof Player){
             Player player = (Player) ev.getEntity();
             if (player.getHealth() - ev.getFinalDamage() <= 0){

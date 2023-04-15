@@ -33,6 +33,8 @@ public final class MMORPG extends JavaPlugin{
             Start_cluster_client.connect();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
         // Plugin startup logic
         getServer().getPluginManager().registerEvents(new Listeners(), this);
