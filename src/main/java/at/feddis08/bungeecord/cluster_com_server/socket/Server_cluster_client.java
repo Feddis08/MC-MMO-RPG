@@ -13,7 +13,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Client extends Thread{
+public class Server_cluster_client extends Thread{
     public Socket clientSocket;
     public BufferedReader input;
     public PrintWriter output;
@@ -24,7 +24,7 @@ public class Client extends Thread{
     public Server_client_data server_data;
     public boolean authenticated = false;
 
-    public Client(Socket clientSocket) throws IOException {
+    public Server_cluster_client(Socket clientSocket) throws IOException {
         this.clientSocket = clientSocket;
         this.output = new PrintWriter(clientSocket.getOutputStream(), true);
         this.input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
@@ -64,11 +64,9 @@ public class Client extends Thread{
         int index = 0;
         JSONObject response = null;
         while (response == null) {
-            if (response_requests.size() > 0 ) {
-                Thread.sleep(100);
+            Thread.sleep(1);
+            if (response_requests.size() != 0 ) {
                 JSONObject jsonObject = this.response_requests.get(index);
-                Boot.consoleLog(jsonObject.toString());
-                Boot.consoleLog(msg_to_wait.toString());
                 if (Objects.equals(jsonObject.getString("id"), msg_to_wait.getString("id"))) {
                     response = jsonObject;
                     this.response_requests.remove(index);

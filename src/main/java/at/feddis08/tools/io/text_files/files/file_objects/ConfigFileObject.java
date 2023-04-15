@@ -17,7 +17,7 @@ public class ConfigFileObject {
     public int network_port = 25564;
     public String network_master_ip = "localhost";
     public String node_token = "1234567890";
-    public String server_name = "Server1";
+    public String server_name = "lobby";
 
     public void parse_config_file(ArrayList<String> lines){
         System.out.println("Parsing config file ...");

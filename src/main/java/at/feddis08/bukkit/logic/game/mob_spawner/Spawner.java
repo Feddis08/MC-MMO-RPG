@@ -82,7 +82,7 @@ public class Spawner {
             passed_ticks = 0;
         }
         try {
-            script_start_by_event_name ("PLAYER_KILL_MOB_FROM_SPAWNER", varObjects);
+            script_start_by_event_name ("PLAYER_KILL_MOB_FROM_SPAWNER", varObjects, false);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

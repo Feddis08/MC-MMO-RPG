@@ -101,7 +101,7 @@ public final class MMORPG extends JavaPlugin{
         Thread.sleep(1000);
         Boot.consoleLog("Starting scripts by SERVER_STOP event...");
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
-        script_start_by_event_name ("SERVER_STOP", varObjects);
+        script_start_by_event_name ("SERVER_STOP", varObjects, false);
         at.feddis08.tools.remote_interface.server.socket.Server.close();
         Boot.consoleLog("Closing WebService...");
         at.feddis08.tools.remote_interface.web_service.Main.stop();

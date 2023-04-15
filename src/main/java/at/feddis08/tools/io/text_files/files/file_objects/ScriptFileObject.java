@@ -40,7 +40,7 @@ public class ScriptFileObject extends Thread {
             error = true;
             throw_error("[" + this.name + "]: ERROR: Var " + name + " is already defined!", current_line);
         }else{
-            if (type == "ARRAY"){
+            if (Objects.equals(type, "ARRAY")){
                 varObjects.add(new ArrayObject(name, new ArrayList<VarObject>()));
             }else{
                 varObjects.add(new VarObject(name, type, ""));

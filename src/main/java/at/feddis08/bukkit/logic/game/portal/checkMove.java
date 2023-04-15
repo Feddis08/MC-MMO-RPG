@@ -47,7 +47,7 @@ public class checkMove {
                     varObjects.add(new VarObject("player_id", "STRING", dbPlayer.id));
                     varObjects.add(new VarObject("portal_id", "STRING", dbPortalTrack.id));
                     try {
-                        script_start_by_event_name ("PLAYER_TELEPORTED_BY_PORTAL", varObjects);
+                        script_start_by_event_name ("PLAYER_TELEPORTED_BY_PORTAL", varObjects, false);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     } catch (IOException e) {

@@ -3,12 +3,21 @@ package at.feddis08.bukkit.cluster_com_client.socket;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import at.feddis08.Boot;
+import at.feddis08.bukkit.MMORPG;
+import at.feddis08.bukkit.logic.scripts.Main;
+import at.feddis08.bukkit.logic.scripts.Var;
+import at.feddis08.bukkit.logic.scripts.VarObject;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import org.bukkit.Bukkit;
+import org.checkerframework.checker.units.qual.A;
 import org.json.JSONObject;
 
-public class Client extends Thread{
+public class Cluster_client extends Thread{
     private Socket clientSocket;
     private PrintWriter output;
     private BufferedReader input;
@@ -73,12 +82,15 @@ public class Client extends Thread{
         if (Objects.equals(event.getString("event_name"), "ping")){
             JSONObject json = new JSONObject();
             json.put("status", "ok");
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("token", Boot.config.node_token);
-            this.send_event(jsonObject, "init-connection");
-            jsonObject = this.wait_for_response(jsonObject);
             Thread.sleep(1000);
             this.send_event(json, "ping");
+        }
+        if (Objects.equals(event.getString("event_name"), "script_event_triggered")){
+            Gson gson = new Gson();
+            ArrayList<VarObject> varObjects = gson.fromJson(event.getString("varObjects"), new TypeToken<List<VarObject>>(){}.getType());
+            varObjects.add(new VarObject("server_name","STRING" , Boot.config.server_name));
+            Boot.consoleLog(varObjects.toString());
+            Main.script_start_by_event_name(event.getString("script_event_name"), varObjects, true);
         }
 
     }

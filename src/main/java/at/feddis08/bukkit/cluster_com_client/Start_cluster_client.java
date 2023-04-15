@@ -2,15 +2,15 @@ package at.feddis08.bukkit.cluster_com_client;
 
 
 import at.feddis08.Boot;
-import at.feddis08.bukkit.cluster_com_client.socket.Client;
+import at.feddis08.bukkit.cluster_com_client.socket.Cluster_client;
 
 import java.io.IOException;
 
 public class Start_cluster_client {
-    public static Client client = null;
+    public static Cluster_client client = null;
 
     public static void connect() throws IOException, InterruptedException {
-        client = new Client();
+        client = new Cluster_client();
         client.startConnection(Boot.config.network_master_ip, Boot.config.network_port);
     }
 }

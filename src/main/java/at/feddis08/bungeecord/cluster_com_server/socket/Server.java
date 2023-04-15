@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Server extends Thread{
     public static Thread th = new Server();
     public static ServerSocket serverSocket;
-    public static ArrayList<Client> clients = new ArrayList<>();
+    public static ArrayList<Server_cluster_client> clients = new ArrayList<>();
 
     public void run(){
         try {
@@ -22,10 +22,10 @@ public class Server extends Thread{
             e.printStackTrace();
         }
     }
-    public static Client get_client(String id) throws IOException {
+    public static Server_cluster_client get_client(String id) throws IOException {
         Integer index = 0;
-        Client servernodeclient;
-        Client result = null;
+        Server_cluster_client servernodeclient;
+        Server_cluster_client result = null;
         while (index < Server.clients.size()) {
             servernodeclient = Server.clients.get(index);
             if (Objects.equals(servernodeclient.id, id)) {
@@ -39,7 +39,7 @@ public class Server extends Thread{
         th.stop();
         Integer index = 0;
         while (index < Server.clients.size()) {
-            Client servernodeclient = Server.clients.get(index);
+            Server_cluster_client servernodeclient = Server.clients.get(index);
             servernodeclient.closeConnection();
             index = index + 1;
         }
@@ -52,7 +52,7 @@ public class Server extends Thread{
         try {
             while (true){
                 Socket c = serverSocket.accept();
-                Client servernodeclient = new Client(c);
+                Server_cluster_client servernodeclient = new Server_cluster_client(c);
                 clients.add(servernodeclient);
             }
 

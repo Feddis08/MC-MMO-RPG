@@ -36,11 +36,11 @@ public class Main {
 
     public static void check_all_after_events() throws IOException, InterruptedException {
         if (run_AFTER_PLAYER_CLICK_EVENT){
-            script_start_by_event_name ("AFTER_PLAYER_CLICK_ENTITY", vars_AFTER_PLAYER_CLICK_EVENT);
+            script_start_by_event_name ("AFTER_PLAYER_CLICK_ENTITY", vars_AFTER_PLAYER_CLICK_EVENT, false);
             run_AFTER_PLAYER_CLICK_EVENT = false;
         }
         if (run_AFTER_PLAYER_JOINED){
-            script_start_by_event_name ("PLAYER_JOINED", vars_AFTER_PLAYER_JOINED);
+            script_start_by_event_name ("PLAYER_JOINED", vars_AFTER_PLAYER_JOINED, false);
             run_AFTER_PLAYER_JOINED = false;
         }
     }
@@ -49,7 +49,7 @@ public class Main {
         parse_scripts();
         Boot.consoleLog("Starting scripts by SERVER_START event...");
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
-        script_start_by_event_name ("SERVER_START", varObjects);
+        script_start_by_event_name ("SERVER_START", varObjects, false);
 
     }
     public static void parse_scripts() throws IOException {
@@ -85,7 +85,7 @@ public class Main {
             index = index + 1;
         }
     }
-    public static void script_start_by_event_name(String event_name, ArrayList<VarObject> varObjects) throws InterruptedException, IOException {
+    public static void script_start_by_event_name(String event_name, ArrayList<VarObject> varObjects, boolean called_by_other_server) throws InterruptedException, IOException {
         Integer index = 0;
         if (Boot.is_bungee){
 
@@ -94,6 +94,7 @@ public class Main {
                 while (index < Var.scripts.size()){
                     ScriptFileObject scriptFileObject = Var.scripts.get(index);
                     ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
+                    safe_varObjects.add(new VarObject("is_from_other_server", "STRING", "FALSE"));
                     if (Objects.equals(scriptFileObject.start_event, event_name)){
                         scriptFileObject.varObjects = safe_varObjects;
                         scriptFileObject.start();
@@ -102,19 +103,35 @@ public class Main {
                 }
             }else{
                 JSONObject json = new JSONObject();
-                Gson gson = new Gson();
-                gson.toJson(varObjects);
-                json.put("script_event_trigger_name", event_name);
-                json.put("varObjects", gson.toString());
-                Start_cluster_client.client.send_event(json, "script_event_triggered");
-                json = Start_cluster_client.client.wait_for_response(json);
+                if (!called_by_other_server){
+                    Gson gson = new Gson();
+                    json.put("script_event_name", event_name);
+                    json.put("varObjects", gson.toJson(varObjects));
+                    Start_cluster_client.client.send_event(json, "script_event_triggered");
+                    json = Start_cluster_client.client.wait_for_response(json);
+                    Boot.consoleLog("wdwd22");
+                }else{
+                    json.put("status", "ok");
+                    json.put("event_start", true);
+                    Boot.consoleLog("2398t45390");
+                }
                 if (Objects.equals(json.getString("status"), "ok") && json.getBoolean("event_start")){
                     while (index < Var.scripts.size()){
                         ScriptFileObject scriptFileObject = Var.scripts.get(index);
-                        ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
-                        if (Objects.equals(scriptFileObject.start_event, event_name)){
-                            scriptFileObject.varObjects = safe_varObjects;
-                            scriptFileObject.start();
+                        if (called_by_other_server && scriptFileObject.listen_to_others_events){
+                            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
+                            safe_varObjects.add(new VarObject("is_from_other_server", "STRING", "TRUE"));
+                            if (Objects.equals(scriptFileObject.start_event, event_name)){
+                                scriptFileObject.varObjects = safe_varObjects;
+                                scriptFileObject.start();
+                            }
+                        }else if (!called_by_other_server){
+                            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
+                            safe_varObjects.add(new VarObject("is_from_other_server", "STRING", "FALSE"));
+                            if (Objects.equals(scriptFileObject.start_event, event_name)){
+                                scriptFileObject.varObjects = safe_varObjects;
+                                scriptFileObject.start();
+                            }
                         }
                         index = index + 1;
                     }

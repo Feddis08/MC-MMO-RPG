@@ -35,7 +35,7 @@ public class Clock {
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
         varObjects.add(new VarObject("tick_count", "INTEGER", String.valueOf(event.getTickNumber())));
         try {
-            script_start_by_event_name ("TICK_START", varObjects);
+            script_start_by_event_name ("TICK_START", varObjects, false);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

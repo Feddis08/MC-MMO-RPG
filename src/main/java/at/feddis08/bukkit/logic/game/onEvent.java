@@ -53,7 +53,7 @@ public class onEvent {
                 varObjects.add(new VarObject("death_cause", "STRING", ev.getCause().toString()));
                 varObjects.add(new VarObject("final_damage", "INTEGER", String.valueOf(ev.getFinalDamage())));
                 varObjects.add(new VarObject("player_health", "INTEGER", String.valueOf(player.getHealth())));
-                script_start_by_event_name ("PLAYER_DEATH", varObjects);
+                script_start_by_event_name ("PLAYER_DEATH", varObjects, false);
                 player.setHealth(player.getMaxHealth());
             }
         }
@@ -73,6 +73,19 @@ public class onEvent {
         }else{
             event.setCancelled(true);
             event.getPlayer().sendMessage(ChatColor.RED + "You need permissions: doPlaceBlock!");
+        }
+        ArrayList<VarObject> varObjects = new ArrayList<>();
+        varObjects.add(new VarObject("block_type_name", "STRING", event.getBlock().getType().name()));
+        varObjects.add(new VarObject("player_id", "STRING", event.getPlayer().getUniqueId().toString()));
+        varObjects.add(new VarObject("block_x", "INTEGER", String.valueOf(event.getBlock().getX())));
+        varObjects.add(new VarObject("block_y", "INTEGER", String.valueOf(event.getBlock().getY())));
+        varObjects.add(new VarObject("block_z", "INTEGER", String.valueOf(event.getBlock().getZ())));
+        try {
+            Main.script_start_by_event_name("BLOCK_PLACED", varObjects, false);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -58,6 +58,6 @@ public class Mine {
         varObjects.add(new VarObject("player_id", "STRING", player_id));
         varObjects.add(new VarObject("mine_name", "STRING", name));
         passed_ticks = 0;
-        Main.script_start_by_event_name("PLAYER_MINE_BLOCK", varObjects);
+        Main.script_start_by_event_name("PLAYER_MINE_BLOCK", varObjects, false);
     }
 }
