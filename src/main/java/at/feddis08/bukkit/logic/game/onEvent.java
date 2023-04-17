@@ -76,6 +76,7 @@ public class onEvent {
         }
         ArrayList<VarObject> varObjects = new ArrayList<>();
         varObjects.add(new VarObject("block_type_name", "STRING", event.getBlock().getType().name()));
+        varObjects.add(new VarObject("world_name", "STRING", event.getBlock().getWorld().getName()));
         varObjects.add(new VarObject("player_id", "STRING", event.getPlayer().getUniqueId().toString()));
         varObjects.add(new VarObject("block_x", "INTEGER", String.valueOf(event.getBlock().getX())));
         varObjects.add(new VarObject("block_y", "INTEGER", String.valueOf(event.getBlock().getY())));

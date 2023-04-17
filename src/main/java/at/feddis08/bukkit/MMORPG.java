@@ -9,6 +9,7 @@ import at.feddis08.tools.discord.DISCORD;
 import at.feddis08.bukkit.logic.scripts.VarObject;
 import at.feddis08.bukkit.minecraft.listeners.Listeners;
 import at.feddis08.bukkit.minecraft.tools.Methods;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
@@ -23,6 +24,7 @@ public final class MMORPG extends JavaPlugin{
 
 
     public static org.bukkit.Server Server;
+    public static Plugin plugin;
 
     @Override
     public void onEnable() {
@@ -37,6 +39,7 @@ public final class MMORPG extends JavaPlugin{
             throw new RuntimeException(e);
         }
         // Plugin startup logic
+        plugin = this;
         getServer().getPluginManager().registerEvents(new Listeners(), this);
         getCommand("Test").setExecutor(new TestCommand());
         getCommand("rank").setExecutor(new Rank());

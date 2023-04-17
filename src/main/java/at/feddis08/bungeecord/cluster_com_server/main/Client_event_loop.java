@@ -1,14 +1,18 @@
 package at.feddis08.bungeecord.cluster_com_server.main;
 
 import at.feddis08.Boot;
+import at.feddis08.bungeecord.BUNGEE;
 import at.feddis08.bungeecord.cluster_com_server.socket.Server_cluster_client;
 import at.feddis08.bungeecord.cluster_com_server.socket.Server;
+import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.rmi.ServerError;
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Client_event_loop extends Thread {
     public void run(){
@@ -42,6 +46,35 @@ public class Client_event_loop extends Thread {
                         JSONObject json = new JSONObject();
                         json.put("status", "ok");
                         client.send_event(json, "ping");
+                    }
+                }
+                if (Objects.equals(event_name, "send_player_to_server")){
+                    if (client.authenticated){
+                        for (Server_cluster_client client2 : Server.clients) {
+                            if (client2.authenticated && Objects.equals(client2.server_data.name, request.getString("server_name"))){
+                                ProxiedPlayer player = BUNGEE.proxyServer.getPlayer(UUID.fromString(request.getString("player_id")));
+                                ServerInfo target_server = BUNGEE.proxyServer.getServerInfo(client2.server_data.name);
+                                JSONObject jsonObject = new JSONObject();
+                                if (!Objects.equals(player.getServer().getInfo().getName(), target_server.getName())) {
+                                    jsonObject.put("player_id", player.getUniqueId().toString());
+                                    jsonObject.put("from_server", client.server_data.name);
+                                    client2.send_event(jsonObject, "send_player_to_server");
+                                    jsonObject = client2.wait_for_response(jsonObject);
+                                    if (jsonObject.getBoolean("ready")) {
+                                        player.connect(target_server);
+                                        jsonObject = client2.wait_for_response(jsonObject);
+                                        JSONObject jsonObject2 = new JSONObject();
+                                        jsonObject2.put("arrived", jsonObject.getBoolean("arrived"));
+                                        client.send_response(jsonObject2, request);
+                                    }
+                                }else{
+                                    jsonObject.put("status", "not_ok");
+                                    jsonObject.put("info", "already connected");
+                                    client2.send_response(jsonObject, request);
+
+                                }
+                            }
+                        }
                     }
                 }
                 if (Objects.equals(event_name, "script_event_triggered")){

@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Server_cluster_client extends Thread{
@@ -21,7 +22,7 @@ public class Server_cluster_client extends Thread{
     public ArrayList<JSONObject> event_requests = new ArrayList<>();
     public ArrayList<JSONObject> response_requests = new ArrayList<>();
     public int id;
-    public Server_client_data server_data;
+    public Server_client_data server_data = new Server_client_data();
     public boolean authenticated = false;
 
     public Server_cluster_client(Socket clientSocket) throws IOException {
@@ -63,18 +64,26 @@ public class Server_cluster_client extends Thread{
     public JSONObject wait_for_response(JSONObject msg_to_wait) throws InterruptedException {
         int index = 0;
         JSONObject response = null;
+        Boot.consoleLog("w2e2e2 " + msg_to_wait.toString() + " s " + Arrays.toString(Thread.currentThread().getStackTrace()));
         while (response == null) {
             Thread.sleep(1);
             if (response_requests.size() != 0 ) {
-                JSONObject jsonObject = this.response_requests.get(index);
-                if (Objects.equals(jsonObject.getString("id"), msg_to_wait.getString("id"))) {
-                    response = jsonObject;
-                    this.response_requests.remove(index);
+                Thread.sleep(5);
+                index = 0;
+                while (index < this.response_requests.size()){
+                    JSONObject jsonObject = this.response_requests.get(index);
+                    if (Objects.equals(jsonObject.getString("id"), msg_to_wait.getString("id"))) {
+                        response = jsonObject;
+                        this.response_requests.remove(index);
+                    }
+                    index ++;
                 }
             }
         }
+        Boot.consoleLog("ewdwdf");
         return response;
     }
+
     public void closeConnection() throws IOException {
         th.stop();
         output.close();
@@ -91,7 +100,7 @@ public class Server_cluster_client extends Thread{
                 str = null;
             }
         }
-        Boot.consoleLog(str);
+        Boot.consoleLog("NODE SERVER[" + server_data.name + "]: " + str);
         return str;
     }
 }

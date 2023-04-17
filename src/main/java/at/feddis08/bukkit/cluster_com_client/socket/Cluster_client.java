@@ -3,14 +3,17 @@ package at.feddis08.bukkit.cluster_com_client.socket;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import at.feddis08.Boot;
 import at.feddis08.bukkit.MMORPG;
+import at.feddis08.bukkit.cluster_com_client.Start_cluster_client;
 import at.feddis08.bukkit.logic.scripts.Main;
 import at.feddis08.bukkit.logic.scripts.Var;
 import at.feddis08.bukkit.logic.scripts.VarObject;
+import at.feddis08.bungeecord.BUNGEE;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
@@ -25,6 +28,8 @@ public class Cluster_client extends Thread{
     public static String id = "";
     private Thread th = this;
     public boolean connected = false;
+    public ArrayList<Incoming_player> incoming_players = new ArrayList<>();
+    public boolean player_joined = false;
 
 
 
@@ -42,7 +47,9 @@ public class Cluster_client extends Thread{
         if (Objects.equals(json.getString("status"), "ok")){
             this.connected = true;
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put("status", "ok");
+            jsonObject.put("server_name", Boot.config.server_name);
+            this.send_event(jsonObject, "post-connection");
+            jsonObject = this.wait_for_response(jsonObject);
             this.send_event(jsonObject, "ping");
         }
     }
@@ -88,9 +95,40 @@ public class Cluster_client extends Thread{
         if (Objects.equals(event.getString("event_name"), "script_event_triggered")){
             Gson gson = new Gson();
             ArrayList<VarObject> varObjects = gson.fromJson(event.getString("varObjects"), new TypeToken<List<VarObject>>(){}.getType());
-            varObjects.add(new VarObject("server_name","STRING" , Boot.config.server_name));
+            varObjects.add(new VarObject("server_name","STRING" , event.getString("server_name")));
             Boot.consoleLog(varObjects.toString());
             Main.script_start_by_event_name(event.getString("script_event_name"), varObjects, true);
+        }
+        if (Objects.equals(event.getString("event_name"), "send_player_to_server")){
+            this.incoming_players.add(new Incoming_player(event.getString("player_id"), event.getString("from_server"), false));
+            boolean stop = false;
+            JSONObject json2 = new JSONObject();
+            json2.put("ready", true);
+            this.send_response(json2, event);
+            while (!stop){
+                Thread.sleep(5);
+                if (this.player_joined){
+                    Thread.sleep(5);
+                    int i = 0;
+                    for (Incoming_player i_player : this.incoming_players){
+                        Thread.sleep(5);
+                        if (Objects.equals(i_player.player_id, event.getString("player_id"))){
+                            if (i_player.arrived){
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("arrived", true);
+                                this.send_response(jsonObject, event);
+                                stop = true;
+                            }
+                        }
+                        if (!stop)
+                            i ++;
+                    }
+                    if (stop){
+                        this.incoming_players.remove(i);
+                    }
+                    player_joined = false;
+                }
+            }
         }
 
     }
@@ -119,21 +157,28 @@ public class Cluster_client extends Thread{
     public JSONObject wait_for_response(JSONObject msg_to_wait) throws InterruptedException {
         int index = 0;
         JSONObject response = null;
+        Boot.consoleLog("w2e2e2 " + msg_to_wait.toString() + " s " + Arrays.toString(Thread.currentThread().getStackTrace()));
         while (response == null) {
             Thread.sleep(1);
             if (response_requests.size() != 0 ) {
-                JSONObject jsonObject = this.response_requests.get(index);
-                if (Objects.equals(jsonObject.getString("id"), msg_to_wait.getString("id"))) {
-                    response = jsonObject;
-                    this.response_requests.remove(index);
+                Thread.sleep(5);
+                index = 0;
+                while (index < this.response_requests.size()){
+                    JSONObject jsonObject = this.response_requests.get(index);
+                    if (Objects.equals(jsonObject.getString("id"), msg_to_wait.getString("id"))) {
+                        response = jsonObject;
+                        this.response_requests.remove(index);
+                    }
+                    index ++;
                 }
             }
         }
+        Boot.consoleLog("dw344");
         return response;
     }
     public String listen() throws IOException {
-
         String str = input.readLine();
+        Boot.consoleLog(str);
         return str;
     }
 }

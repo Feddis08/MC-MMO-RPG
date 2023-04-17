@@ -1,5 +1,6 @@
 package at.feddis08.bukkit.logic.scripts;
 
+import at.feddis08.Boot;
 import at.feddis08.bukkit.MMORPG;
 import at.feddis08.bukkit.commands.Gamemode;
 import at.feddis08.bukkit.commands.Rank;
@@ -18,6 +19,8 @@ import at.feddis08.bukkit.logic.scripts.Var_pool;
 import at.feddis08.bukkit.minecraft.tools.Methods;
 import at.feddis08.bukkit.minecraft.tools.classes.Book;
 import at.feddis08.tools.io.text_files.files.file_objects.ScriptFileObject;
+import com.google.gson.Gson;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -31,45 +34,59 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
 public class Executor_for_bukkit {
-    public static ArrayList<VarObject> execute_functions(ArrayList<String> args, Integer index) throws SQLException, IOException, InterruptedException {
+    public static ArrayList<VarObject> execute_functions(ArrayList<String> args, Integer index, ScriptFileObject scriptFileObject) throws SQLException, IOException, InterruptedException {
         ArrayList<VarObject> result = new ArrayList<>();
+        if (Objects.equals(args.get(0), "minecraft.set_block:")){
+            Gson gson = new Gson();
+            Boot.consoleLog("dwdwd2222" + gson.toJson(scriptFileObject.varObjects));
+            Boot.consoleLog("232324 " + Integer.parseInt(scriptFileObject.get_value(args.get(1)).get(0).value));
+            Boot.consoleLog("232324 " + scriptFileObject.get_value(args.get(2)).get(0).value);
+            Boot.consoleLog("232324 " + scriptFileObject.get_value(args.get(3)).get(0).value);
+            Boot.consoleLog("232324 " + scriptFileObject.get_value(args.get(4)).get(0).value);
+            Boot.consoleLog("232324 " + scriptFileObject.get_value(args.get(5)).get(0).value);
+            //Bukkit.getScheduler().runTask(MMORPG.plugin, () -> MMORPG.Server.getWorld(scriptFileObject.get_value(args.get(5)).get(0).value).getBlockAt(Integer.parseInt(scriptFileObject.get_value(args.get(1)).get(0).value),Integer.parseInt(scriptFileObject.get_value(args.get(2)).get(0).value), Integer.parseInt(scriptFileObject.get_value(args.get(3)).get(0).value) ).setType(Material.getMaterial(scriptFileObject.get_value(args.get(4)).get(0).value)));
+            Bukkit.getScheduler().runTask(MMORPG.plugin, () -> MMORPG.Server.getWorld("world").getBlockAt(-191, 177, -34).setType(Material.getMaterial("DIRT")));
+        }
+        if (Objects.equals(args.get(0), "minecraft.broadcast_message:")){
+            MMORPG.Server.broadcast("System", scriptFileObject.get_value(args.get(1)).get(0).value);
+        }
         if (Objects.equals(args.get(0), "open_inv_on_minecraft_player:")){
-            Methods.open_inv_on_minecraft_player(ScriptFileObject.get_value(args.get(1)).get(0).value, ScriptFileObject.get_value(args.get(2)).get(0).value);
+            Methods.open_inv_on_minecraft_player(scriptFileObject.get_value(args.get(1)).get(0).value, scriptFileObject.get_value(args.get(2)).get(0).value);
         }
         if (Objects.equals(args.get(0), "minecraft.send_message_to_player:")){
-            Methods.send_minecraft_message_by_id(ScriptFileObject.get_value(args.get(1)).get(0).value, ScriptFileObject.get_value(args.get(2)).get(0).value);
+            Methods.send_minecraft_message_by_id(scriptFileObject.get_value(args.get(1)).get(0).value, scriptFileObject.get_value(args.get(2)).get(0).value);
         }
         if (Objects.equals(args.get(0), "minecraft.book.open:")){
-            MMORPG.Server.getPlayer(UUID.fromString(ScriptFileObject.get_value(args.get(1)).get(0).value)).closeInventory();
-            MMORPG.Server.getPlayer(UUID.fromString(ScriptFileObject.get_value(args.get(1)).get(0).value)).openBook(Var.get_book_by_display_name(ScriptFileObject.get_value(args.get(2)).get(0).value).book);
+            MMORPG.Server.getPlayer(UUID.fromString(scriptFileObject.get_value(args.get(1)).get(0).value)).closeInventory();
+            MMORPG.Server.getPlayer(UUID.fromString(scriptFileObject.get_value(args.get(1)).get(0).value)).openBook(Var.get_book_by_display_name(scriptFileObject.get_value(args.get(2)).get(0).value).book);
         }
         if (Objects.equals(args.get(0), "minecraft.book.create:")){
-            Var.books.add(new Book(ScriptFileObject.get_value(args.get(1)).get(0).value, ScriptFileObject.get_value(args.get(2)).get(0).value, ScriptFileObject.get_value(args.get(2)).get(0).value));
+            Var.books.add(new Book(scriptFileObject.get_value(args.get(1)).get(0).value, scriptFileObject.get_value(args.get(2)).get(0).value, scriptFileObject.get_value(args.get(2)).get(0).value));
         }
         if (Objects.equals(args.get(0), "minecraft.book.add_page:")){
-            BookMeta itemMeta = (BookMeta) Var.get_book_by_display_name(ScriptFileObject.get_value(args.get(1)).get(0).value).book.getItemMeta();
-            itemMeta.addPage(ScriptFileObject.get_value(args.get(2)).get(0).value);
-            Var.get_book_by_display_name(ScriptFileObject.get_value(args.get(1)).get(0).value).book.setItemMeta(itemMeta);
+            BookMeta itemMeta = (BookMeta) Var.get_book_by_display_name(scriptFileObject.get_value(args.get(1)).get(0).value).book.getItemMeta();
+            itemMeta.addPage(scriptFileObject.get_value(args.get(2)).get(0).value);
+            Var.get_book_by_display_name(scriptFileObject.get_value(args.get(1)).get(0).value).book.setItemMeta(itemMeta);
         }
         if (Objects.equals(args.get(0), "spawner.create:")){
             Spawner spawner = new Spawner();
-            spawner.name = ScriptFileObject.get_value(args.get(1)).get(0).value;
-            spawner.mob_type = ScriptFileObject.get_value(args.get(2)).get(0).value;
-            spawner.world_name = ScriptFileObject.get_value(args.get(3)).get(0).value;
-            spawner.max_mobs = Integer.parseInt(ScriptFileObject.get_value(args.get(4)).get(0).value);
-            spawner.cool_down_ticks = Integer.parseInt(ScriptFileObject.get_value(args.get(5)).get(0).value);
+            spawner.name = scriptFileObject.get_value(args.get(1)).get(0).value;
+            spawner.mob_type = scriptFileObject.get_value(args.get(2)).get(0).value;
+            spawner.world_name = scriptFileObject.get_value(args.get(3)).get(0).value;
+            spawner.max_mobs = Integer.parseInt(scriptFileObject.get_value(args.get(4)).get(0).value);
+            spawner.cool_down_ticks = Integer.parseInt(scriptFileObject.get_value(args.get(5)).get(0).value);
             at.feddis08.bukkit.logic.game.mob_spawner.Main.spawners.add(spawner);
         }
         if (Objects.equals(args.get(0), "spawner.add_location:")){
-            Spawner spawner = at.feddis08.bukkit.logic.game.mob_spawner.Main.get_spawner_by_name(ScriptFileObject.get_value(args.get(1)).get(0).value);
+            Spawner spawner = at.feddis08.bukkit.logic.game.mob_spawner.Main.get_spawner_by_name(scriptFileObject.get_value(args.get(1)).get(0).value);
             at.feddis08.bukkit.minecraft.tools.classes.Location location = new at.feddis08.bukkit.minecraft.tools.classes.Location();
-            location.x = Integer.parseInt(ScriptFileObject.get_value(args.get(2)).get(0).value);
-            location.y = Integer.parseInt(ScriptFileObject.get_value(args.get(3)).get(0).value);
-            location.z = Integer.parseInt(ScriptFileObject.get_value(args.get(4)).get(0).value);
+            location.x = Integer.parseInt(scriptFileObject.get_value(args.get(2)).get(0).value);
+            location.y = Integer.parseInt(scriptFileObject.get_value(args.get(3)).get(0).value);
+            location.z = Integer.parseInt(scriptFileObject.get_value(args.get(4)).get(0).value);
             spawner.spawn_points.add(location);
         }
         if (Objects.equals(args.get(0), "spawner.get_by_name:")){
-            Spawner spawner = at.feddis08.bukkit.logic.game.mob_spawner.Main.get_spawner_by_name (ScriptFileObject.get_value(args.get(1)).get(0).value);
+            Spawner spawner = at.feddis08.bukkit.logic.game.mob_spawner.Main.get_spawner_by_name (scriptFileObject.get_value(args.get(1)).get(0).value);
             if (!(spawner == null)){
                 result.add(new VarObject("", "STRING", String.valueOf(spawner.name)));
                 result.add(new VarObject("", "STRING", String.valueOf(spawner.mob_type)));
@@ -86,17 +103,17 @@ public class Executor_for_bukkit {
         }
         if (Objects.equals(args.get(0), "create_mine:")){
             Mine mine = new Mine();
-            mine.name = ScriptFileObject.get_value(args.get(1)).get(0).value;
-            mine.material_name = ScriptFileObject.get_value(args.get(2)).get(0).value;
-            mine.world_name = ScriptFileObject.get_value(args.get(3)).get(0).value;
-            mine.x = Integer.parseInt(ScriptFileObject.get_value(args.get(4)).get(0).value);
-            mine.y = Integer.parseInt(ScriptFileObject.get_value(args.get(5)).get(0).value);
-            mine.z = Integer.parseInt(ScriptFileObject.get_value(args.get(6)).get(0).value);
-            mine.cool_down_ticks = Integer.parseInt(ScriptFileObject.get_value(args.get(7)).get(0).value);
+            mine.name = scriptFileObject.get_value(args.get(1)).get(0).value;
+            mine.material_name = scriptFileObject.get_value(args.get(2)).get(0).value;
+            mine.world_name = scriptFileObject.get_value(args.get(3)).get(0).value;
+            mine.x = Integer.parseInt(scriptFileObject.get_value(args.get(4)).get(0).value);
+            mine.y = Integer.parseInt(scriptFileObject.get_value(args.get(5)).get(0).value);
+            mine.z = Integer.parseInt(scriptFileObject.get_value(args.get(6)).get(0).value);
+            mine.cool_down_ticks = Integer.parseInt(scriptFileObject.get_value(args.get(7)).get(0).value);
             Main.mines.add(mine);
         }
         if (Objects.equals(args.get(0), "get_mine_by_cords:")){
-            Mine mine = Main.get_mine_by_cords (ScriptFileObject.get_value(args.get(1)).get(0).value, Integer.parseInt(ScriptFileObject.get_value(args.get(2)).get(0).value), Integer.parseInt(ScriptFileObject.get_value(args.get(3)).get(0).value), Integer.parseInt(ScriptFileObject.get_value(args.get(4)).get(0).value));
+            Mine mine = Main.get_mine_by_cords (scriptFileObject.get_value(args.get(1)).get(0).value, Integer.parseInt(scriptFileObject.get_value(args.get(2)).get(0).value), Integer.parseInt(scriptFileObject.get_value(args.get(3)).get(0).value), Integer.parseInt(scriptFileObject.get_value(args.get(4)).get(0).value));
             if (!(mine == null)){
                 result.add(new VarObject("", "STRING", String.valueOf(mine.name)));
                 result.add(new VarObject("", "STRING", String.valueOf(mine.material_name)));
@@ -116,11 +133,11 @@ public class Executor_for_bukkit {
             }
         }
         if (Objects.equals(args.get(0), "break_mine:")){
-            Mine mine = Main.get_mine_by_name (ScriptFileObject.get_value(args.get(1)).get(0).value);
-            mine.break_block(ScriptFileObject.get_value(args.get(2)).get(0).value);
+            Mine mine = Main.get_mine_by_name (scriptFileObject.get_value(args.get(1)).get(0).value);
+            mine.break_block(scriptFileObject.get_value(args.get(2)).get(0).value);
         }
         if (Objects.equals(args.get(0), "get_mine_by_name:")){
-            Mine mine = Main.get_mine_by_name (ScriptFileObject.get_value(args.get(1)).get(0).value);
+            Mine mine = Main.get_mine_by_name (scriptFileObject.get_value(args.get(1)).get(0).value);
             if (!(mine == null)){
                 result.add(new VarObject("", "STRING", String.valueOf(mine.name)));
                 result.add(new VarObject("", "STRING", String.valueOf(mine.material_name)));
@@ -140,20 +157,20 @@ public class Executor_for_bukkit {
             }
         }
         if (Objects.equals(args.get(0), "minecraft.change_gamemode_of_player:")){
-            Gamemode.changeBukkitPlayerGamemode(ScriptFileObject.get_value(args.get(1)).get(0).value, ScriptFileObject.get_value(args.get(2)).get(0).value);
+            Gamemode.changeBukkitPlayerGamemode(scriptFileObject.get_value(args.get(1)).get(0).value, scriptFileObject.get_value(args.get(2)).get(0).value);
         }
         if (Objects.equals(args.get(0), "warp_player:")){
-            Boolean warped = Warp.warp_player(ScriptFileObject.get_value(args.get(1)).get(0).value, ScriptFileObject.get_value(args.get(2)).get(0).value);
+            Boolean warped = Warp.warp_player(scriptFileObject.get_value(args.get(1)).get(0).value, scriptFileObject.get_value(args.get(2)).get(0).value);
         }
         if (Objects.equals(args.get(0), "minecraft.spawn_entity:")){
-            Entity entity = MMORPG.Server.getWorld(ScriptFileObject.get_value(args.get(1)).get(0).value).spawnEntity(new Location(MMORPG.Server.getWorld(ScriptFileObject.get_value(args.get(1)).get(0).value), Double.valueOf(ScriptFileObject.get_value(args.get(2)).get(0).value), Double.valueOf(ScriptFileObject.get_value(args.get(3)).get(0).value), Double.valueOf(ScriptFileObject.get_value(args.get(4)).get(0).value)), EntityType.fromName(ScriptFileObject.get_value(args.get(5)).get(0).value));
+            Entity entity = MMORPG.Server.getWorld(scriptFileObject.get_value(args.get(1)).get(0).value).spawnEntity(new Location(MMORPG.Server.getWorld(scriptFileObject.get_value(args.get(1)).get(0).value), Double.valueOf(scriptFileObject.get_value(args.get(2)).get(0).value), Double.valueOf(scriptFileObject.get_value(args.get(3)).get(0).value), Double.valueOf(scriptFileObject.get_value(args.get(4)).get(0).value)), EntityType.fromName(scriptFileObject.get_value(args.get(5)).get(0).value));
             result.add(new VarObject("", "STRING", entity.getUniqueId().toString()));
         }
         if (Objects.equals(args.get(0), "minecraft.change_entity_speed:")){
             //MMORPG.Server.getEntity(UUID.fromString(get_value(args.get(1)).get(0).value)).set
         }
         if (Objects.equals(args.get(0), "minecraft.give_player_itemstack:")){
-            MMORPG.Server.getPlayer(UUID.fromString(ScriptFileObject.get_value(args.get(1)).get(0).value)).getInventory().addItem(new ItemStack(Material.valueOf(ScriptFileObject.get_value(args.get(2)).get(0).value), Integer.parseInt(ScriptFileObject.get_value(args.get(3)).get(0).value)));
+            MMORPG.Server.getPlayer(UUID.fromString(scriptFileObject.get_value(args.get(1)).get(0).value)).getInventory().addItem(new ItemStack(Material.valueOf(scriptFileObject.get_value(args.get(2)).get(0).value), Integer.parseInt(scriptFileObject.get_value(args.get(3)).get(0).value)));
         }
         return result;
     }

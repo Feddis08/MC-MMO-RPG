@@ -13,14 +13,14 @@ import static at.feddis08.bukkit.logic.scripts.Executor.execute_functions;
 public class ScriptFileObject extends Thread {
 
     public ArrayList<ArrayList<String>> script = new ArrayList<>();
-    public static String name = "";
+    public String name = "";
     public String start_event = "SERVER_START";
-    public static ArrayList<VarObject> varObjects = new ArrayList<>();
+    public ArrayList<VarObject> varObjects = new ArrayList<>();
     public Thread t = new Thread("script");
-    public static Boolean error = false;
+    public Boolean error = false;
     public Boolean show_enabling_message = true;
     public String author = "";
-    public static Integer current_line = 0;
+    public Integer current_line = 0;
     public boolean listen_to_others_events = false;
     public void run(){
         Boot.consoleLog("dd");
@@ -51,7 +51,7 @@ public class ScriptFileObject extends Thread {
         ArrayObject arrayObject = (ArrayObject) get_var_by_name(array_name);
         arrayObject.varList.add(get_value(str).get(0));
     }
-    public static VarObject get_var_by_name(String var_name){
+    public VarObject get_var_by_name(String var_name){
         Integer index = 0;
         VarObject result = null;
         while (index < varObjects.size()){
@@ -62,11 +62,11 @@ public class ScriptFileObject extends Thread {
         }
         if (result == null){
             error = true;
-            throw_error("[" + name + "]: ERROR: Var " + var_name + " is not defined!", current_line);
+            throw_error("[" + this.name + "]: ERROR: Var " + var_name + " is not defined!", current_line);
         }
         return result;
     }
-    public static ArrayList<VarObject> get_value(String arg){
+    public ArrayList<VarObject> get_value(String arg){
         ArrayList<VarObject> result = new ArrayList<>();
         if (arg.contains("<@va>")){
             ArrayObject arrayObject = (ArrayObject) get_var_by_name(arg.split("<@va>")[1]);
@@ -101,7 +101,7 @@ public class ScriptFileObject extends Thread {
         }
         return result;
     }
-    public static void throw_error(String error, Integer line){
+    public void throw_error(String error, Integer line){
         Boot.consoleLog(varObjects.toString());
         varObjects.clear();
         error = String.valueOf(true);
@@ -161,9 +161,9 @@ public class ScriptFileObject extends Thread {
                     }
                     ArrayList<VarObject> result = new ArrayList<>();
                     try {
-                        result = execute_functions(args, index);
+                        result = execute_functions(args, index, this);
                         if (result.size() == 0 && !Boot.is_bungee){
-                            result = Executor_for_bukkit.execute_functions(args, index);
+                            result = Executor_for_bukkit.execute_functions(args, index, this);
                         }
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
@@ -231,9 +231,9 @@ public class ScriptFileObject extends Thread {
                     }
                 }
                 try {
-                    execute_functions(cmd, index);
+                    execute_functions(cmd, index, this);
                     if (!Boot.is_bungee){
-                        Executor_for_bukkit.execute_functions(cmd, index);
+                        Executor_for_bukkit.execute_functions(cmd, index, this);
                     }
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
