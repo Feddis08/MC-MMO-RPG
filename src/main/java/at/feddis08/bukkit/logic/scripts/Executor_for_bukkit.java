@@ -37,15 +37,17 @@ public class Executor_for_bukkit {
     public static ArrayList<VarObject> execute_functions(ArrayList<String> args, Integer index, ScriptFileObject scriptFileObject) throws SQLException, IOException, InterruptedException {
         ArrayList<VarObject> result = new ArrayList<>();
         if (Objects.equals(args.get(0), "minecraft.set_block:")){
-            Gson gson = new Gson();
-            Boot.consoleLog("dwdwd2222" + gson.toJson(scriptFileObject.varObjects));
-            Boot.consoleLog("232324 " + Integer.parseInt(scriptFileObject.get_value(args.get(1)).get(0).value));
-            Boot.consoleLog("232324 " + scriptFileObject.get_value(args.get(2)).get(0).value);
-            Boot.consoleLog("232324 " + scriptFileObject.get_value(args.get(3)).get(0).value);
-            Boot.consoleLog("232324 " + scriptFileObject.get_value(args.get(4)).get(0).value);
-            Boot.consoleLog("232324 " + scriptFileObject.get_value(args.get(5)).get(0).value);
-            //Bukkit.getScheduler().runTask(MMORPG.plugin, () -> MMORPG.Server.getWorld(scriptFileObject.get_value(args.get(5)).get(0).value).getBlockAt(Integer.parseInt(scriptFileObject.get_value(args.get(1)).get(0).value),Integer.parseInt(scriptFileObject.get_value(args.get(2)).get(0).value), Integer.parseInt(scriptFileObject.get_value(args.get(3)).get(0).value) ).setType(Material.getMaterial(scriptFileObject.get_value(args.get(4)).get(0).value)));
-            Bukkit.getScheduler().runTask(MMORPG.plugin, () -> MMORPG.Server.getWorld("world").getBlockAt(-191, 177, -34).setType(Material.getMaterial("DIRT")));
+            String world_name = scriptFileObject.get_value(args.get(5)).get(0).value;
+            int x = Integer.parseInt(scriptFileObject.get_value(args.get(1)).get(0).value);
+            int y = Integer.parseInt(scriptFileObject.get_value(args.get(2)).get(0).value);
+            int z = Integer.parseInt(scriptFileObject.get_value(args.get(3)).get(0).value);
+            String material_name = scriptFileObject.get_value(args.get(4)).get(0).value;
+            Bukkit.getScheduler().runTask(MMORPG.plugin, () -> MMORPG.Server
+                    .getWorld(world_name).
+                    getBlockAt(x
+                            , y
+                            , z)
+                    .setType(Material.getMaterial(material_name)));
         }
         if (Objects.equals(args.get(0), "minecraft.broadcast_message:")){
             MMORPG.Server.broadcast("System", scriptFileObject.get_value(args.get(1)).get(0).value);
