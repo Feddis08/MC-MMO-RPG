@@ -16,6 +16,7 @@ import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -58,7 +59,13 @@ public class InventoryManagment {
                             varObjects.add(new VarObject("material_name", "STRING", tradeTable.sell_item));
                             varObjects.add(new VarObject("profit", "INTEGER", String.valueOf(tradeTable.sell_price * tradeTable.sell_amount)));
                             varObjects.add(new VarObject("amount", "INTEGER", String.valueOf(tradeTable.sell_amount)));
-                            Main.script_PLAYER_SOLD_AT_SHOP_event(varObjects);
+                            try {
+                                Main.script_start_by_event_name("PLAYER_SOLD_AT_SHOP", varObjects, false);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                         } else {
                             event.setCancelled(true);
                         }
@@ -74,7 +81,13 @@ public class InventoryManagment {
                             varObjects.add(new VarObject("material_name", "STRING", tradeTable.buy_item));
                             varObjects.add(new VarObject("cost", "INTEGER", String.valueOf(tradeTable.buy_price * tradeTable.buy_amount)));
                             varObjects.add(new VarObject("amount", "INTEGER", String.valueOf(tradeTable.buy_amount)));
-                            Main.script_PLAYER_BOUGHT_AT_SHOP_event(varObjects);
+                            try {
+                                Main.script_start_by_event_name("PLAYER_BOUGHT_AT_SHOP", varObjects, false);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                             Functions.update("players_balance", "pocket", String.valueOf(player_balance.pocket - tradeTable.buy_price * tradeTable.buy_amount), player_balance.player_id, "player_id");
                             event.getWhoClicked().getInventory().addItem(new ItemStack(Material.getMaterial(tradeTable.buy_item), tradeTable.buy_amount));
                             MMORPG.Server.getPlayer(Functions.getPlayer("id", player_balance.player_id).player_name).sendMessage(ChatColor.GREEN + "You bought " + ChatColor.YELLOW + tradeTable.buy_item + ChatColor.GREEN + ". Now you have " + ChatColor.YELLOW + (player_balance.pocket - tradeTable.buy_amount * tradeTable.buy_price) + ChatColor.GREEN + " coins in your pocket!");

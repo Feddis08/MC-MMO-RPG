@@ -109,12 +109,12 @@ public class ScriptFileObject extends Thread {
         Boot.consoleLog(str);
     }
     public void start(){
-        Integer index = 0;
+        int index = 0;
         current_line = 0;
         if (!error) {
             Boot.consoleLog("Enabling script: " + name);
             while (index < script.size()) {
-                current_line =+ 1;
+                current_line ++;
                 ArrayList<String> cmd = script.get(index);
                 if (error) {
                     throw_error ("Script " + name + " stopped! Error at line: ", index);

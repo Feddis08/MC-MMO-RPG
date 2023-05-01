@@ -4,5 +4,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class onDeath {
     public static void onDeath(PlayerDeathEvent event){
+
     }
 }

@@ -43,7 +43,6 @@ public class Cluster_client extends Thread{
         json.put("token", Boot.config.node_token);
         this.send_event(json, "init-connection");
         json = this.wait_for_response(json);
-        Boot.consoleLog(json.toString());
         if (Objects.equals(json.getString("status"), "ok")){
             this.connected = true;
             JSONObject jsonObject = new JSONObject();
@@ -96,7 +95,6 @@ public class Cluster_client extends Thread{
             Gson gson = new Gson();
             ArrayList<VarObject> varObjects = gson.fromJson(event.getString("varObjects"), new TypeToken<List<VarObject>>(){}.getType());
             varObjects.add(new VarObject("server_name","STRING" , event.getString("server_name")));
-            Boot.consoleLog(varObjects.toString());
             Main.script_start_by_event_name(event.getString("script_event_name"), varObjects, true);
         }
         if (Objects.equals(event.getString("event_name"), "send_player_to_server")){
@@ -157,7 +155,6 @@ public class Cluster_client extends Thread{
     public JSONObject wait_for_response(JSONObject msg_to_wait) throws InterruptedException {
         int index = 0;
         JSONObject response = null;
-        Boot.consoleLog("w2e2e2 " + msg_to_wait.toString() + " s " + Arrays.toString(Thread.currentThread().getStackTrace()));
         while (response == null) {
             Thread.sleep(1);
             if (response_requests.size() != 0 ) {
@@ -173,12 +170,11 @@ public class Cluster_client extends Thread{
                 }
             }
         }
-        Boot.consoleLog("dw344");
         return response;
     }
     public String listen() throws IOException {
         String str = input.readLine();
-        Boot.consoleLog(str);
+        Boot.debugLog(str);
         return str;
     }
 }

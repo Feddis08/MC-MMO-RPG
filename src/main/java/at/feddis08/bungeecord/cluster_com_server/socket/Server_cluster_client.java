@@ -64,7 +64,6 @@ public class Server_cluster_client extends Thread{
     public JSONObject wait_for_response(JSONObject msg_to_wait) throws InterruptedException {
         int index = 0;
         JSONObject response = null;
-        Boot.consoleLog("w2e2e2 " + msg_to_wait.toString() + " s " + Arrays.toString(Thread.currentThread().getStackTrace()));
         while (response == null) {
             Thread.sleep(1);
             if (response_requests.size() != 0 ) {
@@ -80,7 +79,6 @@ public class Server_cluster_client extends Thread{
                 }
             }
         }
-        Boot.consoleLog("ewdwdf");
         return response;
     }
 
@@ -100,7 +98,7 @@ public class Server_cluster_client extends Thread{
                 str = null;
             }
         }
-        Boot.consoleLog("NODE SERVER[" + server_data.name + "]: " + str);
+        Boot.debugLog("NODE SERVER: [" + server_data.name + "]: " + str);
         return str;
     }
 }
