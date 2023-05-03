@@ -25,14 +25,10 @@ public class StartUp implements CommandExecutor {
                 sender.sendMessage("You already did the startup!");
                 return true;
             }else {
-                if (args.length > 2 || args.length == 1) {
-                    sender.sendMessage("For the startup you need to write this command. You must change the parameters:" +
-                            " /startUp {your player_name} {password}");
-                }else{
-                    if (args.length == 2){
+                    if (args.length == 2) {
                         String DisplayName = args[0];
                         try {
-                            Functions.update("players" , "display_name", DisplayName, dbPlayer.id, "id");
+                            Functions.update("players", "display_name", DisplayName, dbPlayer.id, "id");
                             Functions.update("players", "didStartup", "true", dbPlayer.id, "id");
                             Functions.update("users", "hash", Methods.get_hash(args[1]), dbPlayer.id, "id");
                         } catch (SQLException e) {
@@ -41,9 +37,12 @@ public class StartUp implements CommandExecutor {
 
                         Player p = (Player) sender;
                         p.kickPlayer("You are now " + DisplayName
-                                    + ". You can change the player_name/password by redoing the startup. Write  /reset  to start!");
-                            return true;
-                        }
+                                + ". You can change the player_name/password by redoing the startup. Write  /reset  to start!");
+                        return true;
+                    }
+                    else{
+                        sender.sendMessage("For the startup you need to write this command. You must change the parameters:" +
+                                " /startUp <your player_name> <password>");
                     }
                 }
             }
