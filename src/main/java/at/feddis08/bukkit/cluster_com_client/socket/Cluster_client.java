@@ -30,6 +30,7 @@ public class Cluster_client extends Thread{
     public boolean connected = false;
     public ArrayList<Incoming_player> incoming_players = new ArrayList<>();
     public boolean player_joined = false;
+    public boolean stop = false;
 
 
 
@@ -54,29 +55,36 @@ public class Cluster_client extends Thread{
     }
     public void run(){
         while (true){
-            String str = null;
+            String str = "null";
             try {
                 str = listen();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            JSONObject json = new JSONObject(str);
-            if (Objects.equals(json.getString("message_type"), "response")){
-                this.response_requests.add(json);
-            }
-            if (Objects.equals(json.getString("message_type"), "event")){
-                Thread t = new Thread(){
-                    public void run(){
-                        try {
-                            call_event(json);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        } catch (InterruptedException e) {
-                            throw new RuntimeException(e);
-                        }
+
+            try{
+                if (!Objects.equals(str, "null")) {
+                    JSONObject json = new JSONObject(str);
+                    if (Objects.equals(json.getString("message_type"), "response")) {
+                        this.response_requests.add(json);
                     }
-                };
-                t.start();
+                    if (Objects.equals(json.getString("message_type"), "event")) {
+                        Thread t = new Thread() {
+                            public void run() {
+                                try {
+                                    call_event(json);
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                } catch (InterruptedException e) {
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        };
+                        t.start();
+
+                    }
+                }
+            }catch (Exception e){
 
             }
         }
@@ -135,11 +143,15 @@ public class Cluster_client extends Thread{
         output.println(msg);
     }
 
-    public void stopConnection() throws IOException {
-        input.close();
-        output.close();
-        clientSocket.close();
+    public void stopConnection(String cause) throws IOException {
+        JSONObject event = new JSONObject();
+        event.put("cause", cause);
+
+
+        this.send_event(event, "quit-connection");
+        this.stop = true;
         th.stop();
+        clientSocket.close();
     }
     public void send_response(JSONObject msg, JSONObject msg_to_response) throws IOException {
         msg.put("id", msg_to_response.getString("id"));
@@ -156,11 +168,13 @@ public class Cluster_client extends Thread{
         int index = 0;
         JSONObject response = null;
         while (response == null) {
+            if (stop) break;
             Thread.sleep(1);
             if (response_requests.size() != 0 ) {
                 Thread.sleep(5);
                 index = 0;
                 while (index < this.response_requests.size()){
+                    if (stop) break;
                     JSONObject jsonObject = this.response_requests.get(index);
                     if (Objects.equals(jsonObject.getString("id"), msg_to_wait.getString("id"))) {
                         response = jsonObject;
@@ -174,7 +188,11 @@ public class Cluster_client extends Thread{
     }
     public String listen() throws IOException {
         String str = input.readLine();
-        Boot.debugLog(str);
-        return str;
+        if (str != null){
+            Boot.debugLog(str);
+            return str;
+        }else{
+            return "null";
+        }
     }
 }

@@ -37,16 +37,17 @@ public class Server_cluster_client extends Thread{
         while (true){
             try {
                 String str = listen();
-                JSONObject json = new JSONObject(str);
-                if (Objects.equals(json.getString("message_type"), "response")){
-                    this.response_requests.add(json);
-                }
-                if (Objects.equals(json.getString("message_type"), "event")){
-                    this.event_requests.add(json);
+                if (!Objects.equals(str, "null")){
+
+                    JSONObject json = new JSONObject(str);
+                    if (Objects.equals(json.getString("message_type"), "response")){
+                        this.response_requests.add(json);
+                    }
+                    if (Objects.equals(json.getString("message_type"), "event")){
+                        this.event_requests.add(json);
+                    }
                 }
             } catch (IOException e) {
-                e.printStackTrace();
-                th.stop();
             }
         }
     }
@@ -89,16 +90,12 @@ public class Server_cluster_client extends Thread{
         clientSocket.close();
     }
     public String listen() throws IOException {
-        String str = null;
-        if (clientSocket.isConnected()) {
-            try {
-            str = input.readLine();
-            }catch(Exception e){
-                closeConnection();
-                str = null;
-            }
+        String str = input.readLine();
+        if (str != null){
+            Boot.debugLog("NODE SERVER: [" + server_data.name + "]: " + str);
+            return str;
+        }else{
+            return "null";
         }
-        Boot.debugLog("NODE SERVER: [" + server_data.name + "]: " + str);
-        return str;
     }
 }

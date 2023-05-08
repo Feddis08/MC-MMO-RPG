@@ -78,46 +78,20 @@ public final class MMORPG extends JavaPlugin{
     public void onDisable() {
         // Plugin shutdown logic
             try {
-                shutdown();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                Boot.stop();
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
 
     public static void shutdown() throws Exception {
-        dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "Server is closing in 3 seconds ...");
-        dcFunctions.send_message_in_channel(DISCORD.config.chat, "<@&1000897321745260594> Server is closing in 3 seconds ...");
-        Boot.consoleLog("Shutdown... in 3 seconds.");
-        Boot.consoleLog("3 ...");
-        Thread.sleep(1000);
-        Boot.consoleLog("2 ...");
-        Boot.consoleLog("Clearing spawners...");
+        if (!Boot.config.is_in_network && Boot.config.enable_discord_bot){
+            dcFunctions.send_message_in_channel(DISCORD.config.read_only_chat, "Server is closing...");
+            dcFunctions.send_message_in_channel(DISCORD.config.chat, "<@&1000897321745260594> Server is closing...");
+        }
+        Boot.debugLog("Clearing spawners...");
         at.feddis08.bukkit.logic.game.mob_spawner.Main.clear_spawners();
-        Boot.consoleLog("Saving players...");
+        Boot.debugLog("Saving players...");
         Methods.update_all_players_online_state();
-        Thread.sleep(1000);
-        Boot.consoleLog("1 ...");
-        Thread.sleep(1000);
-        Boot.consoleLog("Starting scripts by SERVER_STOP event...");
-        ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
-        script_start_by_event_name ("SERVER_STOP", varObjects, false);
-        at.feddis08.tools.remote_interface.server.socket.Server.close();
-        Boot.consoleLog("Closing WebService...");
-        at.feddis08.tools.remote_interface.web_service.Main.stop();
-        Boot.debugLog("Disconnecting systems...");
-        if (Boot.config.enable_discord_bot){
-            DISCORD.api.disconnect();
-            Boot.debugLog("Disconnected Discord_bot");
-        }
-        try {
-            JDBC.myConn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        Boot.debugLog("Disconnected Database");
     }
 }

@@ -106,6 +106,16 @@ public class Client_event_loop extends Thread {
                         }
                     }
                 }
+                if (Objects.equals(event_name, "quit-connection")){
+                    if (client.authenticated){
+                        Boot.consoleLog("[NODE]" + "[" + client.server_data.name + "] Quit connection: " + request.getString("cause"));
+                        client.authenticated = false;
+                        client.th.stop();
+                        client.clientSocket.close();
+                        client.input.close();
+
+                    }
+                }
                 if (Objects.equals(event_name, "post-connection")){
                     if (client.authenticated){
                         client.server_data.name = request.getString("server_name");

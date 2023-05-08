@@ -61,6 +61,14 @@ public class Main {
            index = index + 1;
        }
     }
+    public static void enable_script_by_name(String script_name){
+        for (ScriptFileObject scriptFileObject : Var.scripts){
+            if (script_name.equals(scriptFileObject.name)){
+                scriptFileObject.varObjects.add(new VarObject("is_from_other_server", "STRING", "FALSE"));
+                scriptFileObject.start();
+            }
+        }
+    }
     public static void script_start_by_event_name(String event_name, ArrayList<VarObject> varObjects, boolean called_by_other_server) throws InterruptedException, IOException {
         int index = 0;
         if (Boot.is_bungee){

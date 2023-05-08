@@ -29,6 +29,11 @@ public class Executor {
                 throw new RuntimeException(e);
             }
         }
+        if (Objects.equals(args.get(0), "system.enable_script:")){
+            String script_name = scriptFileObject.get_value(args.get(1)).get(0).value;
+
+
+        }
         if (Objects.equals(args.get(0), "rank.create_rank:")){
             Rank_api.create_rank( scriptFileObject.get_value(args.get(1)).get(0).value);
         }
