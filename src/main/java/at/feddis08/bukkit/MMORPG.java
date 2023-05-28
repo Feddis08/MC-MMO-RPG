@@ -32,7 +32,8 @@ public final class MMORPG extends JavaPlugin{
         Server = getServer();
         Boot.start(Server.getLogger(), false);
         try {
-            Start_cluster_client.connect();
+            if (Boot.config.is_in_network)
+                Start_cluster_client.connect();
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
@@ -60,13 +61,6 @@ public final class MMORPG extends JavaPlugin{
         try {
             Methods.update_all_players_online_state();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            at.feddis08.bukkit.logic.scripts.Main.start();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
         if (Boot.discord_bot_active){

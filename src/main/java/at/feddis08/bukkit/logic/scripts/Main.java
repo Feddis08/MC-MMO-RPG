@@ -26,6 +26,7 @@ public class Main {
         vars_AFTER_PLAYER_CLICK_EVENT = new ArrayList<>();
         Var.scripts = new ArrayList<>();
         Var.var_pools = new ArrayList<>();
+        Var.scripts.clear();
         CheckScriptsFile.check();
         try {
             start();
@@ -54,6 +55,8 @@ public class Main {
     }
     public static void parse_scripts() throws IOException {
        Integer index = 0;
+       Var.scripts = new ArrayList<>();
+       Var.scripts.clear();
        while (index < Var.config.scripts.size()){
            ScriptFileObject scriptFileObject = new ScriptFileObject();
            scriptFileObject.parse_config_file(ReadFile.getFile(Var.path + Var.config.scripts.get(index)));
@@ -71,55 +74,55 @@ public class Main {
     }
     public static void script_start_by_event_name(String event_name, ArrayList<VarObject> varObjects, boolean called_by_other_server) throws InterruptedException, IOException {
         int index = 0;
-        if (Boot.is_bungee){
-
-        }else if(Start_cluster_client.client != null){
-            if (Objects.equals(event_name, "TICK_START")){
-                while (index < Var.scripts.size()){
-                    ScriptFileObject scriptFileObject = Var.scripts.get(index);
-                    ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
-                    safe_varObjects.add(new VarObject("is_from_other_server", "STRING", "FALSE"));
-                    if (Objects.equals(scriptFileObject.start_event, event_name)){
-                        scriptFileObject.varObjects = safe_varObjects;
-                        scriptFileObject.start();
-                        break;
-                    }
-                    index = index + 1;
+        boolean call = true;
+        if (Objects.equals(event_name, "TICK_START")) {
+            while (index < Var.scripts.size()) {
+                ScriptFileObject scriptFileObject = Var.scripts.get(index);
+                ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
+                safe_varObjects.add(new VarObject("is_from_other_server", "STRING", "FALSE"));
+                if (Objects.equals(scriptFileObject.start_event, event_name)) {
+                    scriptFileObject.varObjects = safe_varObjects;
+                    scriptFileObject.start();
                 }
-            }else{
-                JSONObject json = new JSONObject();
-                if (!called_by_other_server){
-                    Gson gson = new Gson();
-                    json.put("script_event_name", event_name);
-                    json.put("varObjects", gson.toJson(varObjects));
-                    Start_cluster_client.client.send_event(json, "script_event_triggered");
-                    json = Start_cluster_client.client.wait_for_response(json);
-                }else{
-                    json.put("status", "ok");
-                    json.put("event_start", true);
-                }
-                if (Objects.equals(json.getString("status"), "ok") && json.getBoolean("event_start")){
-                    while (index < Var.scripts.size()){
-                        ScriptFileObject scriptFileObject = Var.scripts.get(index);
-                        if (Objects.equals(scriptFileObject.start_event, event_name)){
-                            ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
-                            if (called_by_other_server && scriptFileObject.listen_to_others_events){
-                                safe_varObjects.add(new VarObject("is_from_other_server", "STRING", "TRUE"));
-                            }else if (!called_by_other_server){
-                                safe_varObjects.add(new VarObject("is_from_other_server", "STRING", "FALSE"));
-                            }
-                            scriptFileObject.varObjects = safe_varObjects;
-                            if (called_by_other_server && scriptFileObject.listen_to_others_events)
-                                scriptFileObject.start();
-                            else if (!called_by_other_server){
-                                scriptFileObject.start();
-                            }
-                            break;
-                        }
-                        index = index + 1;
-                    }
-                }
+                index = index + 1;
             }
+        }else{
+
+        if(Start_cluster_client.client != null){
+            JSONObject json = new JSONObject();
+            if (!called_by_other_server || Objects.equals(event_name, "TICK_START")){
+                call = false;
+                Gson gson = new Gson();
+                json.put("script_event_name", event_name);
+                json.put("varObjects", gson.toJson(varObjects));
+                Start_cluster_client.client.send_event(json, "script_event_triggered");
+                json = Start_cluster_client.client.wait_for_response(json);
+            }else{
+                json.put("status", "ok");
+                json.put("event_start", true);
+            }
+            if (Objects.equals(json.getString("status"), "ok") && json.getBoolean("event_start")) {
+                call = true;
+            }
+        }
+        if (call){
+
+            while (index < Var.scripts.size()){
+                ScriptFileObject scriptFileObject = Var.scripts.get(index);
+                if (Objects.equals(scriptFileObject.start_event, event_name)){
+                    ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
+                    if (called_by_other_server && scriptFileObject.listen_to_others_events){
+                        safe_varObjects.add(new VarObject("is_from_other_server", "STRING", "TRUE"));
+                    }else if (!called_by_other_server){
+                        safe_varObjects.add(new VarObject("is_from_other_server", "STRING", "FALSE"));
+                    }
+                    scriptFileObject.varObjects = safe_varObjects;
+                    scriptFileObject.start();
+                    //break;
+                }
+                index = index + 1;
+            }
+        }
         }
     }
 }
