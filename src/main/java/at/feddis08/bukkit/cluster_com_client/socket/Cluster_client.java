@@ -111,6 +111,15 @@ public class Cluster_client extends Thread{
             JSONObject json2 = new JSONObject();
             json2.put("ready", true);
             this.send_response(json2, event);
+
+            Thread t = new Thread() {
+                @Override
+                        public void run(){
+
+                }
+            };
+            t.start();
+
             while (!stop){
                 Thread.sleep(5);
                 if (this.player_joined){

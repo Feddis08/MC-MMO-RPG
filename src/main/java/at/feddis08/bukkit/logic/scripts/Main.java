@@ -74,6 +74,7 @@ public class Main {
     }
     public static void script_start_by_event_name(String event_name, ArrayList<VarObject> varObjects, boolean called_by_other_server) throws InterruptedException, IOException {
         int index = 0;
+        Boot.debugLog(called_by_other_server + " dddsemf;lasknfgsrd;lkg");
         boolean call = true;
         if (Objects.equals(event_name, "TICK_START")) {
             while (index < Var.scripts.size()) {
@@ -113,11 +114,13 @@ public class Main {
                     ArrayList<VarObject> safe_varObjects = (ArrayList<VarObject>) varObjects.clone();
                     if (called_by_other_server && scriptFileObject.listen_to_others_events){
                         safe_varObjects.add(new VarObject("is_from_other_server", "STRING", "TRUE"));
-                    }else if (!called_by_other_server){
+                        scriptFileObject.varObjects = safe_varObjects;
+                        scriptFileObject.start();
+                    }else if (!called_by_other_server && !scriptFileObject.listen_to_others_events){
                         safe_varObjects.add(new VarObject("is_from_other_server", "STRING", "FALSE"));
+                        scriptFileObject.varObjects = safe_varObjects;
+                        scriptFileObject.start();
                     }
-                    scriptFileObject.varObjects = safe_varObjects;
-                    scriptFileObject.start();
                     //break;
                 }
                 index = index + 1;

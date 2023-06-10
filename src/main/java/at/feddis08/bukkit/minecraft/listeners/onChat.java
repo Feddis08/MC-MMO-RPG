@@ -1,5 +1,7 @@
 package at.feddis08.bukkit.minecraft.listeners;
 
+import at.feddis08.bukkit.logic.scripts.Main;
+import at.feddis08.bukkit.logic.scripts.VarObject;
 import at.feddis08.tools.Rank_api;
 import at.feddis08.tools.io.database.Functions;
 import at.feddis08.tools.io.database.objects.PlayerObject;
@@ -9,15 +11,22 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class onChat {
-    public static void onChat(AsyncPlayerChatEvent event) throws SQLException, IOException {
+    public static void onChat(AsyncPlayerChatEvent event) throws SQLException, IOException, InterruptedException {
         event.setCancelled(true);
         String chatMessage = event.getMessage();
         Player player = event.getPlayer();
         PlayerObject dbPlayer = null;
         dbPlayer = Functions.getPlayer("id", player.getUniqueId().toString());
+
+        ArrayList<VarObject> varObjects = new ArrayList<>();
+        varObjects.add(new VarObject("player_id", "STRING", dbPlayer.id));
+        varObjects.add(new VarObject("message", "STRING", event.getMessage()));
+        Main.script_start_by_event_name("ON_CHAT", varObjects, false);
+
         if (!(Objects.equals(dbPlayer.didStartup, "true") || Objects.equals(dbPlayer.didStartup, "false") || Objects.equals(dbPlayer.didStartup, ""))){
             player.kickPlayer("please rejoin");
         }

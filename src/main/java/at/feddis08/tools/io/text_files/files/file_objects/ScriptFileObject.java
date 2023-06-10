@@ -246,7 +246,7 @@ public class ScriptFileObject extends Thread {
             }
         }
         varObjects.clear();
-        t.stop();
+        //t.stop();
     }
 
 

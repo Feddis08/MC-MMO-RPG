@@ -1,6 +1,7 @@
 package at.feddis08.bukkit.commands;
 
 import at.feddis08.Boot;
+import at.feddis08.bukkit.cluster_com_client.Start_cluster_client;
 import at.feddis08.tools.Rank_api;
 import at.feddis08.tools.io.database.Functions;
 import at.feddis08.tools.io.database.JDBC;
@@ -10,6 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.sql.SQLException;
@@ -59,6 +61,17 @@ public class Server implements CommandExecutor {
                                         Functions.restore_database_from_save(save_json);
                                         sender.sendMessage(myRs + "");
                                     }
+                                }
+                            }
+                            if (Objects.equals(args[0], "switch")) {
+
+                                JSONObject json = new JSONObject();
+                                json.put("player_id", dbPlayer.id);
+                                json.put("server_name", args[1]);
+                                try {
+                                    Start_cluster_client.client.send_event(json, "send_player_to_server");
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
                                 }
                             }
                         } else {

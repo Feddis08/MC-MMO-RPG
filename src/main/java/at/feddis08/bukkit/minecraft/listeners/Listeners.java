@@ -94,7 +94,7 @@ public class Listeners implements org.bukkit.event.Listener {
         onInvOpened.onInvOpened(event);
     }
     @EventHandler
-    public static void onChat(AsyncPlayerChatEvent event) throws SQLException, IOException {onChat.onChat(event);}
+    public static void onChat(AsyncPlayerChatEvent event) throws SQLException, IOException, InterruptedException {onChat.onChat(event);}
     @EventHandler
     public static void onPlaced(BlockPlaceEvent event) throws SQLException {onEvent.onBlockPlaced(event);}
 }
