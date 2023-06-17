@@ -111,3 +111,73 @@ buildNumber.properties
 
 # Common working directory
 run/
+
+
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
+
+*~
+*.sw[mnpcod]
+.tmp
+*.tmp
+*.tmp.*
+UserInterfaceState.xcuserstate
+$RECYCLE.BIN/
+
+*.log
+web/log.txt
+
+
+web/.sourcemaps
+web/.versions
+web/coverage
+
+# Ionic
+web/.ionic
+web/www
+web/platforms
+web/plugins
+
+# Compiled output
+web/dist
+web/tmp
+web/out-tsc
+web/bazel-out
+
+# Node
+web/node_modules
+web/npm-debug.log
+web/yarn-error.log
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+
+# Miscellaneous
+web/.angular
+web/.angular/cache
+web/.sass-cache/
+web/connect.lock
+web/coverage
+web/libpeerconnection.log
+web/testem.log
+web/typings
+
+# System files
+.DS_Store
+Thumbs.db

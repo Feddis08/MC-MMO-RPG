@@ -23,6 +23,8 @@ public class CheckConfigFile {
             myWriter.write(System.lineSeparator());
             myWriter.write("console_prefix: MMO-RPG");
             myWriter.write(System.lineSeparator());
+            myWriter.write("allow_entity_spawning: false");
+            myWriter.write(System.lineSeparator());
             myWriter.write("enable_debug_log: true");
             myWriter.write(System.lineSeparator());
             myWriter.write("server_name: Server1");

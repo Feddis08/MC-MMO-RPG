@@ -82,7 +82,7 @@ public class Listeners implements org.bukkit.event.Listener {
         onPlayerInteract.playerInteract(event);
     }
     @EventHandler
-    public static void onSpawn(EntitySpawnEvent event){
+    public static void onSpawn(EntitySpawnEvent event) throws IOException, InterruptedException {
         onSpawn.onSpawn(event);
     }
     @EventHandler
