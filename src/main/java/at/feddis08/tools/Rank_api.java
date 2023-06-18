@@ -33,6 +33,18 @@ public class Rank_api {
                 result = false;
             }
         }
+        if (!result){
+            if (has_permission_from_rank(dbRank.name, "*")){
+                result = true;
+            }else{
+                if(has_permission_from_rank(dbRank.parent, "*")){
+                    result = true;
+                }else{
+                    result = false;
+                }
+            }
+
+        }
         return result;
     }
 

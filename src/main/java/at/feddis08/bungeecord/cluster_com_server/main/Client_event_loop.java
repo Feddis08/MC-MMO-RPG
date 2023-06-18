@@ -19,8 +19,11 @@ public class Client_event_loop extends Thread {
         while (true){
             try {
                 loop();
+                Thread.sleep(1);
             } catch (IOException | SQLException e) {
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
     }
