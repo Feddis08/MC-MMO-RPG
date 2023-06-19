@@ -90,7 +90,7 @@ public class Parse_req {
                         jsonObject.put("auth_token", userObject.jsonObject.get("auth_token"));
                         jsonObject.put("auth_id", Functions.getPlayer("display_name", json_data.getString("username")).id);
 
-                        if (Objects.equals(userObject.first_name, "")) {
+                        if (!userObject.jsonObject.getBoolean("did_setup")) {
                             //account not set up
                             jsonObject.put("need_set_up", "true");
                         } else {
@@ -137,8 +137,8 @@ public class Parse_req {
                     if (req_user_id.equals(web_user.id)){
                         if (Rank_api.isPlayer_allowedTo(web_user.id, "get_own_user")){
                             PlayerObject player = Functions.getPlayer("id", web_user.id);
-                            userObject.jsonObject.put("firstname", userObject.first_name);
-                            userObject.jsonObject.put("lastname", userObject.last_name);
+                            userObject.jsonObject.put("first_name", userObject.first_name);
+                            userObject.jsonObject.put("last_name", userObject.last_name);
                             userObject.jsonObject.put("display_name", player.display_name);
                             userObject.jsonObject.put("player_name", player.player_name);
                             jsonObject.put("data", userObject.jsonObject);
@@ -152,8 +152,8 @@ public class Parse_req {
                         if (Rank_api.isPlayer_allowedTo(web_user.id, "get_other_user")){
                             userObject = Functions.getUser("id", json_data.getString("user_id"));
                             PlayerObject player = Functions.getPlayer("id", userObject.id);
-                            userObject.jsonObject.put("firstname", userObject.first_name);
-                            userObject.jsonObject.put("lastname", userObject.last_name);
+                            userObject.jsonObject.put("first_name", userObject.first_name);
+                            userObject.jsonObject.put("last_name", userObject.last_name);
                             userObject.jsonObject.put("display_name", player.display_name);
                             userObject.jsonObject.put("player_name", player.player_name);
                             jsonObject.put("data", userObject.jsonObject);
@@ -180,6 +180,7 @@ public class Parse_req {
                             userObject.jsonObject.put("email", json_data.getString("email"));
                             userObject.jsonObject.put("login_message", json_data.getString("login_message"));
                             userObject.jsonObject.put("send_message_on_loggin", json_data.getString("send_message_on_loggin"));
+                            userObject.jsonObject.put("did_setup", true);
                             userObject.data_json = userObject.jsonObject.toString();
                             Functions.update("users", "data_json", userObject.data_json, userObject.id, "id");
                             jsonObject.put("status", "success");

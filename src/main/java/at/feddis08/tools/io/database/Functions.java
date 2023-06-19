@@ -152,23 +152,21 @@ public class Functions {
     public static void createData(DataObject dataObj) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
         String sqlString = "'"
-                + dataObj.name
+                + dataObj.node_name
                 + "', '"
-                + dataObj.owner_name
+                + dataObj.data
                 + "', '"
-                + dataObj.ranks
+                + dataObj.data_type
                 + "', '"
-                + dataObj.enabled
+                + dataObj.time
                 + "', '"
-                + dataObj.registerdPlayers
-                + "', '"
-                + dataObj.online
+                + dataObj.id
                 + "'";
         String sql = "insert into data "
-                + "(name, owner_name, ranks, enabled, registerdPlayers, onlinePlayers)"
+                + "(node_name, data, data_type, time, id)"
                 + "values (" + sqlString + ")";
         stmt.executeUpdate(sql);
-        Boot.debugLog("DataTabel created: " + dataObj.name + "!");
+        Boot.debugLog("DataTabel created: " + dataObj.node_name + "!");
     }
     public static void createWorld(WorldObject dataObj) throws SQLException {
         Statement stmt = JDBC.myConn.createStatement();
@@ -468,14 +466,13 @@ public class Functions {
 
         DataObject dataObj = new DataObject();
         while (myRs.next()) {
-            dataObj.name = myRs.getString("name");
-            dataObj.owner_name = myRs.getString("owner_name");
-            dataObj.ranks = myRs.getInt("ranks");
-            dataObj.online = myRs.getInt("online");
-            dataObj.enabled = myRs.getInt("enabled");
-            dataObj.registerdPlayers = myRs.getInt("registerdPlayers");
+            dataObj.node_name = myRs.getString("node_name");
+            dataObj.data = myRs.getString("data");
+            dataObj.data_type = myRs.getString("data_type");
+            dataObj.id = myRs.getString("id");
+            dataObj.time = myRs.getInt("time");
         }
-        Boot.debugLog("Database read in data for " + dataObj.name + " !");
+        Boot.debugLog("Database read in data for " + dataObj.data_type + " !");
         return dataObj;
     }
     public static WorldObject getWorld(String column, String value) throws SQLException {

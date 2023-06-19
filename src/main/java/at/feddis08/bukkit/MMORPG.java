@@ -30,7 +30,11 @@ public final class MMORPG extends JavaPlugin{
     public void onEnable() {
 
         Server = getServer();
-        Boot.start(Server.getLogger(), false);
+        try {
+            Boot.start(Server.getLogger(), false);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         try {
             if (Boot.config.is_in_network)
                 Start_cluster_client.connect();

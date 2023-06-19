@@ -6,6 +6,7 @@ import at.feddis08.bukkit.cluster_com_client.socket.Cluster_client;
 import at.feddis08.bukkit.logic.scripts.VarObject;
 import at.feddis08.bukkit.minecraft.tools.Methods;
 import at.feddis08.bungeecord.BUNGEE;
+import at.feddis08.tools.DataLogger;
 import at.feddis08.tools.Rank_api;
 import at.feddis08.tools.discord.DISCORD;
 import at.feddis08.tools.discord.dcFunctions;
@@ -35,7 +36,7 @@ public class Boot {
     public static Logger logger;
     public static boolean is_bungee = false;
 
-    public static void start(Logger logger2, boolean bungee){
+    public static void start(Logger logger2, boolean bungee) throws SQLException {
         is_bungee = bungee;
         logger = logger2;
         try {
@@ -114,7 +115,26 @@ public class Boot {
                 throw new RuntimeException(e);
             }
         }
-        consoleLog("All Systems started. Server running ...");
+
+        Thread t = new Thread(){
+          @Override
+          public void run(){
+              try {
+                  while (true){
+                      DataLogger.start();
+                      Thread.sleep(1000);
+                  }
+              } catch (SQLException e) {
+                  throw new RuntimeException(e);
+              } catch (InterruptedException e) {
+                  throw new RuntimeException(e);
+              }
+          }
+        };
+        t.start();
+        DataLogger.start();
+
+        consoleLog("Basic Systems started. Server boot almost done...");
     }
 
     public static void debugLog(String log){

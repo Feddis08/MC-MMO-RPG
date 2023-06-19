@@ -25,6 +25,7 @@ public class UserObject {
        jsonObject.put("auth_token_date_created", "");
        jsonObject.put("ip-address", "");
        jsonObject.put("last_login", "");
+       jsonObject.put("did_setup", false);
        data_json = jsonObject.toString();
     }
     public void update_json(){

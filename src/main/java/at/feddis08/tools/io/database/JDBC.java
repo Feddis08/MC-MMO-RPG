@@ -98,7 +98,7 @@ public class JDBC {
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
-        Boot.debugLog("MYSQL ranks tabel created!");
+        Boot.debugLog("MYSQL ranks table created!");
     }
     public static void createMailsTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "mails"
@@ -112,7 +112,7 @@ public class JDBC {
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
-        Boot.debugLog("MYSQL mails tabel created!");
+        Boot.debugLog("MYSQL mails table created!");
     }
     public static void createWarpsTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "warps"
@@ -156,17 +156,15 @@ public class JDBC {
     }
     public static void createDataTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "data"
-                + "  (reloads INTEGER,"
-                + "   ranks INTEGER,"
-                + "   enabled INTEGER,"
-                + "   name VARCHAR(20),"
-                + "   registerdPlayers INTEGER,"
-                + "   owner_name VARCHAR(20),"
-                + "   onlinePlayers INTEGER )";
+                + "   (time INTEGER,"
+                + "   node_name VARCHAR(256),"
+                + "   id VARCHAR(256),"
+                + "   data VARCHAR(4096),"
+                + "   data_type VARCHAR(256))";
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
-        Boot.debugLog("MYSQL data tabel created!");
+        Boot.debugLog("MYSQL data table created!");
     }
     public static void createWorldsTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "worlds"
@@ -179,7 +177,7 @@ public class JDBC {
 
         Statement stmt = myConn.createStatement();
         stmt.execute(sqlCreate);
-        Boot.debugLog("MYSQL worlds tabel created!");
+        Boot.debugLog("MYSQL worlds table created!");
     }
     public static void createBlock_break_countTable() throws SQLException {
         String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "block_break_counter"

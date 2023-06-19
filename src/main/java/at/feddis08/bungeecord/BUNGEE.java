@@ -9,6 +9,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class BUNGEE extends Plugin {
     public static ProxyServer proxyServer;
@@ -16,7 +17,11 @@ public class BUNGEE extends Plugin {
     public void onEnable() {
         proxyServer = getProxy();
         getLogger().info("Starting the plugin in Bungee mode.");
-        Boot.start(getLogger(), true);
+        try {
+            Boot.start(getLogger(), true);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         try {
             Start_cluster_server.start();
         } catch (IOException e) {
