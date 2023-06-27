@@ -18,7 +18,7 @@ public class DataLogger {
 
         log_memory();
         log_cpu_load();
-        Boot.consoleLog("dd");
+
 
     }
 

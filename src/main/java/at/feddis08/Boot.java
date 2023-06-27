@@ -122,7 +122,7 @@ public class Boot {
               try {
                   while (true){
                       DataLogger.start();
-                      Thread.sleep(1000);
+                      Thread.sleep(10000);
                   }
               } catch (SQLException e) {
                   throw new RuntimeException(e);

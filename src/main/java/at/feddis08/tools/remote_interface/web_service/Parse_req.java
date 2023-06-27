@@ -5,18 +5,24 @@ import at.feddis08.bukkit.MMORPG;
 import at.feddis08.bungeecord.BUNGEE;
 import at.feddis08.tools.Rank_api;
 import at.feddis08.tools.io.database.Functions;
+import at.feddis08.tools.io.database.JDBC;
 import at.feddis08.tools.io.database.objects.PlayerObject;
 import at.feddis08.tools.io.database.objects.UserObject;
 import at.feddis08.bukkit.minecraft.tools.Methods;
 import jakarta.servlet.http.HttpServletRequest;
 import org.bukkit.Bukkit;
+import org.checkerframework.checker.units.qual.A;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Parse_req {
@@ -185,6 +191,64 @@ public class Parse_req {
                             Functions.update("users", "data_json", userObject.data_json, userObject.id, "id");
                             jsonObject.put("status", "success");
                         }catch (Exception e){
+                            jsonObject.put("status", "failed");
+                        }
+                    }
+                }
+                response = jsonObject.toString();
+            }
+            if (Objects.equals(json_data.get("req").toString(), "request database")) {
+                UserObject userObject = Functions.getUser("id", web_user.id);
+                if (Objects.equals(userObject.id, "")) {
+                    //user not found
+                    jsonObject.put("status", "failed");
+                } else {
+                    if (Rank_api.isPlayer_allowedTo(userObject.id, "doDatabase")){
+                        try{
+
+                            Statement stmt = JDBC.myConn.createStatement();
+                            String sql = json_data.getString("database_request");
+                            stmt.executeQuery(sql);
+
+                            JSONObject response_db = new JSONObject();
+
+                            ResultSet resultSet = stmt.getResultSet();
+                            ResultSetMetaData metaData = resultSet.getMetaData();
+                            int columnCount = metaData.getColumnCount();
+
+                            int rowCount = 0;
+                             ArrayList<JSONObject> rows = new ArrayList<>();
+                            while (resultSet.next()) {
+                                JSONObject row_json = new JSONObject();
+                                ArrayList<JSONObject> columns = new ArrayList<>();
+
+                                for (int i = 1; i <= columnCount; i++) {
+                                    String columnName = metaData.getColumnName(i);
+                                    Object value = resultSet.getObject(i);
+                                    String dataType = metaData.getColumnTypeName(i);
+
+                                    JSONObject columnData = new JSONObject();
+                                    columnData.put("value", value);
+                                    columnData.put("data_type", dataType);
+                                    columnData.put("name", columnName);
+                                    columnData.put("index", i);
+
+                                    columns.add(columnData);
+                                    Boot.consoleLog("aa " + columnName);
+                                }
+                                row_json.put("columns", columns);
+                                rows.add(row_json);
+                                response_db.put("rows", rows);
+                                rowCount++;
+                            }
+
+                            jsonObject.put("database_response", response_db);
+
+
+                            jsonObject.put("status", "success");
+                        }catch (Exception e){
+                            jsonObject.put("info", "error");
+                            jsonObject.put("error", e.toString());
                             jsonObject.put("status", "failed");
                         }
                     }
