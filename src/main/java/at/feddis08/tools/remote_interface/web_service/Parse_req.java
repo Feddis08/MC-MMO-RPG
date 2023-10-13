@@ -12,6 +12,7 @@ import at.feddis08.bukkit.minecraft.tools.Methods;
 import jakarta.servlet.http.HttpServletRequest;
 import org.bukkit.Bukkit;
 import org.checkerframework.checker.units.qual.A;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -197,6 +198,68 @@ public class Parse_req {
                 }
                 response = jsonObject.toString();
             }
+            if (Objects.equals(json_data.get("req").toString(), "get log data")) {
+                UserObject userObject = Functions.getUser("id", web_user.id);
+                if (Objects.equals(userObject.id, "")) {
+                    //user not found
+                    jsonObject.put("status", "failed");
+                } else {
+                    if (Rank_api.isPlayer_allowedTo(userObject.id, "doGetLogData")){
+                        try{
+
+                            Statement stmt = JDBC.myConn.createStatement();
+                            String sql = "";
+                            boolean isResultSet = stmt.execute(sql);
+
+                            JSONObject response_db = new JSONObject();
+                            JSONArray rowsArray = new JSONArray();
+
+                            if (isResultSet) {
+                                ResultSet resultSet = stmt.getResultSet();
+                                ResultSetMetaData metaData = resultSet.getMetaData();
+                                int columnCount = metaData.getColumnCount();
+
+                                while (resultSet.next()) {
+                                    JSONObject rowJson = new JSONObject();
+                                    JSONArray columnsArray = new JSONArray();
+
+                                    for (int i = 1; i <= columnCount; i++) {
+                                        String columnName = metaData.getColumnName(i);
+                                        Object value = resultSet.getObject(i);
+                                        String dataType = metaData.getColumnTypeName(i);
+
+                                        JSONObject columnData = new JSONObject();
+                                        columnData.put("value", value);
+                                        columnData.put("data_type", dataType);
+                                        columnData.put("name", columnName);
+                                        columnData.put("index", i);
+
+                                        columnsArray.put(columnData);
+                                    }
+
+                                    rowJson.put("columns", columnsArray);
+                                    rowsArray.put(rowJson);
+                                }
+
+                                response_db.put("rows", rowsArray);
+                            } else {
+                                int updateCount = stmt.getUpdateCount();
+                                response_db.put("update_count", updateCount);
+                            }
+
+                            jsonObject.put("database_response", response_db);
+
+
+                            jsonObject.put("status", "success");
+                        }catch (Exception e){
+                            jsonObject.put("info", "error");
+                            jsonObject.put("error", e.toString());
+                            jsonObject.put("status", "failed");
+                        }
+                    }
+                }
+                response = jsonObject.toString();
+            }
             if (Objects.equals(json_data.get("req").toString(), "request database")) {
                 UserObject userObject = Functions.getUser("id", web_user.id);
                 if (Objects.equals(userObject.id, "")) {
@@ -208,38 +271,42 @@ public class Parse_req {
 
                             Statement stmt = JDBC.myConn.createStatement();
                             String sql = json_data.getString("database_request");
-                            stmt.executeQuery(sql);
+                            boolean isResultSet = stmt.execute(sql);
 
                             JSONObject response_db = new JSONObject();
+                            JSONArray rowsArray = new JSONArray();
 
-                            ResultSet resultSet = stmt.getResultSet();
-                            ResultSetMetaData metaData = resultSet.getMetaData();
-                            int columnCount = metaData.getColumnCount();
+                            if (isResultSet) {
+                                ResultSet resultSet = stmt.getResultSet();
+                                ResultSetMetaData metaData = resultSet.getMetaData();
+                                int columnCount = metaData.getColumnCount();
 
-                            int rowCount = 0;
-                             ArrayList<JSONObject> rows = new ArrayList<>();
-                            while (resultSet.next()) {
-                                JSONObject row_json = new JSONObject();
-                                ArrayList<JSONObject> columns = new ArrayList<>();
+                                while (resultSet.next()) {
+                                    JSONObject rowJson = new JSONObject();
+                                    JSONArray columnsArray = new JSONArray();
 
-                                for (int i = 1; i <= columnCount; i++) {
-                                    String columnName = metaData.getColumnName(i);
-                                    Object value = resultSet.getObject(i);
-                                    String dataType = metaData.getColumnTypeName(i);
+                                    for (int i = 1; i <= columnCount; i++) {
+                                        String columnName = metaData.getColumnName(i);
+                                        Object value = resultSet.getObject(i);
+                                        String dataType = metaData.getColumnTypeName(i);
 
-                                    JSONObject columnData = new JSONObject();
-                                    columnData.put("value", value);
-                                    columnData.put("data_type", dataType);
-                                    columnData.put("name", columnName);
-                                    columnData.put("index", i);
+                                        JSONObject columnData = new JSONObject();
+                                        columnData.put("value", value);
+                                        columnData.put("data_type", dataType);
+                                        columnData.put("name", columnName);
+                                        columnData.put("index", i);
 
-                                    columns.add(columnData);
-                                    Boot.consoleLog("aa " + columnName);
+                                        columnsArray.put(columnData);
+                                    }
+
+                                    rowJson.put("columns", columnsArray);
+                                    rowsArray.put(rowJson);
                                 }
-                                row_json.put("columns", columns);
-                                rows.add(row_json);
-                                response_db.put("rows", rows);
-                                rowCount++;
+
+                                response_db.put("rows", rowsArray);
+                            } else {
+                                int updateCount = stmt.getUpdateCount();
+                                response_db.put("update_count", updateCount);
                             }
 
                             jsonObject.put("database_response", response_db);

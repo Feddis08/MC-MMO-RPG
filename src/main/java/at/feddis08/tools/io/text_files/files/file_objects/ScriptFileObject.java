@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import static at.feddis08.bukkit.logic.scripts.Executor.execute_functions;
 
 public class ScriptFileObject extends Thread {
 
@@ -161,7 +160,7 @@ public class ScriptFileObject extends Thread {
                     }
                     ArrayList<VarObject> result = new ArrayList<>();
                     try {
-                        result = execute_functions(args, index, this);
+                        result = new Executor().execute_functions(args, index, this);
                         if (result.size() == 0 && !Boot.is_bungee){
                             result = Executor_for_bukkit.execute_functions(args, index, this);
                         }
@@ -231,7 +230,7 @@ public class ScriptFileObject extends Thread {
                     }
                 }
                 try {
-                    execute_functions(cmd, index, this);
+                    new Executor().execute_functions(cmd, index, this);
                     if (!Boot.is_bungee){
                         Executor_for_bukkit.execute_functions(cmd, index, this);
                     }
