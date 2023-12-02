@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Logger;
 
 import static at.feddis08.bukkit.logic.scripts.Main.script_start_by_event_name;
@@ -35,8 +36,12 @@ public class Boot {
     public static boolean discord_bot_active = false;
     public static Logger logger;
     public static boolean is_bungee = false;
+    public static boolean enable_remote_interface = false;
+
+    public static String version = "1.0";
 
     public static void start(Logger logger2, boolean bungee) throws SQLException {
+        System.out.println ("Current version: " + version);
         is_bungee = bungee;
         logger = logger2;
         try {
@@ -89,6 +94,8 @@ public class Boot {
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
         if (config.is_in_network == false){

@@ -2,6 +2,7 @@ package at.feddis08.tools.remote_interface.web_service;
 
 import at.feddis08.Boot;
 import at.feddis08.bukkit.MMORPG;
+import at.feddis08.bukkit.logic.scripts.Executor;
 import at.feddis08.bungeecord.BUNGEE;
 import at.feddis08.tools.Rank_api;
 import at.feddis08.tools.io.database.Functions;
@@ -9,6 +10,7 @@ import at.feddis08.tools.io.database.JDBC;
 import at.feddis08.tools.io.database.objects.PlayerObject;
 import at.feddis08.tools.io.database.objects.UserObject;
 import at.feddis08.bukkit.minecraft.tools.Methods;
+import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import org.bukkit.Bukkit;
 import org.checkerframework.checker.units.qual.A;
@@ -60,6 +62,14 @@ public class Parse_req {
             }
             web_user.session_id = Methods.get_hash(String.valueOf(System.currentTimeMillis()));
             jsonObject.put("session_id", web_user.session_id);
+            if (Objects.equals(json_data.get("req").toString(), "get script commands")) {
+
+
+                jsonObject.put("data", new JSONObject(Executor.commandsToJson(Executor.commands)));
+
+
+                response = jsonObject.toString();
+            }
             if (Objects.equals(json_data.get("req").toString(), "get server data")) {
                 RuntimeMXBean rb = ManagementFactory.getRuntimeMXBean();
                 long uptime = rb.getUptime();

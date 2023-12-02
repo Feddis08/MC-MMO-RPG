@@ -17,6 +17,7 @@ import java.io.*;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class Server implements CommandExecutor {
     @Override
@@ -69,8 +70,12 @@ public class Server implements CommandExecutor {
                                 json.put("player_id", dbPlayer.id);
                                 json.put("server_name", args[1]);
                                 try {
-                                    Start_cluster_client.client.send_event(json, "send_player_to_server");
+                                    json = Start_cluster_client.client.send_event(json, "send_player_to_server");
+                                    Start_cluster_client.client.wait_for_response(json);
+                                    Boot.consoleLog("Player sent via CLUSTER!");
                                 } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                } catch (InterruptedException e) {
                                     throw new RuntimeException(e);
                                 }
                             }

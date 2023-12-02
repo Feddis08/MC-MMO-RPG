@@ -33,8 +33,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+
 public class Executor_for_bukkit {
-    public static ArrayList<VarObject> execute_functions(ArrayList<String> args, Integer index, ScriptFileObject scriptFileObject) throws SQLException, IOException, InterruptedException {
+    public static ArrayList<VarObject> execute_functions(ArrayList<String> args, Integer index, ScriptFileObject scriptFileObject) throws SQLException, IOException, InterruptedException, ExecutionException {
         ArrayList<VarObject> result = new ArrayList<>();
         if (Objects.equals(args.get(0), "minecraft.set_block:")){
             String world_name = scriptFileObject.get_value(args.get(5)).get(0).value;

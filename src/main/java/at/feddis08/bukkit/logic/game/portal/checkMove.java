@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 import static at.feddis08.bukkit.logic.scripts.Main.script_start_by_event_name;
 
@@ -51,6 +52,8 @@ public class checkMove {
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    } catch (ExecutionException e) {
                         throw new RuntimeException(e);
                     }
                 }

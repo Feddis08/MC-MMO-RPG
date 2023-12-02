@@ -10,9 +10,10 @@ import org.checkerframework.checker.units.qual.A;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class onSpawn {
-    public static void onSpawn(EntitySpawnEvent event) throws IOException, InterruptedException {
+    public static void onSpawn(EntitySpawnEvent event) throws IOException, InterruptedException, ExecutionException {
         Entity entity = event.getEntity();
         if (!(entity instanceof Player)){
             if (!Boot.config.allow_entity_spawning){

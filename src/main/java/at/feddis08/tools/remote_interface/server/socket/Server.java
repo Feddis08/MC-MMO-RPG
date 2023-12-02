@@ -14,6 +14,7 @@ public class Server extends Thread{
     public static Thread th = new Server();
     public static ServerSocket serverSocket;
     public static ArrayList<Client> clients = new ArrayList<>();
+    static boolean stop = false;
 
     public void run(){
         try {
@@ -36,6 +37,7 @@ public class Server extends Thread{
         }
     }
     public static void broadcast_chat_message(String message) throws IOException {
+        stop = true;
         Integer index = 0;
         Client client;
         while (index < Server.clients.size()) {
@@ -58,22 +60,24 @@ public class Server extends Thread{
         return result;
     }
     public static void close() throws IOException {
-        th.stop();
-        Integer index = 0;
-        while (index < Server.clients.size()) {
-            Client client = Server.clients.get(index);
-            client.closeConnection();
-            index = index + 1;
+        stop = true;
+        if (!serverSocket.isClosed()) {
+            Integer index = 0;
+            while (index < Server.clients.size()) {
+                Client client = Server.clients.get(index);
+                client.closeConnection();
+                index = index + 1;
+            }
+            serverSocket.close();
+            clients.clear();
         }
-        serverSocket.close();
-        clients.clear();
     }
     public static void startServer() throws IOException {
         serverSocket = new ServerSocket(Start.port);
         Start.log("running");
 
         try {
-            while (true){
+            while (!stop){
                 Socket c = serverSocket.accept();
                 Client client = new Client(c);
                 clients.add(client);

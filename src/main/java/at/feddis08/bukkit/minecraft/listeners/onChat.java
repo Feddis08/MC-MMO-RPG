@@ -13,9 +13,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class onChat {
-    public static void onChat(AsyncPlayerChatEvent event) throws SQLException, IOException, InterruptedException {
+    public static void onChat(AsyncPlayerChatEvent event) throws SQLException, IOException, InterruptedException, ExecutionException {
         event.setCancelled(true);
         String chatMessage = event.getMessage();
         Player player = event.getPlayer();

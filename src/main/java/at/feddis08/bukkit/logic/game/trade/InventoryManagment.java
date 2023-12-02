@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class InventoryManagment {
 
@@ -65,6 +66,8 @@ public class InventoryManagment {
                                 throw new RuntimeException(e);
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
+                            } catch (ExecutionException e) {
+                                throw new RuntimeException(e);
                             }
                         } else {
                             event.setCancelled(true);
@@ -86,6 +89,8 @@ public class InventoryManagment {
                             } catch (InterruptedException e) {
                                 throw new RuntimeException(e);
                             } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            } catch (ExecutionException e) {
                                 throw new RuntimeException(e);
                             }
                             Functions.update("players_balance", "pocket", String.valueOf(player_balance.pocket - tradeTable.buy_price * tradeTable.buy_amount), player_balance.player_id, "player_id");

@@ -14,6 +14,7 @@ public class Server extends Thread{
     public static Thread th = new Server();
     public static ServerSocket serverSocket;
     public static ArrayList<Server_cluster_client> clients = new ArrayList<>();
+    public static boolean stop = false;
 
     public void run(){
         try {
@@ -36,7 +37,7 @@ public class Server extends Thread{
         return result;
     }
     public static void close() throws IOException {
-        th.stop();
+        stop = true;
         Integer index = 0;
         while (index < Server.clients.size()) {
             Server_cluster_client servernodeclient = Server.clients.get(index);
@@ -50,7 +51,7 @@ public class Server extends Thread{
         serverSocket = new ServerSocket(Start_cluster_server.port);
         Boot.consoleLog("running");
         try {
-            while (true){
+            while (!stop){
                 Socket c = serverSocket.accept();
                 Server_cluster_client servernodeclient = new Server_cluster_client(c);
                 clients.add(servernodeclient);

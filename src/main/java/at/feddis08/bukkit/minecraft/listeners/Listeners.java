@@ -14,6 +14,7 @@ import org.bukkit.event.player.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.concurrent.ExecutionException;
 
 public class Listeners implements org.bukkit.event.Listener {
 
@@ -36,6 +37,8 @@ public class Listeners implements org.bukkit.event.Listener {
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
     }
@@ -63,7 +66,7 @@ public class Listeners implements org.bukkit.event.Listener {
             onBlockEvents.onBlockBreak(event);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException | ExecutionException e) {
             throw new RuntimeException(e);
         }
     }
@@ -75,6 +78,8 @@ public class Listeners implements org.bukkit.event.Listener {
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
         }
     }
     @EventHandler
@@ -82,7 +87,7 @@ public class Listeners implements org.bukkit.event.Listener {
         onPlayerInteract.playerInteract(event);
     }
     @EventHandler
-    public static void onSpawn(EntitySpawnEvent event) throws IOException, InterruptedException {
+    public static void onSpawn(EntitySpawnEvent event) throws IOException, InterruptedException, ExecutionException {
         onSpawn.onSpawn(event);
     }
     @EventHandler
@@ -94,7 +99,7 @@ public class Listeners implements org.bukkit.event.Listener {
         onInvOpened.onInvOpened(event);
     }
     @EventHandler
-    public static void onChat(AsyncPlayerChatEvent event) throws SQLException, IOException, InterruptedException {onChat.onChat(event);}
+    public static void onChat(AsyncPlayerChatEvent event) throws SQLException, IOException, InterruptedException, ExecutionException {onChat.onChat(event);}
     @EventHandler
     public static void onPlaced(BlockPlaceEvent event) throws SQLException {onEvent.onBlockPlaced(event);}
 }

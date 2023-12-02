@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 
 public class ScriptFileObject extends Thread {
@@ -170,6 +171,8 @@ public class ScriptFileObject extends Thread {
                         throw new RuntimeException(e);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
+                    } catch (ExecutionException e) {
+                        throw new RuntimeException(e);
                     }
                     index2 = 0;
                     if (result.size() == 0) {
@@ -239,6 +242,8 @@ public class ScriptFileObject extends Thread {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                } catch (ExecutionException e) {
                     throw new RuntimeException(e);
                 }
                 index = index + 1;

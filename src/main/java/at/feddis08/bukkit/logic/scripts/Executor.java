@@ -7,6 +7,7 @@ import at.feddis08.tools.io.database.objects.PlayerObject;
 import at.feddis08.tools.io.database.objects.Player_questObject;
 import at.feddis08.tools.io.database.objects.RankObject;
 import at.feddis08.tools.io.text_files.files.file_objects.ScriptFileObject;
+import com.google.gson.Gson;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -770,7 +771,7 @@ public class Executor {
 
 
 
-    private static final Map<String, Command> commands = new HashMap<>();
+    public static final Map<String, Command> commands = new HashMap<>();
 
     {
         commands.put("consoleLog:", new ConsoleLogCommand());
@@ -808,5 +809,14 @@ public class Executor {
             return command.execute(args, scriptFileObject);
         }
         return null;
+    }
+    public static String commandsToJson(Map<String, Command> commands) {
+        Map<String, Info> commandInfoMap = new HashMap<>();
+        for (Map.Entry<String, Command> entry : commands.entrySet()) {
+            commandInfoMap.put(entry.getKey(), entry.getValue().getInfo());
+        }
+
+        Gson gson = new Gson();
+        return gson.toJson(commandInfoMap);
     }
 }

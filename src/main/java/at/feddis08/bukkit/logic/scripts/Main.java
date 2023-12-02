@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class Main {
 
@@ -32,10 +33,12 @@ public class Main {
             start();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public static void check_all_after_events() throws IOException, InterruptedException {
+    public static void check_all_after_events() throws IOException, InterruptedException, ExecutionException {
         if (run_AFTER_PLAYER_CLICK_EVENT){
             script_start_by_event_name ("AFTER_PLAYER_CLICK_ENTITY", vars_AFTER_PLAYER_CLICK_EVENT, false);
             run_AFTER_PLAYER_CLICK_EVENT = false;
@@ -45,7 +48,7 @@ public class Main {
             run_AFTER_PLAYER_JOINED = false;
         }
     }
-    public static void start() throws IOException, InterruptedException {
+    public static void start() throws IOException, InterruptedException, ExecutionException {
         Boot.debugLog("Start parsing scripts...");
         parse_scripts();
         Boot.consoleLog("Starting scripts by SERVER_START event...");
@@ -72,9 +75,9 @@ public class Main {
             }
         }
     }
-    public static void script_start_by_event_name(String event_name, ArrayList<VarObject> varObjects, boolean called_by_other_server) throws InterruptedException, IOException {
+    public static void script_start_by_event_name(String event_name, ArrayList<VarObject> varObjects, boolean called_by_other_server) throws InterruptedException, IOException, ExecutionException {
         int index = 0;
-        Boot.debugLog(called_by_other_server + " dddsemf;lasknfgsrd;lkg");
+        Boot.debugLog("From other server: [" + called_by_other_server + "]: Script" + event_name + " called");
         boolean call = true;
         if (Objects.equals(event_name, "TICK_START")) {
             while (index < Var.scripts.size()) {

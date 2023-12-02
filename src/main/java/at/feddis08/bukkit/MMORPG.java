@@ -3,6 +3,7 @@ package at.feddis08.bukkit;
 import at.feddis08.Boot;
 import at.feddis08.bukkit.cluster_com_client.Start_cluster_client;
 import at.feddis08.bukkit.commands.*;
+import at.feddis08.bukkit.minecraft.tools.WorldAutoLoad;
 import at.feddis08.tools.discord.dcFunctions;
 import at.feddis08.tools.io.database.*;
 import at.feddis08.tools.discord.DISCORD;
@@ -15,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import static at.feddis08.bukkit.logic.scripts.Main.script_start_by_event_name;
 
@@ -42,9 +44,18 @@ public final class MMORPG extends JavaPlugin{
             throw new RuntimeException(e);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
         }
         // Plugin startup logic
         plugin = this;
+
+        try {
+            WorldAutoLoad.checkAutoloadWorlds();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         getServer().getPluginManager().registerEvents(new Listeners(), this);
         getCommand("Test").setExecutor(new TestCommand());
         getCommand("rank").setExecutor(new Rank());

@@ -19,13 +19,15 @@ public class Main {
     private static Server server;
     public static Integer port = 8080;
 
+    public static boolean stop = false;
+
     public static ArrayList<Web_user> web_users = new ArrayList<>();
     public static Thread t = new Thread(){
         @Override
       public void run() {
             int i = 0;
             int remove_i = -1;
-            while (true){
+            while (!stop){
                 Web_user web_user = web_users.get(i);
                 if (web_users.size() > i) {
                     i = 0;
@@ -82,6 +84,7 @@ public class Main {
 
     }
     public static void stop() throws Exception {
+        stop = true;
         server.stop();
     }
 }

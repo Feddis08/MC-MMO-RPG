@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 import static at.feddis08.bukkit.logic.scripts.Main.script_start_by_event_name;
 
@@ -43,7 +44,7 @@ public class onEvent {
     public static void onPlayerMove(PlayerMoveEvent event) throws SQLException, IOException, InterruptedException {
         checkMove.check(event);
     }
-    public static void damage(EntityDamageEvent ev) throws IOException, InterruptedException {
+    public static void damage(EntityDamageEvent ev) throws IOException, InterruptedException, ExecutionException {
         if (ev.getEntity() instanceof Player){
             Player player = (Player) ev.getEntity();
             if (player.getHealth() - ev.getFinalDamage() <= 0){
@@ -86,6 +87,8 @@ public class onEvent {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
     }

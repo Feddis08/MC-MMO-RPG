@@ -30,14 +30,16 @@ public class connectionEvents {
         player.setDisplayName("test");
         PlayerObject dbPlayer = null;
         dbPlayer = Functions.getPlayer("id", player.getUniqueId().toString());
-        Boot.debugLog(dbPlayer.getPlayer_name() + " ds");
+        Boot.debugLog("Early join of Player [" + dbPlayer.getPlayer_name() + "]");
         boolean joined_from_other_server = false;
         if (Start_cluster_client.client != null){
-            for (Incoming_player i_player : Start_cluster_client.client.incoming_players){
-                if (Objects.equals(i_player.player_id, player.getUniqueId().toString())){
-                    i_player.arrived = true;
-                    Start_cluster_client.client.player_joined = true;
-                    joined_from_other_server = true;
+            synchronized (Start_cluster_client.client.incoming_players){
+
+                for (Incoming_player i_player : Start_cluster_client.client.incoming_players){
+                    if (Objects.equals(i_player.player_id, player.getUniqueId().toString())){
+                        i_player.arrived = true;
+                        joined_from_other_server = true;
+                    }
                 }
             }
         }

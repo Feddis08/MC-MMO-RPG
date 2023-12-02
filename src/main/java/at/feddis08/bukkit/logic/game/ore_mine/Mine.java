@@ -11,6 +11,7 @@ import org.bukkit.block.Block;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class Mine {
     public String world_name;
@@ -53,7 +54,7 @@ public class Mine {
             }
         }
     }
-    public void break_block(String player_id) throws IOException, InterruptedException {
+    public void break_block(String player_id) throws IOException, InterruptedException, ExecutionException {
         ArrayList<VarObject> varObjects = new ArrayList<VarObject>();
         varObjects.add(new VarObject("player_id", "STRING", player_id));
         varObjects.add(new VarObject("mine_name", "STRING", name));

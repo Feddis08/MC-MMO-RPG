@@ -12,10 +12,11 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.concurrent.ExecutionException;
 
 
 public class onBlockEvents{
-    public static void onBlockBreak(BlockBreakEvent event) throws SQLException, IOException, InterruptedException {
+    public static void onBlockBreak(BlockBreakEvent event) throws SQLException, IOException, InterruptedException, ExecutionException {
         Player player = event.getPlayer();
         PlayerObject dbPlayer = Functions.getPlayer("id", player.getUniqueId().toString());
         Mine mine = Main.get_mine_by_cords(event.getBlock().getWorld().getName(), event.getBlock().getX(), event.getBlock().getY(), event.getBlock().getZ());
