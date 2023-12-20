@@ -18,7 +18,7 @@ public class ConfigFileObject {
     public String network_master_ip = "localhost";
     public String node_token = "1234567890";
     public String server_name = "lobby";
-    public boolean allow_entity_spawning = false;
+    public boolean allow_entity_spawning = true;
 
     public void parse_config_file(ArrayList<String> lines){
         System.out.println("Parsing config file ...");

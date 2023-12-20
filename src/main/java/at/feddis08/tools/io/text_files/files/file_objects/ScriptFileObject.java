@@ -104,7 +104,6 @@ public class ScriptFileObject extends Thread {
     public void throw_error(String error, Integer line){
         Boot.consoleLog(varObjects.toString());
         varObjects.clear();
-        error = String.valueOf(true);
         String str = "[" + name + "]: " + error + "[in line]: " + line;
         Boot.consoleLog(str);
     }
@@ -121,49 +120,132 @@ public class ScriptFileObject extends Thread {
                     index = script.size() - 1;
                     break;
                 }
-                if (Objects.equals(script.get(index).get(0), "<*va>")) {
-                    register_new_var(cmd.get(1), cmd.get(2));
-                }
-                if (Objects.equals(script.get(index).get(0), "<+va>")) {
-                    add_value_to_array(cmd.get(1), cmd.get(2));
-                }
-                if (Objects.equals(script.get(index).get(0), "<!va>")) {
-                    ArrayObject arrayObject = (ArrayObject) get_var_by_name(cmd.get(1));
-                    arrayObject.varList.clear();
-                }
-                if (Objects.equals(script.get(index).get(0), "<*v>")) {
-                    register_new_var(cmd.get(1), cmd.get(2));
-                }
-                if (Objects.equals(script.get(index).get(0), "<=v>")) {
-                    change_value_of_var(cmd.get(1), get_value(cmd.get(2)).get(0).value, 0);
-                }
-                if (Objects.equals(script.get(index).get(0), "<=va>")) {
-                    change_value_of_var(cmd.get(1), get_value(cmd.get(2)).get(0).value, Integer.parseInt(get_value(cmd.get(3)).get(0).value));
-                }
-                if (Objects.equals(script.get(index).get(0), "<=v,f>")) {
-                    ArrayList<String> args = new ArrayList<>();
-                    Integer count_c = 0;
-                    Integer index2 = 0;
-                    while (index2 < cmd.size()) {
-                        if (cmd.get(index2).contains(":")) {
-                            index2 = cmd.size();
-                        } else {
-                            if (cmd.get(index2).contains("<@v>")) {
-                                count_c = count_c + 1;
+                try {
+                    if (Objects.equals(script.get(index).get(0), "<*va>")) {
+                        register_new_var(cmd.get(1), cmd.get(2));
+                    }
+                    if (Objects.equals(script.get(index).get(0), "<+va>")) {
+                        add_value_to_array(cmd.get(1), cmd.get(2));
+                    }
+                    if (Objects.equals(script.get(index).get(0), "<!va>")) {
+                        ArrayObject arrayObject = (ArrayObject) get_var_by_name(cmd.get(1));
+                        arrayObject.varList.clear();
+                    }
+                    if (Objects.equals(script.get(index).get(0), "<*v>")) {
+                        register_new_var(cmd.get(1), cmd.get(2));
+                    }
+                    if (Objects.equals(script.get(index).get(0), "<=v>")) {
+                        change_value_of_var(cmd.get(1), get_value(cmd.get(2)).get(0).value, 0);
+                    }
+                    if (Objects.equals(script.get(index).get(0), "<=va>")) {
+                        change_value_of_var(cmd.get(1), get_value(cmd.get(2)).get(0).value, Integer.parseInt(get_value(cmd.get(3)).get(0).value));
+                    }
+                    if (Objects.equals(script.get(index).get(0), "<=v,f>")) {
+                        ArrayList<String> args = new ArrayList<>();
+                        Integer count_c = 0;
+                        Integer index2 = 0;
+                        while (index2 < cmd.size()) {
+                            if (cmd.get(index2).contains(":")) {
+                                index2 = cmd.size();
+                            } else {
+                                if (cmd.get(index2).contains("<@v>")) {
+                                    count_c = count_c + 1;
+                                }
+                            }
+                            index2 = index2 + 1;
+                        }
+                        index2 = count_c + 1;
+                        while (index2 < cmd.size()) {
+                            args.add(cmd.get((index2)));
+                            index2 = index2 + 1;
+                        }
+                        ArrayList<VarObject> result = new ArrayList<>();
+                        Boot.debugLog(args.get(0) + " 23rt4534t5 " + args.get(1));
+                        try {
+                            Executor e = new at.feddis08.bukkit.logic.scripts.Executor();
+                            result = e.execute_functions(args, index, this);
+
+                            if (!Boot.is_bungee && result.size() == 0){
+                                result = at.feddis08.bukkit.logic.scripts.Executor_for_bukkit.execute_functions(args, index, this);
+                            }
+                        } catch (SQLException e) {
+                            throw new RuntimeException(e);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        } catch (ExecutionException e) {
+                            throw new RuntimeException(e);
+                        }
+                        index2 = 0;
+                        if (result == null){
+                            error = true;
+                            throw_error("ERROR: function " + args.get(0) + " doesn't has a return array! Maybe an error occurred in the function?", current_line);
+                        }else{
+                            if (result.size() == 0) {
+                                error = true;
+                                throw_error("ERROR: function " + args.get(0) + " didn't returned any values!", current_line);
+                                Boot.debugLog(result.size() + " " + args.size() + " " + count_c);
+                            } else {
+                                while (index2 < count_c) {
+                                    if (cmd.get(index2 + 1).contains("<@v>")) {
+                                        change_value_of_var(cmd.get(index2 + 1).split("<@v>")[1], result.get(index2).value, 0);
+                                    }
+                                    index2 = index2 + 1;
+                                }
+                            }
+                            index2 = 0;
+                        }
+                    }
+                    if (Objects.equals(script.get(index).get(0), "<@v>")) {
+                        get_var_by_name(cmd.get(1));
+                    }
+                    if (Objects.equals(script.get(index).get(0), "<?->")) {
+                        Boolean pass = false;
+                        if (Objects.equals(cmd.get(2), "<_==_>")) {
+                            if (Objects.equals(get_value(cmd.get(3)).get(0).type, "STRING")) {
+                                if (Objects.equals(get_value(cmd.get(3)).get(0).value, get_value(cmd.get(4)).get(0).value))
+                                    pass = true;
+                            } else {
+                                if (Integer.parseInt(get_value(cmd.get(3)).get(0).value) == Integer.parseInt(get_value(cmd.get(4)).get(0).value))
+                                    pass = true;
                             }
                         }
-                        index2 = index2 + 1;
+                        if (Objects.equals(cmd.get(2), "<_<_>")) {
+                            if (Integer.parseInt(get_value(cmd.get(3)).get(0).value) < Integer.parseInt(get_value(cmd.get(4)).get(0).value))
+                                pass = true;
+                        }
+                        if (Objects.equals(cmd.get(2), "<_>_>")) {
+                            if (Integer.parseInt(get_value(cmd.get(3)).get(0).value) > Integer.parseInt(get_value(cmd.get(4)).get(0).value))
+                                pass = true;
+                        }
+                        if (Objects.equals(cmd.get(2), "<_!=_>")) {
+                            if (Objects.equals(get_value(cmd.get(3)).get(0).type, "STRING")) {
+                                if (!(Objects.equals(get_value(cmd.get(3)).get(0).value, get_value(cmd.get(4)).get(0).value)))
+                                    pass = true;
+                            } else {
+                                if (!(Integer.parseInt(get_value(cmd.get(3)).get(0).value) == Integer.parseInt(get_value(cmd.get(4)).get(0).value)))
+                                    pass = true;
+                            }
+                        }
+                        if (!(pass)) {
+                            Integer index2 = index;
+                            while (index2 < script.size()) {
+                                ArrayList<String> cmd2 = script.get(index2);
+                                if (Objects.equals(script.get(index2).get(0), "<-?>") && Objects.equals(script.get(index).get(1), script.get(index2).get(1))) {
+                                    index = index2;
+                                }
+                                index2 = index2 + 1;
+                            }
+                        }
                     }
-                    index2 = count_c + 1;
-                    while (index2 < cmd.size()) {
-                        args.add(cmd.get((index2)));
-                        index2 = index2 + 1;
-                    }
-                    ArrayList<VarObject> result = new ArrayList<>();
                     try {
-                        result = new Executor().execute_functions(args, index, this);
-                        if (result.size() == 0 && !Boot.is_bungee){
-                            result = Executor_for_bukkit.execute_functions(args, index, this);
+
+                        Executor e = new at.feddis08.bukkit.logic.scripts.Executor();
+                        e.execute_functions(cmd, index, this);
+                        if (!Boot.is_bungee){
+
+                            at.feddis08.bukkit.logic.scripts.Executor_for_bukkit.execute_functions(cmd, index, this);
                         }
                     } catch (SQLException e) {
                         throw new RuntimeException(e);
@@ -174,83 +256,15 @@ public class ScriptFileObject extends Thread {
                     } catch (ExecutionException e) {
                         throw new RuntimeException(e);
                     }
-                    index2 = 0;
-                    if (result.size() == 0) {
-                        error = true;
-                        throw_error("ERROR: function " + args.get(0) + " didn't returned any values!", current_line);
-                        Boot.consoleLog(result.size() + " " + args.size() + " " + count_c);
-                    } else {
-                        while (index2 < count_c) {
-                            if (cmd.get(index2 + 1).contains("<@v>")) {
-                                change_value_of_var(cmd.get(index2 + 1).split("<@v>")[1], result.get(index2).value, 0);
-                            }
-                            index2 = index2 + 1;
-                        }
-                    }
-                    index2 = 0;
-
+                    index = index + 1;
+                }catch (Exception e){
+                   error = true;
+                   throw_error("An Error occurred when interpreting the script!\n [" + script.get(index).toString() + "]", index);
+                   e.printStackTrace();
                 }
-                if (Objects.equals(script.get(index).get(0), "<@v>")) {
-                    get_var_by_name(cmd.get(1));
-                }
-                if (Objects.equals(script.get(index).get(0), "<?->")) {
-                    Boolean pass = false;
-                    if (Objects.equals(cmd.get(2), "<_==_>")) {
-                        if (Objects.equals(get_value(cmd.get(3)).get(0).type, "STRING")) {
-                            if (Objects.equals(get_value(cmd.get(3)).get(0).value, get_value(cmd.get(4)).get(0).value))
-                                pass = true;
-                        } else {
-                            if (Integer.parseInt(get_value(cmd.get(3)).get(0).value) == Integer.parseInt(get_value(cmd.get(4)).get(0).value))
-                                pass = true;
-                        }
-                    }
-                    if (Objects.equals(cmd.get(2), "<_<_>")) {
-                        if (Integer.parseInt(get_value(cmd.get(3)).get(0).value) < Integer.parseInt(get_value(cmd.get(4)).get(0).value))
-                            pass = true;
-                    }
-                    if (Objects.equals(cmd.get(2), "<_>_>")) {
-                        if (Integer.parseInt(get_value(cmd.get(3)).get(0).value) > Integer.parseInt(get_value(cmd.get(4)).get(0).value))
-                            pass = true;
-                    }
-                    if (Objects.equals(cmd.get(2), "<_!=_>")) {
-                        if (Objects.equals(get_value(cmd.get(3)).get(0).type, "STRING")) {
-                            if (!(Objects.equals(get_value(cmd.get(3)).get(0).value, get_value(cmd.get(4)).get(0).value)))
-                                pass = true;
-                        } else {
-                            if (!(Integer.parseInt(get_value(cmd.get(3)).get(0).value) == Integer.parseInt(get_value(cmd.get(4)).get(0).value)))
-                                pass = true;
-                        }
-                    }
-                    if (!(pass)) {
-                        Integer index2 = index;
-                        while (index2 < script.size()) {
-                            ArrayList<String> cmd2 = script.get(index2);
-                            if (Objects.equals(script.get(index2).get(0), "<-?>") && Objects.equals(script.get(index).get(1), script.get(index2).get(1))) {
-                                index = index2;
-                            }
-                            index2 = index2 + 1;
-                        }
-                    }
-                }
-                try {
-                    new Executor().execute_functions(cmd, index, this);
-                    if (!Boot.is_bungee){
-                        Executor_for_bukkit.execute_functions(cmd, index, this);
-                    }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                } catch (ExecutionException e) {
-                    throw new RuntimeException(e);
-                }
-                index = index + 1;
             }
         }
         varObjects.clear();
-        //t.stop();
     }
 
 
