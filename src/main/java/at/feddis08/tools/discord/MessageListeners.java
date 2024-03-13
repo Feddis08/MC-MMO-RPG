@@ -17,18 +17,18 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class MessageListeners {
-    public static void create_message_listener(){
+    public static void create_message_listener() {
         DISCORD.api.addMessageCreateListener(event -> {
-            if (!(String.valueOf(event.getMessage().getChannel().getId()).equals(DISCORD.config.server_log))){
-                if (event.isPrivateMessage()){
+            if (!(String.valueOf(event.getMessage().getChannel().getId()).equals(DISCORD.config.server_log))) {
+                if (event.isPrivateMessage()) {
                     Boot.consoleLog("DISCORD: got private_message: ; From: " + event.getMessage().getAuthor().getName() + "#" + event.getMessage().getAuthor().asUser().get().getMentionTag() + " ; Content: " + event.getMessage().getContent());
-                }else{
+                } else {
                     Boot.consoleLog("DISCORD: got server_message: ; Server: " + event.getServer().get().getName() + " ; Channel: " + event.getMessage().getChannel().asServerChannel().get().getName() + " ; From: " + event.getMessage().getAuthor().getName() + "#" + event.getMessage().getAuthor().asUser().get().getMentionTag() + " ; Content: " + event.getMessage().getContent());
                 }
             }
         });
         DISCORD.api.addMessageCreateListener(event -> {
-            if (event.getMessageContent().equals("!help")){
+            if (event.getMessageContent().equals("!help")) {
                 event.getChannel().sendMessage(
                         "```" +
                                 "commands: " +
@@ -105,9 +105,9 @@ public class MessageListeners {
                                                     "```"
                                     );
                                 }
-                                if (String.valueOf(event.getChannel().getId()).equals(DISCORD.config.chat)){
-                                    if (!(event.getMessage().getAuthor().getId() == DISCORD.api.getYourself().getId())){
-                                        Server.broadcast_chat_message("[" +  dbRank.prefix +  "][" + dbPlayer1.display_name + "]" + ": "
+                                if (String.valueOf(event.getChannel().getId()).equals(DISCORD.config.chat)) {
+                                    if (!(event.getMessage().getAuthor().getId() == DISCORD.api.getYourself().getId())) {
+                                        Server.broadcast_chat_message("[" + dbRank.prefix + "][" + dbPlayer1.display_name + "]" + ": "
                                                 + event.getMessage().getContent() + " [" + Methods.getTime() + "]");
                                         MMORPG.Server.broadcastMessage(ChatColor.GRAY + "[" + ChatColor.BLUE + "DISCORD" + ChatColor.GRAY + "][" + ChatColor.GREEN + event.getMessage().getAuthor().getName() + ChatColor.GRAY + "]: " + ChatColor.YELLOW + event.getMessage().getContent() + ChatColor.GRAY + " [" + Methods.getTime() + "]");
                                     }
@@ -154,48 +154,95 @@ public class MessageListeners {
                     }
                 }
             }
-            });
-    }
+        });
 
         DISCORD.api.addMessageCreateListener(event -> {
-        if (!(event.getMessage().getAuthor().getId() == DISCORD.api.getYourself().getId())) {
-            try {
-                Discord_playerObject dbDiscord_playerObject = Functions.getDiscordPlayer("discord_id", String.valueOf(event.getMessage().getAuthor().getId()));
-                PlayerObject dbPlayer1 = Functions.getPlayer("id", dbDiscord_playerObject.id);
-                RankObject dbRank = Functions.getRank("name", dbPlayer1.player_rank);
-                if (dbPlayer1.id == null) {
-                    event.getMessage().delete();
-                    event.getMessage().getAuthor().asUser().get().sendMessage("Please link your minecraft account and your discord account with: !link <in_game_name>");
-                } else {
-                    if (Rank_api.isPlayer_allowedTo(dbPlayer1.id, "ban") || Rank_api.isPlayer_allowedTo(dbPlayer1.id, "*")) {
-                        String[] message = event.getMessage().getContent().split(" ");
-                        if (message[0].equalsIgnoreCase("!ban")) {
-                            if (message.length == 2) {
-                                try {
-                                    PlayerObject targetPlayer = Functions.getPlayer("display_name", message[1]);
-                                    if (targetPlayer.id != null) {
-                                        // Ban the player
-                                        Functions.banPlayer(targetPlayer);
-                                        event.getChannel().sendMessage("Player " + targetPlayer.display_name + " has been banned.");
-                                    } else {
-                                        event.getChannel().sendMessage("Player " + message[1] + " was not found.");
-                                    }
-                                } catch (SQLException e) {
-                                    event.getChannel().sendMessage("There was an error while processing the command.");
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                event.getChannel().sendMessage("Usage: !ban <player>");
-                            }
-                        }
-                    } else {
+            if (!(event.getMessage().getAuthor().getId() == DISCORD.api.getYourself().getId())) {
+                try {
+                    Discord_playerObject dbDiscord_playerObject = Functions.getDiscordPlayer("discord_id", String.valueOf(event.getMessage().getAuthor().getId()));
+                    PlayerObject dbPlayer1 = Functions.getPlayer("id", dbDiscord_playerObject.id);
+                    RankObject dbRank = Functions.getRank("name", dbPlayer1.player_rank);
+                    if (dbPlayer1.id == null) {
                         event.getMessage().delete();
-                        event.getMessage().getAuthor().asUser().get().sendMessage("You don't have the permissions to do that");
+                        event.getMessage().getAuthor().asUser().get().sendMessage("Please link your minecraft account and your discord account with: !link <in_game_name>");
+                    } else {
+                        if (Rank_api.isPlayer_allowedTo(dbPlayer1.id, "mcban") || Rank_api.isPlayer_allowedTo(dbPlayer1.id, "*")) {
+                            String[] message = event.getMessage().getContent().split(" ");
+                            if (message[0].equalsIgnoreCase("!mcban")) {
+                                if (message.length == 2) {
+                                    try {
+                                        PlayerObject targetPlayer = Functions.getPlayer("display_name", message[1]);
+                                        if (targetPlayer.id != null) {
+                                            // Ban the player
+                                            Functions.banPlayer(targetPlayer);
+                                            event.getChannel().sendMessage("Player " + targetPlayer.display_name + " has been banned.");
+                                        } else {
+                                            event.getChannel().sendMessage("Player " + message[1] + " was not found.");
+                                        }
+                                    } catch (SQLException e) {
+                                        event.getChannel().sendMessage("There was an error while processing the command.");
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    event.getChannel().sendMessage("Usage: !mcban <player>");
+                                }
+                            }
+                        } else {
+                            event.getMessage().delete();
+                            event.getMessage().getAuthor().asUser().get().sendMessage("You don't have the permissions to do that");
+                        }
                     }
+                } catch (SQLException | IOException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (SQLException | IOException e) {
-                throw new RuntimeException(e);
             }
-        }
-    });
+        });
+
+        DISCORD.api.addMessageCreateListener(event -> {
+            if (!(event.getMessage().getAuthor().getId() == DISCORD.api.getYourself().getId())) {
+                try {
+                    Discord_playerObject dbDiscord_playerObject = Functions.getDiscordPlayer("discord_id", String.valueOf(event.getMessage().getAuthor().getId()));
+                    PlayerObject dbPlayer1 = Functions.getPlayer("id", dbDiscord_playerObject.id);
+                    RankObject dbRank = Functions.getRank("name", dbPlayer1.player_rank);
+                    if (dbPlayer1.id == null) {
+                        event.getMessage().delete();
+                        event.getMessage().getAuthor().asUser().get().sendMessage("Please link your minecraft account and your discord account with: !link <in_game_name>");
+                    } else {
+                        if (Rank_api.isPlayer_allowedTo(dbPlayer1.id, "ban") || Rank_api.isPlayer_allowedTo(dbPlayer1.id, "*")) {
+                            String[] message = event.getMessage().getContent().split(" ");
+                            if (message[0].equalsIgnoreCase("!ban")) {
+                                if (message.length == 2) {
+                                    try {
+                                        User targetUser = DISCORD.api.getUserById(message[1]); // Assuming message[1] contains the user ID
+                                        if (targetUser != null) {
+                                            banUser(targetUser, event);
+                                        } else {
+                                            event.getChannel().sendMessage("User with ID " + message[1] + " was not found.");
+                                        }
+                                    } catch (NumberFormatException e) {
+                                        event.getChannel().sendMessage("Invalid user ID.");
+                                    }
+                                } else {
+                                    event.getChannel().sendMessage("Usage: !ban <user_id>");
+                                }
+                            }
+                        } else {
+                            event.getMessage().delete();
+                            event.getMessage().getAuthor().asUser().get().sendMessage("You don't have the permissions to do that");
+                        }
+                    }
+                } catch (SQLException | IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+
+    private static void banUser(User user, MessageCreateEvent event) {
+        // Assuming DISCORD.api is your JDA instance
+        DISCORD.api.getGuildById("your_guild_id").ban(user, 0).queue(
+                success -> event.getChannel().sendMessage("User " + user.getAsTag() + " has been banned from the server.").queue(),
+                error -> event.getChannel().sendMessage("An error occurred while trying to ban the user.").queue()
+        );
+    }
 }
