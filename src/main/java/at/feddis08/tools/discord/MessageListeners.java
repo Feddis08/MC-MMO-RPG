@@ -190,7 +190,7 @@ public class MessageListeners {
                         }
                     } else {
                         event.getMessage().delete();
-                        event.getMessage().getAuthor().asUser().get().sendMessage("Request permissions from an admin!");
+                        event.getMessage().getAuthor().asUser().get().sendMessage("You don't have the permissions to do that");
                     }
                 }
             } catch (SQLException | IOException e) {
