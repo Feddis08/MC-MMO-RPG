@@ -156,4 +156,46 @@ public class MessageListeners {
             }
             });
     }
+
+        DISCORD.api.addMessageCreateListener(event -> {
+        if (!(event.getMessage().getAuthor().getId() == DISCORD.api.getYourself().getId())) {
+            try {
+                Discord_playerObject dbDiscord_playerObject = Functions.getDiscordPlayer("discord_id", String.valueOf(event.getMessage().getAuthor().getId()));
+                PlayerObject dbPlayer1 = Functions.getPlayer("id", dbDiscord_playerObject.id);
+                RankObject dbRank = Functions.getRank("name", dbPlayer1.player_rank);
+                if (dbPlayer1.id == null) {
+                    event.getMessage().delete();
+                    event.getMessage().getAuthor().asUser().get().sendMessage("Please link your minecraft account and your discord account with: !link <in_game_name>");
+                } else {
+                    if (Rank_api.isPlayer_allowedTo(dbPlayer1.id, "ban") || Rank_api.isPlayer_allowedTo(dbPlayer1.id, "*")) {
+                        String[] message = event.getMessage().getContent().split(" ");
+                        if (message[0].equalsIgnoreCase("!ban")) {
+                            if (message.length == 2) {
+                                try {
+                                    PlayerObject targetPlayer = Functions.getPlayer("display_name", message[1]);
+                                    if (targetPlayer.id != null) {
+                                        // Ban the player
+                                        Functions.banPlayer(targetPlayer);
+                                        event.getChannel().sendMessage("Player " + targetPlayer.display_name + " has been banned.");
+                                    } else {
+                                        event.getChannel().sendMessage("Player " + message[1] + " was not found.");
+                                    }
+                                } catch (SQLException e) {
+                                    event.getChannel().sendMessage("There was an error while processing the command.");
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                event.getChannel().sendMessage("Usage: !ban <player>");
+                            }
+                        }
+                    } else {
+                        event.getMessage().delete();
+                        event.getMessage().getAuthor().asUser().get().sendMessage("Request permissions from an admin!");
+                    }
+                }
+            } catch (SQLException | IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    });
 }
