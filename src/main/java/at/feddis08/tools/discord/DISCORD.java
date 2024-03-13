@@ -25,7 +25,7 @@ public class DISCORD {
                 .join();
         MessageListeners.create_message_listener();
 
-        SlashCommand.with("ping", "A simple ping pong1 command!").createGlobal(api).join();
+        SlashCommand.with("ping", "A simple ping pong command!").createGlobal(api).join();
 
         api.addSlashCommandCreateListener(event -> {
             SlashCommandInteraction slashCommandInteraction = event.getSlashCommandInteraction();
