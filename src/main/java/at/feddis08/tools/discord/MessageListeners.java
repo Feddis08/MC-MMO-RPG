@@ -31,7 +31,7 @@ public class MessageListeners {
             if (event.getMessageContent().equals("!help")){
                 event.getChannel().sendMessage(
                         "```" +
-                                "commands: " +
+                                "Commands: " +
                                 "\n" +
                                 "!play <youtube_link> #You have to be in a channel" +
                                 "\n" +
@@ -94,16 +94,6 @@ public class MessageListeners {
                                 String[] message = event.getMessage().getContent().split(" ");
                                 if (event.getMessageContent().equalsIgnoreCase("ping")) {
                                     event.getChannel().sendMessage("Pong!");
-                                }
-                                if (event.getMessageContent().equals("!help")) {
-                                    event.getChannel().sendMessage(
-                                            "```" +
-                                                    "commands: " +
-                                                    "\n" +
-                                                    "!play <youtube_link> #You have to be in a channel" +
-                                                    "\n" +
-                                                    "```"
-                                    );
                                 }
                                 if (String.valueOf(event.getChannel().getId()).equals(DISCORD.config.chat)){
                                     if (!(event.getMessage().getAuthor().getId() == DISCORD.api.getYourself().getId())){

@@ -30,6 +30,7 @@ public class dcFunctions {
             AudioSource source = new LavaplayerAudioSource(DISCORD.api, player);
             audioConnection.setAudioSource(source);
 
+            Boot.consoleLog("DISCORD: Streamer all set up! " + youtube_link);
             // You can now use the AudioPlayer like you would normally do with Lavaplayer, e.g.,
             playerManager.loadItem(youtube_link, new AudioLoadResultHandler() {
                 @Override
@@ -39,6 +40,7 @@ public class dcFunctions {
 
                 @Override
                 public void playlistLoaded(AudioPlaylist playlist) {
+                    Boot.consoleLog("DISCORD: Playing track! " + youtube_link);
                     for (AudioTrack track : playlist.getTracks()) {
                         player.playTrack(track);
                     }
