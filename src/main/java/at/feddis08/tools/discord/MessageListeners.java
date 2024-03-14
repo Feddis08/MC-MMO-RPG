@@ -59,6 +59,22 @@ public class MessageListeners {
                             }
                         }
                     }
+                    if (Objects.equals(message[0], "!startup")) {
+                        if (message.length == 2) {
+                            try {
+                                Discord_playerObject dbDiscord_playerObject = Functions.getDiscordPlayer("discord_id", String.valueOf(event.getMessage().getAuthor().getId()));
+                                if (dbDiscord_playerObject.discord_id == null) {
+                                    dbDiscord_playerObject.discord_id = String.valueOf(event.getMessage().getAuthor().getId());
+                                    dbDiscord_playerObject.display_name = message[1];
+                                    Functions.createDiscordPlayer(dbDiscord_playerObject);
+                                } else {
+                                    event.getMessage().getAuthor().asUser().get().sendMessage("You already did the startup!");
+                                }
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    }
                     if (Objects.equals(message[0], "!link")) {
                         if (message.length == 2) {
                             try {
@@ -155,4 +171,5 @@ public class MessageListeners {
                 }
             }
         });
+    }
 }
