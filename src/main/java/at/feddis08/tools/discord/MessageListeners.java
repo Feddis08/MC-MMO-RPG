@@ -28,12 +28,12 @@ public class MessageListeners {
             }
         });
         DISCORD.api.addMessageCreateListener(event -> {
-            if (event.getMessageContent().equals("!help")){
+            if (event.getMessageContent().equals("/help")){
                 event.getChannel().sendMessage(
                         "```" +
                                 "Commands: " +
                                 "\n" +
-                                "!play <youtube_link> #You have to be in a channel" +
+                                "/play <youtube_link> #You have to be in a channel" +
                                 "\n" +
                                 "```"
                 );
@@ -43,7 +43,7 @@ public class MessageListeners {
             if (!(event.getMessage().getAuthor().getId() == DISCORD.api.getYourself().getId())) {
                 if (event.isPrivateMessage()) {
                     String[] message = event.getMessage().getContent().split(" ");
-                    if (Objects.equals(message[0], "!startup")) {
+                    if (Objects.equals(message[0], "/startup")) {
                         if (message.length == 2) {
                             try {
                                 Discord_playerObject dbDiscord_playerObject = Functions.getDiscordPlayer("discord_id", String.valueOf(event.getMessage().getAuthor().getId()));
@@ -59,12 +59,12 @@ public class MessageListeners {
                             }
                         }
                     }
-                    if (Objects.equals(message[0], "!link")) {
+                    if (Objects.equals(message[0], "/link")) {
                         if (message.length == 2) {
                             try {
                                 Discord_playerObject dbDiscord_playerObject = Functions.getDiscordPlayer("discord_id", String.valueOf(event.getMessage().getAuthor().getId()));
                                 if (dbDiscord_playerObject.discord_id == null) {
-                                    event.getMessage().getAuthor().asUser().get().sendMessage("You have to do the startup with: !startup <a_name>");
+                                    event.getMessage().getAuthor().asUser().get().sendMessage("You have to do the startup with: /startup <a_name>");
                                 } else {
                                     PlayerObject dbPlayer = Functions.getPlayer("display_name", message[1]);
                                     if (Objects.equals(dbPlayer.display_name, message[1])) {
@@ -88,7 +88,7 @@ public class MessageListeners {
                         RankObject dbRank = Functions.getRank("name", dbPlayer1.player_rank);
                         if (dbPlayer1.id == null) {
                             event.getMessage().delete();
-                            event.getMessage().getAuthor().asUser().get().sendMessage("Please link your minecraft account and your discord account with: !link <in_game_name>");
+                            event.getMessage().getAuthor().asUser().get().sendMessage("Please link your minecraft account and your discord account with: /link <in_game_name>");
                         } else {
                             if (Rank_api.isPlayer_allowedTo(dbPlayer1.id, "doChatDc") || Rank_api.isPlayer_allowedTo(dbPlayer1.id, "*")) {
                                 String[] message = event.getMessage().getContent().split(" ");
@@ -102,7 +102,7 @@ public class MessageListeners {
                                         MMORPG.Server.broadcastMessage(ChatColor.GRAY + "[" + ChatColor.BLUE + "DISCORD" + ChatColor.GRAY + "][" + ChatColor.GREEN + event.getMessage().getAuthor().getName() + ChatColor.GRAY + "]: " + ChatColor.YELLOW + event.getMessage().getContent() + ChatColor.GRAY + " [" + Methods.getTime() + "]");
                                     }
                                 }
-                                if (event.getMessageContent().equalsIgnoreCase("!showOnlineMinecraftPlayers")) {
+                                if (event.getMessageContent().equalsIgnoreCase("/showOnlineMinecraftPlayers")) {
                                     if (Rank_api.isPlayer_allowedTo(dbPlayer1.id, "doShowOnlineMinecraftPlayers") || Rank_api.isPlayer_allowedTo(dbPlayer1.id, "*")) {
                                         try {
                                             ArrayList<PlayerObject> dbPlayers = Functions.getPlayers("online", "1");
@@ -123,7 +123,7 @@ public class MessageListeners {
                                         event.getMessage().getAuthor().asUser().get().sendMessage("Request perms from an admin!");
                                     }
                                 }
-                                if (Objects.equals(message[0], "!play")) {
+                                if (Objects.equals(message[0], "/play")) {
                                     if (Rank_api.isPlayer_allowedTo(dbPlayer1.id, "doPlayMusic") || Rank_api.isPlayer_allowedTo(dbPlayer1.id, "*")) {
                                         dcFunctions.join_voice_channel_and_stream_audio(event.getMessage().getAuthor().getConnectedVoiceChannel().get().getId(), message[1]);
                                         event.getChannel().sendMessage("Join channel");
