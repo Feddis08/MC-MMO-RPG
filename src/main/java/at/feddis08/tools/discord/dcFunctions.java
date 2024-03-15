@@ -19,13 +19,16 @@ public class dcFunctions {
         t.sendMessage(message);
     }
     public static void join_voice_channel_and_stream_audio(long channel_id, String youtube_link){
+        Boot.debugLog("Discord Bot connection to Channel...");
         ServerVoiceChannel channel = DISCORD.api.getServerVoiceChannelById(channel_id).get();
         channel.connect().thenAccept(audioConnection -> {
             // Create a player manager
+            Boot.debugLog("Discord Bot set up Audio Player...");
             AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
             playerManager.registerSourceManager(new YoutubeAudioSourceManager());
             AudioPlayer player = playerManager.createPlayer();
 
+            Boot.debugLog("Discord Bot creating Audio queue...");
             // Create an audio source and add it to the audio connection's queue
             AudioSource source = new LavaplayerAudioSource(DISCORD.api, player);
             audioConnection.setAudioSource(source);
@@ -34,7 +37,9 @@ public class dcFunctions {
             playerManager.loadItem(youtube_link, new AudioLoadResultHandler() {
                 @Override
                 public void trackLoaded(AudioTrack track) {
+                    Boot.debugLog("Discord Bot streaming track...");
                     player.playTrack(track);
+                    Boot.debugLog("Discord Bot streamed track...");
                 }
 
                 @Override
