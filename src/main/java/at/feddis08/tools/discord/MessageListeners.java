@@ -64,7 +64,7 @@ public class MessageListeners {
                             try {
                                 Discord_playerObject dbDiscord_playerObject = Functions.getDiscordPlayer("discord_id", String.valueOf(event.getMessage().getAuthor().getId()));
                                 if (dbDiscord_playerObject.discord_id == null) {
-                                    event.getMessage().getAuthor().asUser().get().sendMessage("You have to do the startup with: /startup <a_name>");
+                                    event.getMessage().getAuthor().asUser().get().sendMessage("You have to do the startup wih: /startup <a_name>");
                                 } else {
                                     PlayerObject dbPlayer = Functions.getPlayer("display_name", message[1]);
                                     if (Objects.equals(dbPlayer.display_name, message[1])) {
